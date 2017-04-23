@@ -5,25 +5,26 @@ package co.herod.adbwrapper;
  */
 public class Device {
 
+    public String deviceIdentifier;
+    public String type;
+
     public static Device parseAdbString(final String adbDeviceString) {
 
         final Device device = new Device();
 
         final String[] split = adbDeviceString.split("\t", 2);
 
-        device.deviceName = split[0];
+        device.deviceIdentifier = split[0];
         device.type = split[1];
 
         return device;
     }
 
-    public String deviceName;
-    public String type;
-
     @Override
     public String toString() {
+
         return "Device{" +
-                "deviceName='" + deviceName + '\'' +
+                "deviceIdentifier='" + deviceIdentifier + '\'' +
                 ", type='" + type + '\'' +
                 '}';
     }

@@ -6,6 +6,7 @@ package co.herod.adbwrapper;
 public class AdbHelper {
 
     static boolean containsSplitValues(String s) {
+
         return s.contains("\t");
     }
 }
