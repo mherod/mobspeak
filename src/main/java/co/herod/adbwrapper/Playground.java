@@ -9,6 +9,6 @@ public class Playground {
 
         AdbBus.getBus().subscribe(System.out::println);
 
-        Adb.connectedDevices().blockingSubscribe(Adb::pressPowerButtonBlocking);
+        Adb.connectedDevices().blockingSubscribe(Adb::pressPowerButton);
     }
 }

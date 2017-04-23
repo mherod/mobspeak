@@ -2,7 +2,6 @@ package co.herod.adbwrapper;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -17,8 +16,9 @@ class Adb {
 
     private static final String DEVICES = "devices";
 
+    private static final int KEY_EVENT_HOME = 3;
     private static final int KEY_EVENT_BACK = 4;
-    private static final int KEY_EVENT_POWER = 26;
+    public static final int KEY_EVENT_POWER = 26;
 
     static Observable<Device> connectedDevices() {
 
@@ -27,18 +27,8 @@ class Adb {
                 .map(Device::parseAdbString);
     }
 
-    static void pressPowerButtonBlocking(Device device) {
-        pressPowerButton(device).blockingAwait();
-    }
-
-    @CheckReturnValue
-    private static Completable pressBackButton(@Nullable final Device device) {
-        return pressKey(KEY_EVENT_BACK, device);
-    }
-
-    @CheckReturnValue
-    private static Completable pressPowerButton(@Nullable Device device) {
-        return pressKey(KEY_EVENT_POWER, device);
+    static void pressKeyBlocking(Device device, final int key) {
+        pressKey(key, device).blockingAwait();
     }
 
     private static Completable pressKey(int keyEvent, @Nullable final Device device) {
@@ -83,5 +73,17 @@ class Adb {
             }
             s.onComplete();
         });
+    }
+
+    static void pressHomeButton(@Nullable Device device) {
+        pressKeyBlocking(device, KEY_EVENT_HOME);
+    }
+
+    static void pressBackButton(@Nullable Device device) {
+        pressKeyBlocking(device, KEY_EVENT_BACK);
+    }
+
+    static void pressPowerButton(@Nullable Device device) {
+        pressKeyBlocking(device, KEY_EVENT_POWER);
     }
 }
