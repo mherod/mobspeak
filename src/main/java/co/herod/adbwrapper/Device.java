@@ -5,10 +5,10 @@ package co.herod.adbwrapper;
  */
 public class Device {
 
-    public String deviceIdentifier;
-    public String type;
+    private String deviceIdentifier;
+    private String type;
 
-    public static Device parseAdbString(final String adbDeviceString) {
+    static Device parseAdbString(final String adbDeviceString) {
 
         final Device device = new Device();
 
@@ -18,6 +18,14 @@ public class Device {
         device.type = split[1];
 
         return device;
+    }
+
+    public String getDeviceIdentifier() {
+        return deviceIdentifier;
+    }
+
+    public String getType() {
+        return type;
     }
 
     @Override

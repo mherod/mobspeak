@@ -1,7 +1,9 @@
 package co.herod.adbwrapper;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
-import org.jetbrains.annotations.NotNull;
+import io.reactivex.annotations.CheckReturnValue;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,50 +15,48 @@ import java.io.InputStreamReader;
  */
 class Adb {
 
-    private static final String ADB = "adb";
-    private static final String SHELL = "shell";
     private static final String DEVICES = "devices";
-    private static final String INPUT = "input";
-    private static final String KEYEVENT = "keyevent";
 
     private static final int KEY_EVENT_BACK = 4;
-
-    @NotNull
-    private static ProcessBuilder shellInputKeyEvent(int keyEvent) {
-
-        return createProcess(ADB, SHELL, INPUT, KEYEVENT, String.valueOf(keyEvent));
-    }
-
-    @NotNull
-    private static ProcessBuilder devices() {
-
-        return createProcess(ADB, DEVICES);
-    }
-
-    @NotNull
-    private static ProcessBuilder createProcess(final String... strings) {
-
-        return new ProcessBuilder(strings)
-                .redirectErrorStream(true);
-    }
+    private static final int KEY_EVENT_POWER = 26;
 
     static Observable<Device> connectedDevices() {
 
-        return callAdbDevices()
-                .filter(AdbHelper::containsSplitValues)
+        return observableProcess(devices())
+                .filter(s -> s.contains("\t"))
                 .map(Device::parseAdbString);
     }
 
-    static Observable<String> pressBack() {
-        return callAdbInputKeyEvent(KEY_EVENT_BACK);
+
+    static void pressPowerButtonBlocking(Device device) {
+        pressPowerButton(device).blockingAwait();
     }
 
-    private static Observable<String> callAdbInputKeyEvent(int keyEvent) {
-        return observableProcess(shellInputKeyEvent(keyEvent));
+    @CheckReturnValue
+    private static Completable pressBackButton(@Nullable final Device device) {
+        return pressKey(KEY_EVENT_BACK, device);
     }
 
-    private static Observable<String> callAdbDevices() {
-        return observableProcess(devices());
+    @CheckReturnValue
+    private static Completable pressPowerButton(@Nullable Device device) {
+        return pressKey(KEY_EVENT_POWER, device);
+    }
+
+    private static Completable pressKey(int keyEvent, @Nullable final Device device) {
+        return Completable.fromObservable(observableProcess(pressKey(device, keyEvent)));
+    }
+
+    private static ProcessBuilder devices() {
+        return new AdbCommand.Builder()
+                .setCommand(DEVICES)
+                .processBuilder();
+    }
+
+    private static ProcessBuilder pressKey(@Nullable Device device, final int key) {
+        return new AdbCommand.Builder()
+                .setDevice(device)
+                .setCommand(String.format("shell input keyevent %d", key))
+                .processBuilder();
     }
 
     private static Observable<String> observableProcess(final ProcessBuilder processBuilder) {

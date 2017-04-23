@@ -39,6 +39,7 @@ class AdbCommand {
         return ADB + (deviceIdentifier != null ? " -s " + deviceIdentifier : "") + " " + command;
     }
 
+    @SuppressWarnings({"WeakerAccess", "unused"})
     public static class Builder {
 
         private String deviceIdentifier;
@@ -54,7 +55,7 @@ class AdbCommand {
 
         public Builder setDevice(@Nullable final Device device) {
             if (device != null) {
-                this.deviceIdentifier = device.deviceIdentifier;
+                this.deviceIdentifier = device.getDeviceIdentifier();
             }
             return this;
         }
