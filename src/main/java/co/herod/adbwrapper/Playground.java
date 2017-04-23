@@ -6,6 +6,9 @@ package co.herod.adbwrapper;
 public class Playground {
 
     public static void main(String[] args) {
+
+        AdbBus.getBus().subscribe(System.out::println);
+
         Adb.connectedDevices().blockingSubscribe(Adb::pressPowerButtonBlocking);
     }
 }

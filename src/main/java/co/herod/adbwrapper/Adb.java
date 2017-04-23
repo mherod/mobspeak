@@ -27,7 +27,6 @@ class Adb {
                 .map(Device::parseAdbString);
     }
 
-
     static void pressPowerButtonBlocking(Device device) {
         pressPowerButton(device).blockingAwait();
     }
@@ -63,7 +62,8 @@ class Adb {
 
         return Observable.just(processBuilder)
                 .map(ProcessBuilder::start)
-                .flatMap(Adb::observableProcess);
+                .flatMap(Adb::observableProcess)
+                .doOnEach(AdbBus.getBus());
     }
 
     private static Observable<String> observableProcess(final Process process) {
