@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/adb-java-wrapper.iml" filepath="$PROJECT_DIR$/.idea/modules/adb-java-wrapper.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/adb-java-wrapper_main.iml" filepath="$PROJECT_DIR$/.idea/modules/adb-java-wrapper_main.iml" group="adb-java-wrapper" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/adb-java-wrapper_test.iml" filepath="$PROJECT_DIR$/.idea/modules/adb-java-wrapper_test.iml" group="adb-java-wrapper" />
     </modules>
   </component>
 </project>
