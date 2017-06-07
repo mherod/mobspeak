@@ -20,10 +20,10 @@ class Adb {
 
     private static final int KEY_EVENT_HOME = 3;
     private static final int KEY_EVENT_BACK = 4;
-    public static final int KEY_EVENT_POWER = 26;
+    private static final int KEY_EVENT_POWER = 26;
 
-    public static final String DISPLAY = "display";
-    public static final String INPUT_METHOD = "input_method";
+    private static final String DISPLAY = "display";
+    private static final String INPUT_METHOD = "input_method";
 
     static Observable<Device> connectedDevices() {
 
@@ -32,7 +32,7 @@ class Adb {
                 .map(Device::parseAdbString);
     }
 
-    static Single<Map<String, String>> dumpsysMap(Device device, String type) {
+    private static Single<Map<String, String>> dumpsysMap(Device device, String type) {
 
         return observableProcess(dumpsys(device, type))
                 .filter(s -> s.contains("="))
@@ -70,7 +70,6 @@ class Adb {
     }
 
     private static Observable<String> observableProcess(final ProcessBuilder processBuilder) {
-
         return Observable.just(processBuilder)
                 .map(ProcessBuilder::start)
                 .flatMap(Adb::observableProcess)
@@ -115,4 +114,5 @@ class Adb {
     static Observable<Map<String, String>> getInputMethodDumpsys(Device device) {
         return dumpsysMap(device, INPUT_METHOD).toObservable();
     }
+
 }

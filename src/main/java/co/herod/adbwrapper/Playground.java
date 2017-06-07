@@ -6,7 +6,6 @@ import io.reactivex.functions.Function;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 /**
  * Created by matthewherod on 23/04/2017.
@@ -15,25 +14,31 @@ public class Playground {
 
     public static void main(String[] args) {
 
+        DeviceManager.selectFirstConnectedDevice();
+
         // AdbBus.getBus().subscribe(System.out::println);
 
         //Adb.connectedDevices()
         //        .blockingSubscribe(Adb::pressPowerButton);
 
-        allPropertyMap(DeviceManager.getConnectedDevice());
+        // allPropertyMap(DeviceManager.getConnectedDevice());
 
-        Adb.connectedDevices()
-                .flatMap(DeviceProperties::displayProperties)
-                .map(Playground::outputEntry)
-                .blockingSubscribe(System.out::println);
 
-        Adb.connectedDevices()
-                .flatMap(DeviceProperties::inputMethodProperties)
-                .map(Playground::outputEntry)
-                .blockingSubscribe(System.out::println);
+        System.out.printf("is the screen on? %s", DeviceProperties.isScreenOn());
+
+//        Adb.connectedDevices()
+//                .flatMap(DeviceProperties::displayProperties)
+//                .map(Playground::outputEntry)
+//                .blockingSubscribe(System.out::println);
+//
+//        Adb.connectedDevices()
+//                .flatMap(DeviceProperties::inputMethodProperties)
+//                .map(Playground::outputEntry)
+//                .blockingSubscribe(System.out::println);
     }
 
     private static Map<String, String> allPropertyMap(Device connectedDevice) {
+
         Map<String, String> properties = new HashMap<>();
         properties.putAll(propertyMap(connectedDevice, DeviceProperties::displayProperties));
         properties.putAll(propertyMap(connectedDevice, DeviceProperties::inputMethodProperties));

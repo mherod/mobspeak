@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DataTransformers {
+class DataTransformers {
 
     static SingleSource<? extends Map<String, String>> entryListToMapSingle(List<Map.Entry<String, String>> entries) {
         return Single.just(entryListToMap(entries));

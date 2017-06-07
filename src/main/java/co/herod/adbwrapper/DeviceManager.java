@@ -1,13 +1,24 @@
 package co.herod.adbwrapper;
 
-import io.reactivex.Flowable;
 import io.reactivex.annotations.CheckReturnValue;
-import io.reactivex.functions.Function;
-import org.reactivestreams.Publisher;
 
 import java.util.concurrent.TimeUnit;
 
 public class DeviceManager {
+
+    private static Device device;
+
+    private static boolean isConnectedDevice(Device device) {
+        return device.getType().equals("device");
+    }
+
+    public static void selectDevice(Device device) {
+        DeviceManager.device = device;
+    }
+
+    public static Device getDevice() {
+        return device;
+    }
 
     @CheckReturnValue
     static Device getConnectedDevice() {
@@ -20,7 +31,7 @@ public class DeviceManager {
                 .blockingGet();
     }
 
-    private static boolean isConnectedDevice(Device device) {
-        return device.getType().equals("device");
+    static void selectFirstConnectedDevice() {
+        selectDevice(getConnectedDevice());
     }
 }
