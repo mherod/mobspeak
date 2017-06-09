@@ -1,12 +1,5 @@
 package co.herod.adbwrapper;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.functions.Function;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by matthewherod on 23/04/2017.
  */
@@ -14,17 +7,28 @@ public class Playground {
 
     public static void main(String[] args) {
 
-        DeviceManager.selectFirstConnectedDevice();
+        final Device connectedDevice = DeviceManager.getConnectedDevice();
 
-        // AdbBus.getBus().subscribe(System.out::println);
+        // use the bus to log output you're interested in
+        AdbBus.getBus()
+                .filter(Adb::adbFilter)
+                .concatMap(Utils::throttleOutput)
+                .doOnNext(System.out::println)
+                .subscribe();
+
+        DeviceActions.turnDeviceScreenOn(connectedDevice);
+
+        Adb.subscribeUiHierarchyUpdates(connectedDevice)
+                .doOnNext(System.out::println)
+                .doOnNext(s -> DeviceActions.tapUiNode(connectedDevice, s))
+                .blockingSubscribe();
 
         //Adb.connectedDevices()
         //        .blockingSubscribe(Adb::pressPowerButton);
 
+        // Adb.tapBlocking(connectedDevice);
+
         // allPropertyMap(DeviceManager.getConnectedDevice());
-
-
-        System.out.printf("is the screen on? %s", DeviceProperties.isScreenOn());
 
 //        Adb.connectedDevices()
 //                .flatMap(DeviceProperties::displayProperties)
@@ -37,24 +41,4 @@ public class Playground {
 //                .blockingSubscribe(System.out::println);
     }
 
-    private static Map<String, String> allPropertyMap(Device connectedDevice) {
-
-        Map<String, String> properties = new HashMap<>();
-        properties.putAll(propertyMap(connectedDevice, DeviceProperties::displayProperties));
-        properties.putAll(propertyMap(connectedDevice, DeviceProperties::inputMethodProperties));
-        return properties;
-    }
-
-    private static Map<String, String> propertyMap(Device device, Function<Device, ObservableSource<? extends Map.Entry<String, String>>> properties) {
-
-        return Observable.just(device)
-                .flatMap(properties)
-                .toList()
-                .flatMap(DataTransformers::entryListToMapSingle)
-                .blockingGet();
-    }
-
-    private static String outputEntry(Map.Entry<String, String> entry) {
-        return String.format("%s is %s", entry.getKey(), entry.getValue());
-    }
 }
