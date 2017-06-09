@@ -15,6 +15,7 @@ public class UiHierarchyHelper {
 
     @NotNull
     static String extractBounds(String s) {
+
         return extract(s, KEY_STRING_BOUNDS)
                 .replace("][", ",")
                 .replaceAll("[^\\d,]", "");
@@ -28,9 +29,17 @@ public class UiHierarchyHelper {
     @NotNull
     private static String extract(String s, String s1) {
 
-        String substring = s.substring(s.indexOf(s1));
-        int beginIndex = s1.length();
-        return substring.substring(beginIndex, substring.substring(beginIndex).indexOf("\"") + beginIndex);
+        try {
+            String substring = s.substring(s.indexOf(s1));
+            int beginIndex = s1.length();
+            return substring.substring(beginIndex, substring.substring(beginIndex).indexOf("\"") + beginIndex);
+        } catch (StringIndexOutOfBoundsException exception) {
+
+            System.err.printf("%s %s", s, s1);
+            exception.printStackTrace();
+
+            throw exception;
+        }
     }
 
     static int centreX(Integer[] coords) {
@@ -40,4 +49,13 @@ public class UiHierarchyHelper {
     static int centreY(Integer[] coords) {
         return (coords[1] + coords[3]) / 2;
     }
+
+    static boolean nodeTextContains(String s, String s1) {
+        return s1 == null || s1.isEmpty() || s != null && !s.isEmpty() && extractText(s).contains(s1);
+    }
+
+    static boolean hasBoundsProperty(String s) {
+        return s.contains(KEY_STRING_BOUNDS);
+    }
+
 }

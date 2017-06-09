@@ -18,8 +18,14 @@ public class Playground {
         DeviceActions.turnDeviceScreenOn(connectedDevice);
 
         Adb.subscribeUiHierarchyUpdates(connectedDevice)
+                // .filter(s -> nodeTextContains(s, "0%"))
+                // .compose(new FixedDurationTransformer(10, TimeUnit.SECONDS))
+                // .debounce(2, TimeUnit.SECONDS)
+                .distinct()
                 .doOnNext(System.out::println)
-                .doOnNext(s -> DeviceActions.tapUiNode(connectedDevice, s))
+                // .doOnNext(s -> tapUiNode(connectedDevice, s))
+                // .doOnNext(s -> tapCoords(connectedDevice, 80, 100))
+                .onErrorReturn(a -> "")
                 .blockingSubscribe();
     }
 

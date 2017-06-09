@@ -9,14 +9,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by matthewherod on 23/04/2017.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 class Adb {
 
     private static final String DEVICES = "devices";
@@ -38,8 +37,8 @@ class Adb {
     private static Single<Map<String, String>> dumpsysMap(Device device, String type) {
 
         return observableProcess(dumpsys(device, type))
-                .filter(s -> s.contains("="))
-                .map(s -> s.trim().split("=", 2))
+                .filter(Utils::containsKeyValueSeparator)
+                .map(Utils::splitKeyValue)
                 .toMap(s -> s[0].trim(), s -> s[1].trim());
     }
 
@@ -100,16 +99,15 @@ class Adb {
     static Observable<String> dumpUiHierarchy(Device device) {
 
         return observableProcess(dumpUiHierarchyProcess(device))
-                .map(s -> s.substring(s.indexOf('<'), (s.lastIndexOf('>') + 1)))
-                .flatMapIterable(s -> Arrays.asList(s.split(">")))
-                .map(s -> {
-                    s = s.trim();
-                    if (!s.endsWith(">")) s += ">";
-                    return s;
-                })
-                .filter(s -> s.contains("="))
-                .filter(s -> s.contains(UiHierarchyHelper.KEY_STRING_BOUNDS))
-                .retry()
+                .map(Utils::extractXmlString)
+                .compose(new ResultChangeFixedDurationTransformer())
+                .doOnNext(System.out::println)
+                .flatMapIterable(Utils::splitOnCloseTag)
+                .map(String::trim)
+                .map(Utils::appendCloseTagIfNotExists)
+                .filter(s -> Utils.containsKeyValueSeparator(s))
+                .filter(UiHierarchyHelper::hasBoundsProperty)
+                .compose(new FixedDurationTransformer(1, TimeUnit.DAYS))
                 .onErrorReturn(throwable -> {
                     throwable.printStackTrace();
                     return "";
@@ -117,10 +115,12 @@ class Adb {
     }
 
     private static Observable<String> observableProcess(final ProcessBuilder processBuilder) {
+
         return Observable.just(processBuilder)
                 .map(ProcessBuilder::start)
                 .flatMap(Adb::observableProcess)
-                .doOnEach(AdbBus.getBus());
+                .doOnEach(AdbBus.getBus())
+                .map(String::trim);
     }
 
     private static Observable<String> observableProcess(final Process process) {
@@ -155,9 +155,10 @@ class Adb {
     }
 
     static Observable<Integer[]> extractBoundsInts(String s) {
+
         return Observable.just(s)
                 .map(UiHierarchyHelper::extractBounds)
-                .map(s1 -> s1.split(","))
+                .map(Utils::splitCsv)
                 .map(Utils::stringArrayToIntArray);
     }
 
@@ -165,8 +166,8 @@ class Adb {
 
         return dumpUiHierarchy(connectedDevice)
                 .repeat()
-                .filter(Utils::isNotEmpty)
-                .distinct();
+                .filter(Utils::isNotEmpty);
+                //.distinct();
     }
 
     static Observable<String> subscribeUiHierarchyUpdates(Device connectedDevice, String packageIdentifier) {

@@ -43,4 +43,8 @@ public class DeviceActions {
         return Adb.extractBoundsInts(s)
                 .subscribe(c -> tapCentre(connectedDevice, c));
     }
+
+    static void tapCoords(Device connectedDevice, int x, int y) {
+        Adb.tapBlocking(connectedDevice, x, y);
+    }
 }

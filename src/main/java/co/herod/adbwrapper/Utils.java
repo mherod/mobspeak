@@ -7,6 +7,7 @@ import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,5 +57,35 @@ public class Utils {
                 .toList()
                 .flatMap(Utils::entryListToMapSingle)
                 .blockingGet();
+    }
+
+    @NotNull
+    static String appendCloseTagIfNotExists(String s) {
+        if (!s.endsWith(">")) s += ">";
+        return s;
+    }
+
+    @NotNull
+    static String[] splitCsv(String s1) {
+        return s1.split(",");
+    }
+
+    @NotNull
+    static String extractXmlString(String s) {
+        return s.substring(s.indexOf('<'), (s.lastIndexOf('>') + 1));
+    }
+
+    @NotNull
+    static List<String> splitOnCloseTag(String s) {
+        return Arrays.asList(s.split(">"));
+    }
+
+    @NotNull
+    static String[] splitKeyValue(String s) {
+        return s.trim().split("=", 2);
+    }
+
+    static boolean containsKeyValueSeparator(String s) {
+        return s.contains("=");
     }
 }
