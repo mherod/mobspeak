@@ -22,23 +22,5 @@ public class Playground {
                 .doOnNext(System.out::println)
                 .doOnNext(s -> DeviceActions.tapUiNode(connectedDevice, s))
                 .blockingSubscribe();
-
-        //Adb.connectedDevices()
-        //        .blockingSubscribe(Adb::pressPowerButton);
-
-        // Adb.tapBlocking(connectedDevice);
-
-        // allPropertyMap(DeviceManager.getConnectedDevice());
-
-//        Adb.connectedDevices()
-//                .flatMap(DeviceProperties::displayProperties)
-//                .map(Playground::outputEntry)
-//                .blockingSubscribe(System.out::println);
-//
-//        Adb.connectedDevices()
-//                .flatMap(DeviceProperties::inputMethodProperties)
-//                .map(Playground::outputEntry)
-//                .blockingSubscribe(System.out::println);
     }
-
 }
