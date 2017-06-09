@@ -10,8 +10,7 @@ public class Playground {
         final Device connectedDevice = DeviceManager.getConnectedDevice();
 
         // use the bus to log output you're interested in
-        AdbBus.getBus()
-                .filter(Adb::adbFilter)
+        Adb.subscribeAdbCommands()
                 .concatMap(Utils::throttleOutput)
                 .doOnNext(System.out::println)
                 .subscribe();
@@ -23,4 +22,5 @@ public class Playground {
                 .doOnNext(s -> DeviceActions.tapUiNode(connectedDevice, s))
                 .blockingSubscribe();
     }
+
 }

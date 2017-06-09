@@ -176,4 +176,9 @@ class Adb {
                 .filter(Utils::isNotEmpty)
                 .distinct();
     }
+
+    static Observable<String> subscribeAdbCommands() {
+        return AdbBus.getBus()
+                .filter(Adb::adbFilter);
+    }
 }
