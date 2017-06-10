@@ -1,5 +1,6 @@
-package co.herod.adbwrapper;
+package co.herod.adbwrapper.util;
 
+import co.herod.adbwrapper.model.Device;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
@@ -7,7 +8,6 @@ import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,22 +15,9 @@ import java.util.concurrent.TimeUnit;
 
 public class Utils {
 
-    static boolean isNotEmpty(String s) {
-        return !s.trim().isEmpty();
-    }
-
-    static Observable<String> throttleOutput(String s) {
+    public static Observable<String> throttleOutput(String s) {
         return Observable.timer(10, TimeUnit.MILLISECONDS)
                 .flatMap(a -> Observable.just(s));
-    }
-
-    @NotNull
-    static Integer[] stringArrayToIntArray(String[] strings) {
-        Integer[] integers = new Integer[4];
-        for (int i = 0; i < 4; i++) {
-            integers[i] = Integer.parseInt(strings[i]);
-        }
-        return integers;
     }
 
     @NotNull
@@ -59,33 +46,4 @@ public class Utils {
                 .blockingGet();
     }
 
-    @NotNull
-    static String appendCloseTagIfNotExists(String s) {
-        if (!s.endsWith(">")) s += ">";
-        return s;
-    }
-
-    @NotNull
-    static String[] splitCsv(String s1) {
-        return s1.split(",");
-    }
-
-    @NotNull
-    static String extractXmlString(String s) {
-        return s.substring(s.indexOf('<'), (s.lastIndexOf('>') + 1));
-    }
-
-    @NotNull
-    static List<String> splitOnCloseTag(String s) {
-        return Arrays.asList(s.split(">"));
-    }
-
-    @NotNull
-    static String[] splitKeyValue(String s) {
-        return s.trim().split("=", 2);
-    }
-
-    static boolean containsKeyValueSeparator(String s) {
-        return s.contains("=");
-    }
 }

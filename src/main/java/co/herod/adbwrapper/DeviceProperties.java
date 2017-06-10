@@ -1,5 +1,7 @@
 package co.herod.adbwrapper;
 
+import co.herod.adbwrapper.model.Device;
+import co.herod.adbwrapper.util.PropHelper;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import org.jetbrains.annotations.NotNull;

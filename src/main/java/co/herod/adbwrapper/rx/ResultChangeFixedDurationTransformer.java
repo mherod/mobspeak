@@ -1,4 +1,4 @@
-package co.herod.adbwrapper;
+package co.herod.adbwrapper.rx;
 
 import io.reactivex.Observable;
 

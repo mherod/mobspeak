@@ -1,11 +1,13 @@
 package co.herod.adbwrapper;
 
+import co.herod.adbwrapper.model.Device;
+import co.herod.adbwrapper.util.UiHierarchyHelper;
+import io.reactivex.Completable;
 import io.reactivex.disposables.Disposable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static co.herod.adbwrapper.UiHierarchyHelper.centreX;
-import static co.herod.adbwrapper.UiHierarchyHelper.centreY;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class DeviceActions {
@@ -23,28 +25,30 @@ public class DeviceActions {
     }
 
     static void turnDeviceScreenOn(Device device) {
-        while (!DeviceProperties.isScreenOn(device)) {
-            pressPowerButton(device);
-        }
+        while (!DeviceProperties.isScreenOn(device)) pressPowerButton(device);
     }
 
-    static void turnDeviceScreenOff(Device device) {
-        while (DeviceProperties.isScreenOn(device)) {
-            pressPowerButton(device);
-        }
+    public static void turnDeviceScreenOff(Device device) {
+        while (DeviceProperties.isScreenOn(device)) pressPowerButton(device);
     }
 
-    static void tapCentre(Device connectedDevice, Integer[] c) {
-        Adb.tapBlocking(connectedDevice, centreX(c), centreY(c));
+    public static void tapCentre(Device connectedDevice, Integer[] c) {
+        tapBlocking(connectedDevice, UiHierarchyHelper.centreX(c), UiHierarchyHelper.centreY(c));
     }
 
     @NotNull
-    static Disposable tapUiNode(Device connectedDevice, String s) {
-        return Adb.extractBoundsInts(s)
-                .subscribe(c -> tapCentre(connectedDevice, c));
+    public static Disposable tapUiNode(Device connectedDevice, String s) {
+        return Adb.extractBoundsInts(s).subscribe(c -> tapCentre(connectedDevice, c));
     }
 
-    static void tapCoords(Device connectedDevice, int x, int y) {
-        Adb.tapBlocking(connectedDevice, x, y);
+    public static boolean tapCoords(Device connectedDevice, int x, int y) {
+        return tapBlocking(connectedDevice, x, y);
     }
+
+    public static boolean tapBlocking(Device device, final int x, final int y) {
+
+        return Completable.fromObservable(ProcessHelper.observableProcess(Adb.tap(device, x, y)))
+                .blockingAwait(5, TimeUnit.SECONDS);
+    }
+
 }

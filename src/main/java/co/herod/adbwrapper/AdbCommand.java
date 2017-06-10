@@ -1,5 +1,6 @@
 package co.herod.adbwrapper;
 
+import co.herod.adbwrapper.model.Device;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +23,7 @@ class AdbCommand {
     }
 
     public ProcessBuilder toProcessBuilder() {
+
         return new ProcessBuilder()
                 .command(createCommandStrings())
                 .redirectErrorStream(true);

@@ -1,20 +1,21 @@
-package co.herod.adbwrapper;
+package co.herod.adbwrapper.util;
 
+import io.reactivex.Observable;
 import org.jetbrains.annotations.NotNull;
 
 public class UiHierarchyHelper {
 
-    static final String KEY_DELIMITER = "=\"";
+    private static final String KEY_DELIMITER = "=\"";
 
-    static final String KEY_STRING_BOUNDS = getKeyString("bounds");
-    static final String KEY_STRING_TEXT = getKeyString("text");
+    private static final String KEY_STRING_BOUNDS = getKeyString("bounds");
+    private static final String KEY_STRING_TEXT = getKeyString("text");
 
     private static String getKeyString(final String s) {
         return String.format("%s%s", s, KEY_DELIMITER);
     }
 
     @NotNull
-    static String extractBounds(String s) {
+    public static String extractBounds(String s) {
 
         return extract(s, KEY_STRING_BOUNDS)
                 .replace("][", ",")
@@ -22,7 +23,7 @@ public class UiHierarchyHelper {
     }
 
     @NotNull
-    static String extractText(String s) {
+    private static String extractText(String s) {
         return extract(s, KEY_STRING_TEXT);
     }
 
@@ -42,11 +43,11 @@ public class UiHierarchyHelper {
         }
     }
 
-    static int centreX(Integer[] coords) {
+    public static int centreX(Integer[] coords) {
         return (coords[0] + coords[2]) / 2;
     }
 
-    static int centreY(Integer[] coords) {
+    public static int centreY(Integer[] coords) {
         return (coords[1] + coords[3]) / 2;
     }
 
@@ -54,8 +55,15 @@ public class UiHierarchyHelper {
         return s1 == null || s1.isEmpty() || s != null && !s.isEmpty() && extractText(s).contains(s1);
     }
 
-    static boolean hasBoundsProperty(String s) {
+    private static boolean hasBoundsProperty(String s) {
         return s.contains(KEY_STRING_BOUNDS);
     }
 
+    public static Observable<String> uiXmlToNodes(Observable<String> upstream) {
+        return upstream.flatMapIterable(StringUtils::splitOnCloseTag)
+                .map(String::trim)
+                .map(StringUtils::appendCloseTagIfNotExists)
+                .filter(StringUtils::containsKeyValueSeparator)
+                .filter(UiHierarchyHelper::hasBoundsProperty);
+    }
 }

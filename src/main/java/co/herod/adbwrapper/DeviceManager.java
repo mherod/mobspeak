@@ -1,16 +1,14 @@
 package co.herod.adbwrapper;
 
+import co.herod.adbwrapper.model.Device;
 import io.reactivex.annotations.CheckReturnValue;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class DeviceManager {
 
     private static Device device;
-
-    private static boolean isConnectedDevice(Device device) {
-        return device.getType().equals("device");
-    }
 
     public static void selectDevice(Device device) {
         DeviceManager.device = device;
@@ -24,11 +22,15 @@ public class DeviceManager {
     static Device getConnectedDevice() {
 
         return Adb.connectedDevices()
-                .filter(DeviceManager::isConnectedDevice)
-                .singleOrError()
+                .filter(Device::isConnectedDevice)
+                .firstOrError()
                 .retryWhen(handler -> handler.delay(1, TimeUnit.SECONDS))
                 .timeout(10, TimeUnit.SECONDS)
                 .blockingGet();
+    }
+
+    static List<Device> getAllDevices() {
+        return Adb.connectedDevices().toList().blockingGet();
     }
 
     static void selectFirstConnectedDevice() {

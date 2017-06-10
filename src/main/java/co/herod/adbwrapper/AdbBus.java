@@ -8,9 +8,10 @@ import io.reactivex.subjects.Subject;
 /**
  * Created by matthewherod on 23/04/2017.
  */
-public class AdbBus extends Subject<String> implements Observer<String> {
+class AdbBus extends Subject<String> implements Observer<String> {
 
     private static AdbBus ourInstance = new AdbBus();
+
     private final PublishSubject<String> processOutputSubject = PublishSubject.create();
 
     private AdbBus() {

@@ -1,11 +1,11 @@
-package co.herod.adbwrapper;
+package co.herod.adbwrapper.rx;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 
 import java.util.concurrent.TimeUnit;
 
-class FixedDurationTransformer implements ObservableTransformer<String, String> {
+public class FixedDurationTransformer implements ObservableTransformer<String, String> {
 
     private final int timeout;
     private final TimeUnit timeUnit;
@@ -18,9 +18,6 @@ class FixedDurationTransformer implements ObservableTransformer<String, String> 
 
     @Override
     public Observable<String> apply(Observable<String> upstream) {
-
-        return upstream
-                .retry()
-                .timeout(timeout, timeUnit);
+        return upstream.retry().timeout(timeout, timeUnit);
     }
 }
