@@ -1,7 +1,6 @@
 package co.herod.adbwrapper;
 
 import co.herod.adbwrapper.model.Device;
-import co.herod.adbwrapper.util.Utils;
 
 /**
  * Created by matthewherod on 23/04/2017.
@@ -10,13 +9,9 @@ public class Playground {
 
     public static void main(String[] args) {
 
-        final Device connectedDevice = DeviceManager.getConnectedDevice();
+        AdbStreams.streamAdbCommands().subscribe(System.out::println);
 
-        // use the bus to log output you're interested in
-        AdbStreams.streamAdbCommands()
-                .concatMap(Utils::throttleOutput)
-                .doOnNext(System.out::println)
-                .subscribe();
+        final Device connectedDevice = DeviceManager.getConnectedDevice();
 
         DeviceActions.turnDeviceScreenOn(connectedDevice);
 
@@ -32,5 +27,4 @@ public class Playground {
                 .onErrorReturn(a -> "")
                 .blockingSubscribe();
     }
-
 }

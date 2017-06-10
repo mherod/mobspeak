@@ -11,7 +11,7 @@ public class Device {
     private String deviceIdentifier;
     private String type;
 
-    static Device parseAdbString(final String adbDeviceString) {
+    public static Device parseAdbString(final String adbDeviceString) {
 
         final Device device = new Device();
 
@@ -44,7 +44,7 @@ public class Device {
         return device.getType().equals(DEVICE_EMULATOR);
     }
 
-    static boolean isConnectedDevice(Device device) {
+    public static boolean isConnectedDevice(Device device) {
         return device.getType().equals(DEVICE_CONNECTED_DEVICE);
     }
 }

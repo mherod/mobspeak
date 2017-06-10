@@ -1,5 +1,7 @@
 package co.herod.adbwrapper;
 
+import co.herod.adbwrapper.util.Utils;
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
@@ -19,6 +21,10 @@ class AdbBus extends Subject<String> implements Observer<String> {
 
     static AdbBus getBus() {
         return ourInstance;
+    }
+
+    static Observable<String> getThrottledBus() {
+        return getBus().concatMap(Utils::throttleOutput);
     }
 
     @Override
