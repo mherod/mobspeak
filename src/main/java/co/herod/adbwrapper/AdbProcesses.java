@@ -23,14 +23,6 @@ class AdbProcesses {
         return adb(adbDevice, "exec-out uiautomator dump /dev/tty");
     }
 
-    static ProcessBuilder screenCaptureTake(final AdbDevice adbDevice) {
-        return adb(adbDevice, "shell screencap -p /sdcard/screen.png");
-    }
-
-    static ProcessBuilder screenCapturePull(final AdbDevice adbDevice) {
-        return adb(adbDevice, "pull /sdcard/screen.png");
-    }
-
     static ProcessBuilder tap(@Nullable final AdbDevice adbDevice, final int x, final int y) {
         return adb(adbDevice, String.format("shell input tap %d %d", x, y));
     }

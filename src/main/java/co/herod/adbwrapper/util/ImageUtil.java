@@ -14,4 +14,8 @@ public class ImageUtil {
     public static BufferedImage readImage(final File filePath) throws IOException {
         return ImageIO.read(filePath);
     }
+
+    public static BufferedImage cropImage(final File filePath, final int x, final int y, final int w, final int h) throws IOException {
+        return readImage(filePath).getSubimage(x, y, w, h);
+    }
 }

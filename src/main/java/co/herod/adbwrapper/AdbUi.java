@@ -10,6 +10,8 @@ import io.reactivex.Observable;
 
 import java.util.concurrent.TimeUnit;
 
+import static co.herod.adbwrapper.AdbProcesses.adb;
+
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AdbUi {
 
@@ -32,10 +34,12 @@ public class AdbUi {
     private static Observable<String> streamUiNodeStringsInternal(final AdbDevice adbDevice) {
 
         return Adb.dumpUiHierarchy(adbDevice)
-                .doOnNext(s -> Observable.fromCallable(() -> ScreenshotHelper.screenshot(adbDevice)).blockingSubscribe())
+                .distinctUntilChanged()
+                .doOnNext(System.out::println)
+                .doOnNext(s -> Observable.fromCallable(() -> ScreenshotHelper.screenshot(adbDevice, true)).blockingSubscribe())
                 .map(StringUtils::extractXmlString)
                 .compose(new ResultChangeFixedDurationTransformer())
-                .doOnNext(System.out::println)
+                // .doOnNext(System.out::println)
                 .compose(UiHierarchyHelper::uiXmlToNodes)
                 .compose(new FixedDurationTransformer(1, TimeUnit.DAYS))
                 .onErrorReturn(throwable -> {
@@ -44,5 +48,11 @@ public class AdbUi {
                 })
                 .repeat()
                 .filter(StringUtils::isNotEmpty);
+    }
+
+    static void pullScreenCapture(final AdbDevice adbDevice) {
+        ProcessHelper.blocking(adb(adbDevice, "shell screencap -p /sdcard/screen.png"));
+        ProcessHelper.blocking(adb(adbDevice, "pull /sdcard/screen.png"));
+        ProcessHelper.blocking(adb(adbDevice, "shell rm /sdcard/screen.png"));
     }
 }

@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("WeakerAccess")
 class ProcessHelper {
 
     static Observable<String> observableProcess(@NotNull final ProcessBuilder processBuilder) {
@@ -45,5 +46,9 @@ class ProcessHelper {
 
         Completable.fromObservable(observableProcess(processBuilder))
                 .blockingAwait(timeout, timeUnit);
+    }
+
+    static void blocking(final ProcessBuilder processBuilder) {
+        blocking(processBuilder, 10, TimeUnit.SECONDS);
     }
 }

@@ -12,40 +12,25 @@ import io.reactivex.schedulers.Schedulers;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class ScreenshotHelper {
 
-    public static final int SCREENSHOT_EXPIRY_MILLIS = 10000;
+    private static final int SCREENSHOT_EXPIRY_MILLIS = 10000;
 
     @CheckReturnValue
-    public static File screenshot(final AdbDevice adbDevice) {
+    public static File screenshot(final AdbDevice adbDevice, final boolean ignoreCache) {
 
         final File file = FileUtil.getFile("screen.png");
 
         final long l = FileUtil.getAgeMillis(file);
 
-        if (l < SCREENSHOT_EXPIRY_MILLIS) {
-
-            System.out.printf("Screenshot time diff is %d \n", l);
+        if (l < SCREENSHOT_EXPIRY_MILLIS && !ignoreCache) {
+            // TODO only expire on change in UI
             return file;
         }
 
-        ProcessHelper.blocking(AdbProcesses.screenCaptureTake(adbDevice), 10, TimeUnit.SECONDS);
-        ProcessHelper.blocking(AdbProcesses.screenCapturePull(adbDevice), 10, TimeUnit.SECONDS);
-
+        AdbUi.pullScreenCapture(adbDevice);
         return file;
-    }
-
-    public static BufferedImage getSubimage(final File filePath, final int x, final int y, final int w, final int h) {
-
-        try {
-            final BufferedImage originalImage = ImageUtil.readImage(filePath);
-            return originalImage.getSubimage(x, y, w, h);
-        } catch (final IOException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     static void screenshotUiNode(final AdbDevice connectedAdbDevice, final String nodeString) {
@@ -64,7 +49,10 @@ public class ScreenshotHelper {
         getBufferedImageObservable(connectedAdbDevice, coords, width, height)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.io())
-                .subscribe(bufferedImage -> ImageUtil.saveBufferedImage(bufferedImage, pathForCropImage(coords)));
+                .doOnNext(bufferedImage -> ImageUtil.saveBufferedImage(bufferedImage, pathForCropImage(coords)))
+                .subscribe(bufferedImage -> {
+                }, throwable -> {
+                });
     }
 
     private static Observable<BufferedImage> getBufferedImageObservable(final AdbDevice connectedAdbDevice, final Integer[] coords, final int width, final int height) {
@@ -72,8 +60,14 @@ public class ScreenshotHelper {
     }
 
     private static BufferedImage getBufferedImage(final AdbDevice connectedAdbDevice, final Integer[] coords, final int width, final int height) {
-        final File screenshot = screenshot(connectedAdbDevice);
-        return getSubimage(screenshot, coords[0], coords[1], width, height);
+
+        final File screenshot = screenshot(connectedAdbDevice, false);
+        try {
+            return ImageUtil.cropImage(screenshot, coords[0], coords[1], width, height);
+        } catch (final IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     private static String pathForCropImage(final Integer[] coords) {
