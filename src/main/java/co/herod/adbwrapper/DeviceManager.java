@@ -1,39 +1,36 @@
 package co.herod.adbwrapper;
 
 import co.herod.adbwrapper.model.Device;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.annotations.CheckReturnValue;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("WeakerAccess")
 public class DeviceManager {
 
-    private static Device device;
-
-    public static void selectDevice(Device device) {
-        DeviceManager.device = device;
-    }
-
-    public static Device getDevice() {
-        return device;
+    @CheckReturnValue
+    public static Device getConnectedDevice() {
+        return getConnectedDeviceSingle().blockingGet();
     }
 
     @CheckReturnValue
-    static Device getConnectedDevice() {
-
-        return Adb.connectedDevices()
+    public static Single<Device> getConnectedDeviceSingle() {
+        return connectedDevices()
                 .filter(Device::isConnectedDevice)
                 .firstOrError()
                 .retryWhen(handler -> handler.delay(1, TimeUnit.SECONDS))
-                .timeout(10, TimeUnit.SECONDS)
-                .blockingGet();
+                .timeout(10, TimeUnit.SECONDS);
     }
 
-    static List<Device> getAllDevices() {
-        return Adb.connectedDevices().toList().blockingGet();
+    @CheckReturnValue
+    public static List<Device> getAllDevices() {
+        return connectedDevices().toList().blockingGet();
     }
 
-    static void selectFirstConnectedDevice() {
-        selectDevice(getConnectedDevice());
+    private static Observable<Device> connectedDevices() {
+        return Adb.connectedDevices();
     }
 }

@@ -8,7 +8,7 @@ import io.reactivex.Observable;
 
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 class AdbStreams {
 
     static Observable<String> streamAdbCommands() {
