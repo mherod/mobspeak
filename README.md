@@ -8,9 +8,9 @@ Import the library to your Java project using Gradle
 
 ~~~~
 allprojects {
-	repositories {
-		maven { url 'https://jitpack.io' }
-	}
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
 }
 
 dependencies {
