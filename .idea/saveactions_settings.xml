@@ -4,10 +4,15 @@
     <option name="actions">
       <set>
         <option value="activate" />
+        <option value="noActionIfCompileErrors" />
         <option value="organizeImports" />
         <option value="reformat" />
         <option value="rearrange" />
+        <option value="compile" />
         <option value="localCanBeFinal" />
+        <option value="fieldCanBeFinal" />
+        <option value="explicitTypeCanBeDiamond" />
+        <option value="suppressAnnotation" />
         <option value="finalPrivateMethod" />
         <option value="unnecessarySemicolon" />
         <option value="missingOverrideAnnotation" />
