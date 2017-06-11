@@ -79,4 +79,12 @@ public class UiHierarchyHelper {
     public static boolean isPackage(final String packageIdentifier, final String s) {
         return s.contains("package=\"" + packageIdentifier + "\"");
     }
+
+    public static int getHeight(final Integer[] coords) {
+        return coords[3] - coords[1];
+    }
+
+    public static int getWidth(final Integer[] coords) {
+        return coords[2] - coords[0];
+    }
 }

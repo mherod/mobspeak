@@ -8,6 +8,7 @@ import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,4 +47,7 @@ public class Utils {
                 .blockingGet();
     }
 
+    public static int intArrayHashcode(final Integer[] coords) {
+        return Arrays.toString(coords).hashCode();
+    }
 }

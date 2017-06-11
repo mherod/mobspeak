@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by matthewherod on 23/04/2017.
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Adb {
 
     public static Observable<AdbDevice> devices() {
@@ -39,6 +39,10 @@ public class Adb {
                 .filter(StringUtils::containsKeyValueSeparator)
                 .map(StringUtils::splitKeyValue)
                 .toMap(s -> s[0].trim(), s -> s[1].trim());
+    }
+
+    public static Observable<String> dumpUiHierarchy(final AdbDevice adbDevice) {
+        return ProcessHelper.observableProcess(AdbProcesses.dumpUiHierarchyProcess(adbDevice));
     }
 
     public static Observable<String> command(final AdbDevice adbDevice, final String command) {

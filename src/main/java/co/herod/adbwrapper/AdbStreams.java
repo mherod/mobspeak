@@ -1,5 +1,6 @@
 package co.herod.adbwrapper;
 
+import co.herod.adbwrapper.model.AdbUiNode;
 import co.herod.adbwrapper.rx.FixedDurationTransformer;
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer;
 import co.herod.adbwrapper.util.StringUtils;
@@ -9,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
 public class AdbStreams {
 
     public static Observable<String> streamAdbCommands() {
@@ -20,15 +20,16 @@ public class AdbStreams {
         return AdbBus.getThrottledBus().filter(AdbFilters::isUiDumpOutput);
     }
 
-    public static Observable<String> streamUiNodeChanges() {
+    public static Observable<AdbUiNode> streamUiNodeChanges() {
 
         return streamUiHierarchyUpdates()
                 .map(StringUtils::extractXmlString)
                 .compose(new ResultChangeFixedDurationTransformer())
-                // .doOnNext(System.out::println)
                 .compose(UiHierarchyHelper::uiXmlToNodes)
+                .onErrorReturn(throwable -> "")
+                .filter(StringUtils::isNotEmpty)
                 .compose(new FixedDurationTransformer(1, TimeUnit.DAYS))
-                .onErrorReturn(throwable -> "");
+                .map(AdbUiNode::new);
     }
 
     static class AdbFilters {
