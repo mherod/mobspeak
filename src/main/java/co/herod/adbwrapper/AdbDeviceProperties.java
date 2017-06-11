@@ -1,6 +1,6 @@
 package co.herod.adbwrapper;
 
-import co.herod.adbwrapper.model.Device;
+import co.herod.adbwrapper.model.AdbDevice;
 import co.herod.adbwrapper.util.PropHelper;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -10,34 +10,37 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings("WeakerAccess")
-class DeviceProperties {
+@SuppressWarnings({"WeakerAccess", "unused"})
+class AdbDeviceProperties {
+
+    public static final String PROPS_DISPLAY = "display";
+    public static final String PROPS_INPUT_METHOD = "input_method";
 
     private static final String KEY_SCREEN_STATE = "mScreenState";
 
-    static Observable<Map.Entry<String, String>> inputMethodProperties(Device device) {
-        return Observable.just(device)
+    public static Observable<Map.Entry<String, String>> inputMethodProperties(@NotNull final AdbDevice adbDevice) {
+        return Observable.just(adbDevice)
                 .flatMap(Adb::getInputMethodDumpsys)
                 .flatMapIterable(Map::entrySet)
                 .filter(PropHelper::isValidProperty)
                 .sorted(Comparator.comparing(Map.Entry::getKey));
     }
 
-    static Observable<Map.Entry<String, String>> displayProperties(Device device) {
-        return Observable.just(device)
+    public static Observable<Map.Entry<String, String>> displayProperties(@NotNull final AdbDevice adbDevice) {
+        return Observable.just(adbDevice)
                 .flatMap(Adb::getDisplayDumpsys)
                 .flatMapIterable(Map::entrySet)
                 .filter(PropHelper::isValidProperty)
                 .sorted(Comparator.comparing(Map.Entry::getKey));
     }
 
-    static boolean isScreenOn(@NotNull Device device) {
-        return isScreenOnSingle(device).blockingGet();
+    public static boolean isScreenOn(@NotNull final AdbDevice adbDevice) {
+        return isScreenOnSingle(adbDevice).blockingGet();
     }
 
-    static Single<Boolean> isScreenOnSingle(@NotNull Device device) {
-        return Observable.just(device)
-                .flatMap(DeviceProperties::displayProperties)
+    public static Single<Boolean> isScreenOnSingle(@NotNull final AdbDevice adbDevice) {
+        return Observable.just(adbDevice)
+                .flatMap(AdbDeviceProperties::displayProperties)
                 .filter(entry -> PropHelper.isKey(entry, KEY_SCREEN_STATE))
                 .zipWith(Observable.interval(1, TimeUnit.SECONDS), (entry, a) -> entry)
                 .map(PropHelper::hasPositiveValue)

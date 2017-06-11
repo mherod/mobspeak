@@ -1,15 +1,18 @@
 package co.herod.adbwrapper;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.TimeUnit;
 
-public class ProcessHelper {
+class ProcessHelper {
 
-    static Observable<String> observableProcess(final ProcessBuilder processBuilder) {
+    static Observable<String> observableProcess(@NotNull final ProcessBuilder processBuilder) {
 
         return Observable.just(processBuilder)
                 .map(ProcessBuilder::start)
@@ -18,7 +21,7 @@ public class ProcessHelper {
                 .doOnEach(AdbBus.getBus());
     }
 
-    private static Observable<String> observableProcess(final Process process) {
+    private static Observable<String> observableProcess(@NotNull final Process process) {
 
         return Observable.fromPublisher(s -> {
 
@@ -30,10 +33,17 @@ public class ProcessHelper {
                 while ((line = br.readLine()) != null) {
                     s.onNext(line);
                 }
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 s.onError(e);
             }
             s.onComplete();
         });
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    static void blocking(final ProcessBuilder processBuilder, final int timeout, final TimeUnit timeUnit) {
+
+        Completable.fromObservable(observableProcess(processBuilder))
+                .blockingAwait(timeout, timeUnit);
     }
 }

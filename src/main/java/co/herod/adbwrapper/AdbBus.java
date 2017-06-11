@@ -6,12 +6,14 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by matthewherod on 23/04/2017.
  */
-class AdbBus extends Subject<String> implements Observer<String> {
+public class AdbBus extends Subject<String> implements Observer<String> {
 
+    @NotNull
     private static AdbBus ourInstance = new AdbBus();
 
     private final PublishSubject<String> processOutputSubject = PublishSubject.create();
@@ -19,6 +21,7 @@ class AdbBus extends Subject<String> implements Observer<String> {
     private AdbBus() {
     }
 
+    @NotNull
     static AdbBus getBus() {
         return ourInstance;
     }
@@ -28,7 +31,7 @@ class AdbBus extends Subject<String> implements Observer<String> {
     }
 
     @Override
-    protected void subscribeActual(Observer<? super String> observer) {
+    protected void subscribeActual(@NotNull final Observer<? super String> observer) {
         processOutputSubject.subscribeActual(observer);
     }
 
@@ -53,17 +56,17 @@ class AdbBus extends Subject<String> implements Observer<String> {
     }
 
     @Override
-    public void onSubscribe(Disposable d) {
+    public void onSubscribe(final Disposable d) {
         processOutputSubject.onSubscribe(d);
     }
 
     @Override
-    public void onNext(String s) {
+    public void onNext(final String s) {
         processOutputSubject.onNext(s);
     }
 
     @Override
-    public void onError(Throwable e) {
+    public void onError(final Throwable e) {
         processOutputSubject.onError(e);
     }
 

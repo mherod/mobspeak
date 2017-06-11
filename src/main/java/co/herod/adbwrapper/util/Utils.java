@@ -1,6 +1,6 @@
 package co.herod.adbwrapper.util;
 
-import co.herod.adbwrapper.model.Device;
+import co.herod.adbwrapper.model.AdbDevice;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
@@ -15,31 +15,31 @@ import java.util.concurrent.TimeUnit;
 
 public class Utils {
 
-    public static Observable<String> throttleOutput(String s) {
+    public static Observable<String> throttleOutput(@NotNull final String s) {
         return Observable.timer(10, TimeUnit.MILLISECONDS)
                 .flatMap(a -> Observable.just(s));
     }
 
     @NotNull
-    static Map<String, String> entryListToMap(List<Map.Entry<String, String>> entries) {
-        Map<String, String> propertyMap = new HashMap<>();
-        for (Map.Entry<String, String> entry : entries) {
+    static Map<String, String> entryListToMap(@NotNull final List<Map.Entry<String, String>> entries) {
+        final Map<String, String> propertyMap = new HashMap<>();
+        for (final Map.Entry<String, String> entry : entries) {
             propertyMap.put(entry.getKey(), entry.getValue());
         }
         return propertyMap;
     }
 
-    static SingleSource<? extends Map<String, String>> entryListToMapSingle(List<Map.Entry<String, String>> entries) {
+    static SingleSource<? extends Map<String, String>> entryListToMapSingle(@NotNull final List<Map.Entry<String, String>> entries) {
         return Single.just(entryListToMap(entries));
     }
 
-    private static String outputEntry(Map.Entry<String, String> entry) {
+    private static String outputEntry(@NotNull final Map.Entry<String, String> entry) {
         return String.format("%s is %s", entry.getKey(), entry.getValue());
     }
 
-    private static Map<String, String> propertyMap(Device device, Function<Device, ObservableSource<? extends Map.Entry<String, String>>> properties) {
+    private static Map<String, String> propertyMap(@NotNull final AdbDevice adbDevice, @NotNull final Function<AdbDevice, ObservableSource<? extends Map.Entry<String, String>>> properties) {
 
-        return Observable.just(device)
+        return Observable.just(adbDevice)
                 .flatMap(properties)
                 .toList()
                 .flatMap(Utils::entryListToMapSingle)

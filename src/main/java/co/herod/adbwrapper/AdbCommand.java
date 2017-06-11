@@ -1,6 +1,6 @@
 package co.herod.adbwrapper;
 
-import co.herod.adbwrapper.model.Device;
+import co.herod.adbwrapper.model.AdbDevice;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,11 +17,12 @@ class AdbCommand {
     private final String deviceIdentifier;
     private final String command;
 
-    AdbCommand(String deviceIdentifier, String command) {
+    AdbCommand(final String deviceIdentifier, final String command) {
         this.deviceIdentifier = deviceIdentifier;
         this.command = command;
     }
 
+    @NotNull
     public ProcessBuilder toProcessBuilder() {
 
         return new ProcessBuilder()
@@ -44,30 +45,36 @@ class AdbCommand {
     @SuppressWarnings({"WeakerAccess", "unused"})
     public static class Builder {
 
+        @Nullable
         private String deviceIdentifier;
         private String command;
 
+        @Nullable
         AdbCommand build() {
             return new AdbCommand(deviceIdentifier, command);
         }
 
+        @NotNull
         ProcessBuilder processBuilder() {
             return build().toProcessBuilder();
         }
 
-        public Builder setDevice(@Nullable final Device device) {
-            if (device != null) {
-                this.deviceIdentifier = device.getDeviceIdentifier();
+        @NotNull
+        public Builder setDevice(@Nullable final AdbDevice adbDevice) {
+            if (adbDevice != null) {
+                this.deviceIdentifier = adbDevice.getDeviceIdentifier();
             }
             return this;
         }
 
+        @NotNull
         public Builder setDeviceIdentifier(@Nullable final String deviceIdentifier) {
             this.deviceIdentifier = deviceIdentifier;
             return this;
         }
 
-        public Builder setCommand(String command) {
+        @NotNull
+        public Builder setCommand(final String command) {
             this.command = command;
             return this;
         }

@@ -2,6 +2,7 @@ package co.herod.adbwrapper.rx;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,7 +18,7 @@ public class FixedDurationTransformer implements ObservableTransformer<String, S
     }
 
     @Override
-    public Observable<String> apply(Observable<String> upstream) {
+    public Observable<String> apply(@NotNull Observable<String> upstream) {
         return upstream.retry().timeout(timeout, timeUnit);
     }
 }

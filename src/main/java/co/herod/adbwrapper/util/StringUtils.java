@@ -7,7 +7,7 @@ import java.util.List;
 
 public class StringUtils {
 
-    public static boolean isNotEmpty(String s) {
+    public static boolean isNotEmpty(@NotNull String s) {
         return !s.trim().isEmpty();
     }
 
@@ -21,36 +21,36 @@ public class StringUtils {
     }
 
     @NotNull
-    static String appendCloseTagIfNotExists(String s) {
+    static String appendCloseTagIfNotExists(@NotNull String s) {
         if (!s.endsWith(">")) s += ">";
         return s;
     }
 
     @NotNull
-    public static String[] splitCsv(String s1) {
+    public static String[] splitCsv(@NotNull String s1) {
         return s1.split(",");
     }
 
     @NotNull
-    public static String[] splitKeyValue(String s) {
+    public static String[] splitKeyValue(@NotNull String s) {
         return s.trim().split("=", 2);
     }
 
-    public static boolean containsKeyValueSeparator(String s) {
+    public static boolean containsKeyValueSeparator(@NotNull String s) {
         return s.contains("=");
     }
 
-    public static boolean containsTab(String s) {
+    public static boolean containsTab(@NotNull String s) {
         return s.contains("\t");
     }
 
     @NotNull
-    public static String extractXmlString(String s) {
+    public static String extractXmlString(@NotNull String s) {
         return s.substring(s.indexOf('<'), (s.lastIndexOf('>') + 1));
     }
 
     @NotNull
-    static List<String> splitOnCloseTag(String s) {
+    static List<String> splitOnCloseTag(@NotNull String s) {
         return Arrays.asList(s.split(">"));
     }
 }
