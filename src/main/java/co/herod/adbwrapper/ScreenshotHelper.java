@@ -1,6 +1,7 @@
 package co.herod.adbwrapper;
 
 import co.herod.adbwrapper.model.AdbDevice;
+import co.herod.adbwrapper.model.AdbUiNode;
 import co.herod.adbwrapper.util.FileUtil;
 import co.herod.adbwrapper.util.ImageUtil;
 import co.herod.adbwrapper.util.UiHierarchyHelper;
@@ -31,6 +32,10 @@ public class ScreenshotHelper {
 
         AdbUi.pullScreenCapture(adbDevice);
         return file;
+    }
+
+    static void screenshotUiNode(final AdbDevice connectedAdbDevice, final AdbUiNode adbUiNode) {
+        UiHierarchyHelper.extractBoundsInts(adbUiNode.toString()).blockingSubscribe(coords -> screenshotCoords(connectedAdbDevice, coords));
     }
 
     static void screenshotUiNode(final AdbDevice connectedAdbDevice, final String nodeString) {

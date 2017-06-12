@@ -1,6 +1,7 @@
 package co.herod.adbwrapper;
 
 import co.herod.adbwrapper.model.AdbDevice;
+import co.herod.adbwrapper.rx.MuteErrorTransformer;
 
 /**
  * Created by matthewherod on 23/04/2017.
@@ -15,18 +16,31 @@ public class Playground {
 
         AdbDeviceActions.turnDeviceScreenOn(connectedAdbDevice);
 
-        // TODO UiHierarchyBus
-        AdbUi.streamUiNodeStrings(connectedAdbDevice)
+        AdbUi.startStreamingUiHierarchy(connectedAdbDevice).subscribe();
+
+        AdbBusManager.ADB_UI_HIERARCHY_BUS
+                .doOnNext(System.out::println)
+                .subscribe();
+
+        AdbBusManager.ADB_UI_NODE_BUS
+                .doOnNext(System.out::println)
+                .subscribe();
+
+        AdbBusManager.ADB_UI_NODE_BUS
                 // .filter(s -> nodeTextContains(s, "0%"))
                 // .compose(new FixedDurationTransformer(10, TimeUnit.SECONDS))
                 // .debounce(1, TimeUnit.SECONDS)
-                .distinct()
-                .doOnNext(System.out::println)
-                .doOnNext(s -> ScreenshotHelper.screenshotUiNode(connectedAdbDevice, s))
+                // .distinct()
                 // .doOnNext(s -> AdbDeviceActions.tapUiNode(connectedAdbDevice, s))
                 // .doOnNext(s -> AdbDeviceActions.tapCoords(connectedAdbDevice, 80, 100))
-                .onErrorReturn(a -> "")
-                .blockingSubscribe();
-    }
+                .subscribe();
 
+        AdbBusManager.ADB_UI_NODE_BUS
+                .doOnNext(uiNode -> ScreenshotHelper.screenshotUiNode(connectedAdbDevice, uiNode))
+                .compose(new MuteErrorTransformer<>())
+                .subscribe();
+
+        // wait for terminate
+        AdbBusManager.ADB_BUS.blockingSubscribe();
+    }
 }

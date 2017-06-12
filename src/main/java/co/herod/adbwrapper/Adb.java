@@ -45,6 +45,10 @@ public class Adb {
         return ProcessHelper.observableProcess(AdbProcesses.dumpUiHierarchyProcess(adbDevice));
     }
 
+    static void blocking(final AdbDevice device, final String command) {
+        ProcessHelper.blocking(AdbProcesses.adb(device, command));
+    }
+
     public static Observable<String> command(final AdbDevice adbDevice, final String command) {
         return ProcessHelper.observableProcess(AdbProcesses.adb(adbDevice, command));
     }

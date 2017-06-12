@@ -1,19 +1,35 @@
 package co.herod.adbwrapper;
 
 import co.herod.adbwrapper.model.AdbDevice;
+import co.herod.adbwrapper.model.AdbUiHierarchy;
 import co.herod.adbwrapper.model.AdbUiNode;
 import co.herod.adbwrapper.rx.FixedDurationTransformer;
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer;
 import co.herod.adbwrapper.util.StringUtils;
 import co.herod.adbwrapper.util.UiHierarchyHelper;
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 import java.util.concurrent.TimeUnit;
 
-import static co.herod.adbwrapper.AdbProcesses.adb;
-
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AdbUi {
+
+    public static Observable<AdbUiNode> startStreamingUiHierarchy(final AdbDevice adbDevice) {
+
+        return Adb.dumpUiHierarchy(adbDevice)
+                .map(StringUtils::extractXmlString)
+                .compose(new ResultChangeFixedDurationTransformer())
+                .doOnNext(s -> screenshotBlocking(adbDevice, true))
+                .map(s -> new AdbUiHierarchy(s, adbDevice))
+                .doOnEach(AdbBusManager.ADB_UI_HIERARCHY_BUS)
+                .map(AdbUiHierarchy::getXmlString)
+                .compose(UiHierarchyHelper::uiXmlToNodes)
+                .map(AdbUiNode::new)
+                .doOnEach(AdbBusManager.ADB_UI_NODE_BUS)
+                .observeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.newThread());
+    }
 
     public static Observable<String> streamUiNodeStrings(final AdbDevice connectedAdbDevice) {
         return streamUiNodes(connectedAdbDevice).map(AdbUiNode::toString);
@@ -33,14 +49,8 @@ public class AdbUi {
 
     private static Observable<String> streamUiNodeStringsInternal(final AdbDevice adbDevice) {
 
-        return Adb.dumpUiHierarchy(adbDevice)
-                .distinctUntilChanged()
-                .doOnNext(System.out::println)
-                .doOnNext(s -> Observable.fromCallable(() -> ScreenshotHelper.screenshot(adbDevice, true)).blockingSubscribe())
-                .map(StringUtils::extractXmlString)
-                .compose(new ResultChangeFixedDurationTransformer())
-                // .doOnNext(System.out::println)
-                .compose(UiHierarchyHelper::uiXmlToNodes)
+        return AdbBusManager.ADB_UI_NODE_BUS
+                .map(AdbUiNode::toString)
                 .compose(new FixedDurationTransformer(1, TimeUnit.DAYS))
                 .onErrorReturn(throwable -> {
                     throwable.printStackTrace();
@@ -51,8 +61,15 @@ public class AdbUi {
     }
 
     static void pullScreenCapture(final AdbDevice adbDevice) {
-        ProcessHelper.blocking(adb(adbDevice, "shell screencap -p /sdcard/screen.png"));
-        ProcessHelper.blocking(adb(adbDevice, "pull /sdcard/screen.png"));
-        ProcessHelper.blocking(adb(adbDevice, "shell rm /sdcard/screen.png"));
+        Adb.blocking(adbDevice, "shell screencap -p /sdcard/screen.png");
+        Adb.blocking(adbDevice, "pull /sdcard/screen.png");
+        Adb.blocking(adbDevice, "shell rm /sdcard/screen.png");
+    }
+
+    private static void screenshotBlocking(final AdbDevice adbDevice, final boolean ignoreCache) {
+
+        Observable.fromCallable(() -> ScreenshotHelper.screenshot(adbDevice, ignoreCache))
+                .timeout(10, TimeUnit.SECONDS)
+                .blockingSubscribe();
     }
 }

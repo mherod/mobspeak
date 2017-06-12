@@ -12,7 +12,7 @@ public class ResultChangeFixedDurationTransformer extends FixedDurationTransform
     }
 
     @Override
-    public Observable<String> apply(@NotNull Observable<String> upstream) {
+    public Observable<String> apply(@NotNull final Observable<String> upstream) {
         return super.apply(upstream.repeat()).distinctUntilChanged();
     }
 }

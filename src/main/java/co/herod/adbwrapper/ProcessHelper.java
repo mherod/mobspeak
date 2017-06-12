@@ -19,7 +19,7 @@ class ProcessHelper {
                 .map(ProcessBuilder::start)
                 .flatMap(ProcessHelper::observableProcess)
                 .map(String::trim)
-                .doOnEach(AdbBus.getBus());
+                .doOnEach(AdbBusManager.ADB_BUS);
     }
 
     private static Observable<String> observableProcess(@NotNull final Process process) {
@@ -39,6 +39,10 @@ class ProcessHelper {
             }
             s.onComplete();
         });
+    }
+
+    static InputStream processOutput(@NotNull final Process process) {
+        return process.getInputStream();
     }
 
     @SuppressWarnings("SameParameterValue")

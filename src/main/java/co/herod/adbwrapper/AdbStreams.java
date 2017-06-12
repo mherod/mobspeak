@@ -13,11 +13,11 @@ import java.util.concurrent.TimeUnit;
 public class AdbStreams {
 
     public static Observable<String> streamAdbCommands() {
-        return AdbBus.getThrottledBus().filter(AdbFilters::isAdbInput);
+        return AdbBusManager.throttledBus().filter(AdbFilters::isAdbInput);
     }
 
     public static Observable<String> streamUiHierarchyUpdates() {
-        return AdbBus.getThrottledBus().filter(AdbFilters::isUiDumpOutput);
+        return AdbBusManager.throttledBus().filter(AdbFilters::isUiDumpOutput);
     }
 
     public static Observable<AdbUiNode> streamUiNodeChanges() {
