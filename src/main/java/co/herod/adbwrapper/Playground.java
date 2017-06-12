@@ -36,9 +36,12 @@ public class Playground {
                 .subscribe();
 
         AdbBusManager.ADB_UI_NODE_BUS
+                .filter(adbUiNode -> adbUiNode.toString().contains("android.widget.ImageView"))
+                .filter(adbUiNode -> adbUiNode.getWidth() > 100 && adbUiNode.getHeight() > 100)
                 .doOnNext(uiNode -> ScreenshotHelper.screenshotUiNode(connectedAdbDevice, uiNode))
                 .compose(new MuteErrorTransformer<>())
                 .subscribe();
+
 
         // wait for terminate
         AdbBusManager.ADB_BUS.blockingSubscribe();
