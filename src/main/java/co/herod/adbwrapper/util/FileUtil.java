@@ -17,7 +17,25 @@ public class FileUtil {
         if (file.exists()) {
             return file;
         }
-        file.mkdirs();
+
+        final File folder = new File(getFolderPath(pathname));
+        final boolean g = folder.exists() || folder.mkdirs();
+
         return file;
+    }
+
+    @NotNull
+    private static String getFolderPath(final String pathname) {
+
+        if (!pathname.contains("/") && pathname.contains(".")) {
+            return "./";
+        }
+
+        try {
+            final int lastIndexOf = pathname.lastIndexOf("/");
+            return pathname.substring(0, lastIndexOf);
+        } catch (final IndexOutOfBoundsException e) {
+            return pathname;
+        }
     }
 }

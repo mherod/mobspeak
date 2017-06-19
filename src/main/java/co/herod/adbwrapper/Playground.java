@@ -42,7 +42,6 @@ public class Playground {
                 .compose(new MuteErrorTransformer<>())
                 .subscribe();
 
-
         // wait for terminate
         AdbBusManager.ADB_BUS.blockingSubscribe();
     }
