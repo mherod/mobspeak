@@ -21,6 +21,10 @@ public class Adb {
                 .map(AdbDevice::parseAdbString);
     }
 
+    public static void typeText(final AdbDevice adbDevice, final String inputText) {
+        ProcessHelper.blocking(AdbProcesses.inputText(adbDevice, inputText), 5, TimeUnit.SECONDS);
+    }
+
     public static void pressKeyBlocking(final AdbDevice adbDevice, final int key) {
         ProcessHelper.blocking(AdbProcesses.pressKey(adbDevice, key), 5, TimeUnit.SECONDS);
     }

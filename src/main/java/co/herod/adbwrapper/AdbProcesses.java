@@ -19,6 +19,10 @@ class AdbProcesses {
         return adb(adbDevice, String.format("shell input keyevent %d", key));
     }
 
+    static ProcessBuilder inputText(final AdbDevice adbDevice, final String inputText) {
+        return adb(adbDevice, String.format("shell input text %s", inputText));
+    }
+
     static ProcessBuilder dumpUiHierarchyProcess(final AdbDevice adbDevice) {
         return adb(adbDevice, "exec-out uiautomator dump /dev/tty");
     }
