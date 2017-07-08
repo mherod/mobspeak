@@ -12,7 +12,8 @@ import java.util.List;
  */
 class AdbCommand {
 
-    private static final String ADB = "adb";
+    static final String ADB = "adb";
+    static final String SHELL = "shell";
 
     private final String deviceIdentifier;
     private final String command;

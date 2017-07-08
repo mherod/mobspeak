@@ -5,22 +5,20 @@ import org.jetbrains.annotations.Nullable;
 
 class AdbProcesses {
 
-    private static final String DEVICES = "devices";
-
     static ProcessBuilder devices() {
-        return new AdbCommand.Builder().setCommand(DEVICES).processBuilder();
+        return new AdbCommand.Builder().setCommand(Adb.DEVICES).processBuilder();
     }
 
     static ProcessBuilder dumpsys(final AdbDevice adbDevice, final String type) {
-        return adb(adbDevice, String.format("shell dumpsys %s", type));
+        return adb(adbDevice, String.format(AdbCommand.SHELL + " dumpsys %s", type));
     }
 
     static ProcessBuilder pressKey(@Nullable final AdbDevice adbDevice, final int key) {
-        return adb(adbDevice, String.format("shell input keyevent %d", key));
+        return adb(adbDevice, String.format(AdbCommand.SHELL + " input keyevent %d", key));
     }
 
     static ProcessBuilder inputText(final AdbDevice adbDevice, final String inputText) {
-        return adb(adbDevice, String.format("shell input text %s", inputText));
+        return adb(adbDevice, String.format(AdbCommand.SHELL + " input text %s", inputText));
     }
 
     static ProcessBuilder dumpUiHierarchyProcess(final AdbDevice adbDevice) {
@@ -28,7 +26,7 @@ class AdbProcesses {
     }
 
     static ProcessBuilder tap(@Nullable final AdbDevice adbDevice, final int x, final int y) {
-        return adb(adbDevice, String.format("shell input tap %d %d", x, y));
+        return adb(adbDevice, String.format(AdbCommand.SHELL + " input tap %d %d", x, y));
     }
 
     static ProcessBuilder adb(final AdbDevice adbDevice, final String command) {

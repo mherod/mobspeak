@@ -16,6 +16,9 @@ import java.util.concurrent.TimeUnit;
 
 public class Utils {
 
+    public static final String DISABLE = "disable";
+    public static final String ENABLE = "enable";
+
     public static Observable<String> throttleOutput(@NotNull final String s) {
         return Observable.timer(10, TimeUnit.MILLISECONDS)
                 .flatMap(a -> Observable.just(s));
@@ -49,5 +52,10 @@ public class Utils {
 
     public static int intArrayHashcode(final Integer[] coords) {
         return Arrays.toString(coords).hashCode();
+    }
+
+    @NotNull
+    public static String enableOrDisabled(boolean enable) {
+        return enable ? ENABLE : DISABLE;
     }
 }

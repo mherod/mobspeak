@@ -14,6 +14,9 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Adb {
 
+    public static final String DEVICES = "devices";
+
+
     public static Observable<AdbDevice> devices() {
 
         return ProcessHelper.observableProcess(AdbProcesses.devices())
