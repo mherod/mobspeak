@@ -34,7 +34,7 @@ class AdbCommand {
     @NotNull
     private List<String> createCommandStrings() {
         final String command = getCommand();
-        System.out.println(command);
+        // System.out.println(command);
         return Arrays.asList(command.split(" "));
     }
 

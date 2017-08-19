@@ -24,7 +24,7 @@ public class UiHierarchyHelper {
     }
 
     @NotNull
-    private static String extractText(@NotNull final String s) {
+    public static String extractText(@NotNull final String s) {
         return extract(s, KEY_STRING_TEXT);
     }
 

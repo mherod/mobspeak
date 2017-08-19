@@ -20,7 +20,7 @@ public class AdbUi {
         return Adb.dumpUiHierarchy(adbDevice)
                 .map(StringUtils::extractXmlString)
                 .compose(new ResultChangeFixedDurationTransformer())
-                .doOnNext(s -> screenshotBlocking(adbDevice, true))
+                // .doOnNext(s -> screenshotBlocking(adbDevice, true))
                 .map(s -> new AdbUiHierarchy(s, adbDevice))
                 .doOnEach(AdbBusManager.ADB_UI_HIERARCHY_BUS)
                 .map(AdbUiHierarchy::getXmlString)

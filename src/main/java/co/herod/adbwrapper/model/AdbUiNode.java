@@ -26,7 +26,11 @@ public class AdbUiNode {
     }
 
     public int getHeight() {
-        return UiHierarchyHelper.getWidth(getBounds());
+        return UiHierarchyHelper.getHeight(getBounds());
+    }
+
+    public String getText() {
+        return UiHierarchyHelper.extractText(nodeString);
     }
 
     public long getCreationTimeMillis() {
