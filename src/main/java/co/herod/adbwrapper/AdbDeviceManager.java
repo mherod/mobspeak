@@ -31,6 +31,6 @@ public class AdbDeviceManager {
     }
 
     private static Observable<AdbDevice> connectedDevices() {
-        return Adb.devices();
+        return Adb.INSTANCE.devices();
     }
 }

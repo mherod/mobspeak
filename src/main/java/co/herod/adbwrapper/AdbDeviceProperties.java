@@ -20,7 +20,7 @@ class AdbDeviceProperties {
 
     public static Observable<Map.Entry<String, String>> inputMethodProperties(@NotNull final AdbDevice adbDevice) {
         return Observable.just(adbDevice)
-                .flatMap(Adb::getInputMethodDumpsys)
+                .flatMap(Adb.INSTANCE::getInputMethodDumpsys)
                 .flatMapIterable(Map::entrySet)
                 .filter(PropHelper::isValidProperty)
                 .sorted(Comparator.comparing(Map.Entry::getKey));
@@ -28,7 +28,7 @@ class AdbDeviceProperties {
 
     public static Observable<Map.Entry<String, String>> displayProperties(@NotNull final AdbDevice adbDevice) {
         return Observable.just(adbDevice)
-                .flatMap(Adb::getDisplayDumpsys)
+                .flatMap(Adb.INSTANCE::getDisplayDumpsys)
                 .flatMapIterable(Map::entrySet)
                 .filter(PropHelper::isValidProperty)
                 .sorted(Comparator.comparing(Map.Entry::getKey));

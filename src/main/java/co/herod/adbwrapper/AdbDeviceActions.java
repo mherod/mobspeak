@@ -19,19 +19,19 @@ public class AdbDeviceActions {
     public static final int KEY_EVENT_BACKSPACE = 67;
 
     public static void pressHomeButton(@Nullable final AdbDevice adbDevice) {
-        Adb.pressKeyBlocking(adbDevice, KEY_EVENT_HOME);
+        Adb.INSTANCE.pressKeyBlocking(adbDevice, KEY_EVENT_HOME);
     }
 
     public static void pressBackButton(@Nullable final AdbDevice adbDevice) {
-        Adb.pressKeyBlocking(adbDevice, KEY_EVENT_BACK);
+        Adb.INSTANCE.pressKeyBlocking(adbDevice, KEY_EVENT_BACK);
     }
 
     public static void pressPowerButton(@Nullable final AdbDevice adbDevice) {
-        Adb.pressKeyBlocking(adbDevice, KEY_EVENT_POWER);
+        Adb.INSTANCE.pressKeyBlocking(adbDevice, KEY_EVENT_POWER);
     }
 
     public static void pressBackspaceButton(@Nullable final AdbDevice adbDevice) {
-        Adb.pressKeyBlocking(adbDevice, KEY_EVENT_BACKSPACE);
+        Adb.INSTANCE.pressKeyBlocking(adbDevice, KEY_EVENT_BACKSPACE);
     }
 
     public static void turnDeviceScreenOn(@NotNull final AdbDevice adbDevice) {

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 class AdbProcesses {
 
     static ProcessBuilder devices() {
-        return new AdbCommand.Builder().setCommand(Adb.DEVICES).processBuilder();
+        return new AdbCommand.Builder().setCommand(Adb.INSTANCE.getDEVICES()).processBuilder();
     }
 
     static ProcessBuilder dumpsys(final AdbDevice adbDevice, final String type) {

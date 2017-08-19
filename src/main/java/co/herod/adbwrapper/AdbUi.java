@@ -17,7 +17,7 @@ public class AdbUi {
 
     public static Observable<AdbUiNode> startStreamingUiHierarchy(final AdbDevice adbDevice) {
 
-        return Adb.dumpUiHierarchy(adbDevice)
+        return Adb.INSTANCE.dumpUiHierarchy(adbDevice)
                 .map(StringUtils::extractXmlString)
                 .compose(new ResultChangeFixedDurationTransformer())
                 // .doOnNext(s -> screenshotBlocking(adbDevice, true))
@@ -61,9 +61,9 @@ public class AdbUi {
     }
 
     static void pullScreenCapture(final AdbDevice adbDevice) {
-        Adb.blocking(adbDevice, "shell screencap -p /sdcard/screen.png");
-        Adb.blocking(adbDevice, "pull /sdcard/screen.png");
-        Adb.blocking(adbDevice, "shell rm /sdcard/screen.png");
+        Adb.INSTANCE.blocking(adbDevice, "shell screencap -p /sdcard/screen.png");
+        Adb.INSTANCE.blocking(adbDevice, "pull /sdcard/screen.png");
+        Adb.INSTANCE.blocking(adbDevice, "shell rm /sdcard/screen.png");
     }
 
     private static void screenshotBlocking(final AdbDevice adbDevice, final boolean ignoreCache) {

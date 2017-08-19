@@ -15,7 +15,7 @@ public class AdbDeviceServices {
     public static void enableService(@Nullable final AdbDevice adbDevice, boolean enable, final String serviceType) {
 
         //noinspection StringBufferReplaceableByString
-        Adb.blocking(adbDevice, new StringBuilder()
+        Adb.INSTANCE.blocking(adbDevice, new StringBuilder()
                 .append(AdbCommand.SHELL)
                 .append(SPACE)
                 .append(SERVICE)
