@@ -38,7 +38,7 @@ $RECYCLE.BIN/
 .idea/**/uiDesigner.xml
 
 # Gradle:
-.idea/**/gradle.xml
+#.idea/**/gradle.xml
 .idea/**/libraries
 
 # Mongo Explorer plugin:
@@ -129,7 +129,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-.idea/misc.xml
+#.idea/misc.xml
 
 screen.png
 
