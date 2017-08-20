@@ -8,7 +8,7 @@ object Playground {
     @JvmStatic
     fun main(args: Array<String>) {
 
-        AdbStreams.streamAdbCommands().subscribe(::println)
+        AdbStreams.streamAdbCommands()?.subscribe(::println)
 
         val adbDevice = AdbDeviceManager.getConnectedDevice()
 
