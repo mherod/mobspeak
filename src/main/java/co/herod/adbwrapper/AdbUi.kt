@@ -17,11 +17,11 @@ object AdbUi {
             .compose(ResultChangeFixedDurationTransformer())
             // .doOnNext(s -> screenshotBlocking(adbDevice, true))
             .map { AdbUiHierarchy(it, adbDevice) }
-            .doOnEach(AdbBusManager.ADB_UI_HIERARCHY_BUS)
+            .doOnEach(AdbBusManager.getAdbUiHierarchyBus())
             .map { it.xmlString }
             .compose { UiHierarchyHelper.uiXmlToNodes(it) }
             .map { AdbUiNode(it) }
-            .doOnEach(AdbBusManager.ADB_UI_NODE_BUS)
+            .doOnEach(AdbBusManager.getAdbUiNodeBus())
             .observeOn(Schedulers.newThread())
             .subscribeOn(Schedulers.newThread())
 
@@ -34,7 +34,7 @@ object AdbUi {
     private fun streamUiNodeStrings(packageIdentifier: String) =
             streamUiNodeStringsInternal().filter { s -> UiHierarchyHelper.isPackage(packageIdentifier, s) }
 
-    private fun streamUiNodeStringsInternal() = AdbBusManager.ADB_UI_NODE_BUS
+    private fun streamUiNodeStringsInternal() = AdbBusManager.getAdbUiNodeBus()
             .map { it.toString() }
             .compose(FixedDurationTransformer(1, TimeUnit.DAYS))
             .onErrorReturn { throwable -> throwable.printStackTrace(); "" }

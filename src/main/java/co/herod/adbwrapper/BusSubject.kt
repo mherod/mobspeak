@@ -9,7 +9,7 @@ abstract class BusSubject<T> : Subject<T>(), Observer<T> {
 
     private val processSubject = PublishSubject.create<T>()
 
-    override fun subscribeActual(observer: Observer<in T>) {
+    public override fun subscribeActual(observer: Observer<in T>) {
         processSubject.subscribeActual(observer)
     }
 

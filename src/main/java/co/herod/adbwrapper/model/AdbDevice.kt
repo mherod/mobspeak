@@ -19,6 +19,7 @@ class AdbDevice {
     fun isEmulator(): Boolean = type == DEVICE_EMULATOR
 
     companion object {
+
         fun parseAdbString(adbDeviceString: String): AdbDevice {
 
             val adbDevice = AdbDevice()

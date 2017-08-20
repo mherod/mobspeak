@@ -16,11 +16,11 @@ object Playground {
 
         AdbUi.startStreamingUiHierarchy(adbDevice).subscribe()
 
-        AdbBusManager.ADB_UI_HIERARCHY_BUS.doOnNext(::println).subscribe()
+        AdbBusManager.getAdbUiHierarchyBus().doOnNext(::println).subscribe()
 
-        AdbBusManager.ADB_UI_NODE_BUS.doOnNext(::println).subscribe()
+        AdbBusManager.getAdbUiNodeBus().doOnNext(::println).subscribe()
 
         // wait for terminate
-        AdbBusManager.ADB_BUS.blockingSubscribe()
+        AdbBusManager.getAdbBus().blockingSubscribe()
     }
 }

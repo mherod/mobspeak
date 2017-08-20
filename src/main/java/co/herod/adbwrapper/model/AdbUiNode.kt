@@ -12,6 +12,7 @@ class AdbUiNode(private val nodeString: String) {
 
     val text by lazy { UiHierarchyHelper.extractText(nodeString) }
 
-    override fun toString() = "AdbUiNode{nodeString='$nodeString'}"
-
+    override fun toString(): String {
+        return "AdbUiNode(nodeString='$nodeString')"
+    }
 }

@@ -12,31 +12,27 @@ object AdbStreams {
 
     private fun adbBus() = AdbBusManager.throttledBus()
 
-    fun streamUiHierarchyUpdates() = adbBus().filter { AdbFilters.isUiDumpOutput(it) }!!
+    fun streamUiHierarchyUpdates() = adbBus()?.filter { it.isUiDumpOutput() }
 
-    fun streamAdbCommands() = adbBus().filter { AdbFilters.isAdbInput(it) }!!
+    fun streamAdbCommands() = adbBus()?.filter { it.isAdbInput() }
 
-    fun streamUiNodeChanges(): Observable<AdbUiNode>? {
-
-        return streamUiHierarchyUpdates()
-                .map { parseNode(it) }
+    fun streamUiNodeChanges(): Observable<AdbUiNode>? = streamUiHierarchyUpdates()?.let { observable ->
+        observable
+                .map { it.parseNode() }
                 .compose(ResultChangeFixedDurationTransformer())
                 .compose { UiHierarchyHelper.uiXmlToNodes(it) }
                 .onErrorReturn { "" }
-                .filter { hasValue(it) }
+                .filter { it.hasValue() }
                 .compose(FixedDurationTransformer(1, TimeUnit.DAYS))
                 .map { AdbUiNode(it) }
     }
 
-    private fun hasValue(it: String) = !it.trim { it <= ' ' }.isEmpty()
+    private fun String.hasValue(): Boolean = !trim { it <= ' ' }.isEmpty()
 
-    private fun parseNode(it: String) = it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1)
+    private fun String.isAdbInput(): Boolean = startsWith("adb ") && trim { it <= ' ' } != "Killed"
 
-    internal object AdbFilters {
+    private fun String.isUiDumpOutput(): Boolean = contains("<node") && contains("bounds=")
 
-        fun isAdbInput(s: String) = s.startsWith("adb ") && s.trim { it <= ' ' } != "Killed"
+    private fun String.parseNode(): String = substring(indexOf('<'), lastIndexOf('>') + 1)
 
-        fun isUiDumpOutput(s: String) = s.contains("<node") && s.contains("bounds=")
-
-    }
 }

@@ -39,7 +39,7 @@ object AdbDeviceActions {
 
     fun AdbDevice.tapCentre(adbUiNode: AdbUiNode) = this.tapCentre(adbUiNode.bounds!!)
 
-    private fun AdbDevice.tapCentre(c: Array<Int>) = ProcessHelper.blocking(AdbProcesses.tap(this,
+    private fun AdbDevice.tapCentre(c: Array<Int>) = Adb.processFactory.blocking(AdbProcesses.tap(this,
             UiHierarchyHelper.centreX(c),
             UiHierarchyHelper.centreY(c)))
 
@@ -48,6 +48,6 @@ object AdbDeviceActions {
     }
 
     fun tapCoords(adbDevice: AdbDevice, x: Int, y: Int): Boolean =
-            Completable.fromObservable(ProcessHelper.observableProcess(AdbProcesses.tap(adbDevice, x, y)))
+            Completable.fromObservable(Adb.processFactory.observableProcess(AdbProcesses.tap(adbDevice, x, y)))
                     .blockingAwait(5, TimeUnit.SECONDS)
 }

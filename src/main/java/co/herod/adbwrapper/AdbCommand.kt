@@ -36,8 +36,8 @@ internal class AdbCommand(
             return AdbCommand(deviceIdentifier, command)
         }
 
-        internal fun processBuilder(): ProcessBuilder {
-            return build()!!.toProcessBuilder()
+        internal fun processBuilder(): ProcessBuilder? {
+            return build()?.toProcessBuilder()
         }
 
         fun setDevice(adbDevice: AdbDevice?): Builder {

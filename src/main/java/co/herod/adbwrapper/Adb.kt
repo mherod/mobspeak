@@ -11,22 +11,23 @@ import java.util.concurrent.TimeUnit
  */
 object Adb {
 
+    val processFactory: IProcessFactory = ProcessFactory()
+
     const val DEVICES = "devices"
 
-    fun devices(): Observable<AdbDevice> = ProcessHelper.observableProcess(AdbProcesses.devices())
+    fun devices(): Observable<AdbDevice> = processFactory.observableProcess(AdbProcesses.devices())
             .filter { "\t" in it }
             .map { AdbDevice.parseAdbString(it) }
 
-    fun typeText(adbDevice: AdbDevice, inputText: String) {
+    fun typeText(adbDevice: AdbDevice, inputText: String): ProcessBuilder? =
+            AdbProcesses.inputText(adbDevice, inputText).also {
+                it?.let { processFactory.blocking(it, 5, TimeUnit.SECONDS) }
+            }
 
-        AdbProcesses.inputText(adbDevice, inputText).also {
-            ProcessHelper.blocking(it, 5, TimeUnit.SECONDS)
-        }
-    }
-
-    fun pressKeyBlocking(adbDevice: AdbDevice?, key: Int) {
-        ProcessHelper.blocking(AdbProcesses.pressKey(adbDevice, key), 5, TimeUnit.SECONDS)
-    }
+    fun pressKeyBlocking(adbDevice: AdbDevice?, key: Int) =
+            AdbProcesses.pressKey(adbDevice, key)?.let {
+                processFactory.blocking(it, 5, TimeUnit.SECONDS)
+            }
 
     fun getDisplayDumpsys(adbDevice: AdbDevice): Flowable<Map<String, String>> =
             adbDevice.dumpsysMap(AdbDeviceProperties.PROPS_DISPLAY).toFlowable()
@@ -35,18 +36,18 @@ object Adb {
             adbDevice.dumpsysMap(AdbDeviceProperties.PROPS_INPUT_METHOD).toFlowable()
 
     private fun AdbDevice.dumpsysMap(type: String): Single<Map<String, String>> =
-            ProcessHelper.observableProcess(AdbProcesses.dumpsys(this, type))
+            processFactory.observableProcess(AdbProcesses.dumpsys(this, type))
                     .filter { "=" in it }
                     .map { it.trim { it <= ' ' }.split("=".toRegex(), 2) }
                     .toMap({ it[0].trim { it <= ' ' } }) { it[1].trim { it <= ' ' } }
 
     fun dumpUiHierarchy(adbDevice: AdbDevice?): Observable<String> =
-            ProcessHelper.observableProcess(AdbProcesses.dumpUiHierarchyProcess(adbDevice))
+            processFactory.observableProcess(AdbProcesses.dumpUiHierarchyProcess(adbDevice))
 
     fun command(adbDevice: AdbDevice, command: String): Observable<String> =
-            ProcessHelper.observableProcess(AdbProcesses.adb(adbDevice, command))
+            processFactory.observableProcess(AdbProcesses.adb(adbDevice, command))
 
     internal fun blocking(device: AdbDevice?, command: String) {
-        ProcessHelper.blocking(AdbProcesses.adb(device, command))
+        processFactory.blocking(AdbProcesses.adb(device, command))
     }
 }
