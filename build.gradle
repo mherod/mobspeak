@@ -19,15 +19,21 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
+    jcenter()
+    mavenLocal()
     mavenCentral()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     maven { url 'https://jitpack.io' }
+    google()
 }
 
 dependencies {
     compile "io.reactivex.rxjava2:rxjava:2.+"
     compile 'io.reactivex.rxjava2:rxkotlin:2.+'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    compile 'org.junit.jupiter:junit-jupiter-api:+'
+    testCompile 'junit:junit:5.+'
 }
 
 compileKotlin {
