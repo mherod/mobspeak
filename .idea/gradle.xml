@@ -8,6 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/adb-kotlin" />
+            <option value="$PROJECT_DIR$/cucumber" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -134,3 +134,5 @@ Temporary Items
 screen.png
 
 *.png
+adb-kotlin/build/
+cucumber/build/
