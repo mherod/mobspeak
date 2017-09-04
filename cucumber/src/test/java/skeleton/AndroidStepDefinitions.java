@@ -284,18 +284,6 @@ public class AndroidStepDefinitions {
         throw new PendingException();
     }
 
-    @Then("^I enter mileage distance \"([^\"]*)\"$")
-    public void iEnterMileageDistance(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^I select mileage contact \"([^\"]*)\"$")
-    public void iSelectMileageContact(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
     @Then("^I drag up from the left side$")
     public void iDragUpFromTheLeftSide() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
@@ -304,12 +292,6 @@ public class AndroidStepDefinitions {
 
     @Then("^I drag down from the left side$")
     public void iDragDownFromTheLeftSide() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^I don't see Quick Entry$")
-    public void iDonTSeeQuickEntry() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
@@ -328,6 +310,102 @@ public class AndroidStepDefinitions {
 
     @Then("^I wait for delete of \"([^\"]*)\"$")
     public void iWaitForDeleteOf(String arg0) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^I wait for the \"([^\"]*)\" text$")
+    public void iWaitForTheText(String arg0) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^I wait for the \"([^\"]*)\" text to disappear$")
+    public void iWaitForTheTextToDisappear(String arg0) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^I do not see the \"([^\"]*)\" text$")
+    public void iDoNotSeeTheText(String arg0) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^I do not see the text \"([^\"]*)\"$")
+    public void iDoNotSeeTheText2(String arg0) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^I do not see the text \"([^\"]*)\" disappear$")
+    public void iDoNotSeeTheTextDisappear(String arg0) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I swipe from the left$")
+    public void iSwipeFromTheLeft() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I swipe from the top$")
+    public void iSwipeFromTheTop() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I swipe from the bottom$")
+    public void iSwipeFromTheBottom() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I swipe from the right$")
+    public void iSwipeFromTheRight() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I swipe open the left drawer$")
+    public void iSwipeOpenTheLeftDrawer() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I swipe open the right drawer$")
+    public void iSwipeOpenTheRightDrawer() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I select the \"([^\"]*)\" drawer option$")
+    public void iSelectTheDrawerOption(String arg0) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^I see a button$")
+    public void iSeeAButton() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^I see a large image$")
+    public void iSeeALargeImage() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^I do not see any progress indicators$")
+    public void iDoNotSeeAnyProgressIndicators() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^I do not see any whitespace$")
+    public void iDoNotSeeAnyWhitespace() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
