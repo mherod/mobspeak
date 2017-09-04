@@ -17,9 +17,9 @@ internal object AdbDeviceProperties {
     fun AdbDevice.inputMethodProperties(): Flowable<Entry<String, String>>? {
 
         return Flowable.just(this)
-                .flatMap({ Adb.getInputMethodDumpsys(this) })
+                .flatMap { Adb.getInputMethodDumpsys(this) }
                 .flatMapIterable({ it.entries })
-                .filter({ it.key.contains(" ") })
+                .filter { it.key.contains(" ") }
                 .sorted(Comparator.comparing<Entry<String, String>, String>({ it.key }))
 
     }
@@ -27,18 +27,18 @@ internal object AdbDeviceProperties {
     private fun AdbDevice.displayProperties(): Flowable<Entry<String, String>> {
 
         return Flowable.just(this)
-                .flatMap({ Adb.getDisplayDumpsys(it) })
+                .flatMap { Adb.getDisplayDumpsys(it) }
                 .flatMapIterable({ it.entries })
-                .filter({ it.key.contains(" ") })
+                .filter { it.key.contains(" ") }
                 .sorted(Comparator.comparing<Entry<String, String>, String>({ it.key }))
     }
 
     private fun AdbDevice?.isScreenOnSingle(): Single<Boolean> {
 
         return Flowable.just(this)
-                .flatMap({ it.displayProperties() })
+                .flatMap { it.displayProperties() }
                 .filter { entry -> entry.key == KEY_SCREEN_STATE }
-                .map({ it -> PropHelper.hasPositiveValue(it) })
+                .map { it -> PropHelper.hasPositiveValue(it) }
                 .firstOrError()
     }
 

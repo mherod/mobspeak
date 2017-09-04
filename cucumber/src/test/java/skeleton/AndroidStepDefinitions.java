@@ -15,12 +15,12 @@ import cucumber.api.java.en.When;
 
 public class AndroidStepDefinitions {
 
-    private final AdbTestHelperBridge testHelperBridge;
+    private final AndroidStepDefTestHelperBridge testHelper;
 
     private AdbDevice connectedAdbDevice = null;
 
     public AndroidStepDefinitions() {
-        testHelperBridge = new AdbTestHelperBridge(this);
+        testHelper = new AndroidStepDefTestHelperBridge(this);
     }
 
     AdbDevice getConnectedAdbDevice() {
@@ -95,12 +95,12 @@ public class AndroidStepDefinitions {
 
     @Then("^I do not see the \"([^\"]*)\" text$")
     public void iDoNotSeeTheText(String text) throws Throwable {
-        testHelperBridge.failOnText(text);
+        testHelper.failOnText(text);
     }
 
     @Then("^I do not see the text \"([^\"]*)\"$")
     public void iDoNotSeeTheText2(String text) throws Throwable {
-        testHelperBridge.failOnText(text);
+        testHelper.failOnText(text);
     }
 
     @Then("^I do not see the text \"([^\"]*)\" disappear$")
@@ -212,6 +212,11 @@ public class AndroidStepDefinitions {
         }
 
         // TODO check version
+
+        if (!testHelper.installedPackageIsVersion(packageName, versionName)) {
+            throw new AssertionFailedError("Package was not correct version");
+        }
+
     }
 
     @Then("^I have a connected device without the package \"([^\"]*)\"$")
@@ -310,13 +315,13 @@ public class AndroidStepDefinitions {
     @Then("^I see the \"([^\"]*)\" text$")
     public void iSeeTheText(String text) throws Throwable {
 
-        testHelperBridge.waitForText(text);
+        testHelper.waitForText(text);
     }
 
     @When("^I see the text \"([^\"]*)\"$")
     public void iSeeTheText2(String text) throws Throwable {
 
-        testHelperBridge.waitForText(text);
+        testHelper.waitForText(text);
     }
 
     @When("^I select the \"([^\"]*)\" drawer option$")

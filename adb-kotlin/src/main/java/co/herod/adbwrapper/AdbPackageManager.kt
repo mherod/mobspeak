@@ -42,4 +42,12 @@ object AdbPackageManager {
                 .toSortedList()
                 .onErrorReturn { Collections.emptyList() }
     }
+
+    fun getPackageVersionName(adbDevice: AdbDevice?, packageName: String): String? {
+        return adbDevice?.let {
+            Adb.getPackageDumpsys(it, packageName)
+                    .map { a -> a["versionName"] }
+                    .blockingFirst()
+        }
+    }
 }

@@ -1,13 +1,16 @@
 package skeleton;
 
+import java.util.Objects;
+
+import co.herod.adbwrapper.AdbPackageManager;
 import co.herod.adbwrapper.AdbTestHelper;
 import co.herod.adbwrapper.model.AdbDevice;
 
-class AdbTestHelperBridge {
+class AndroidStepDefTestHelperBridge {
 
     private final AndroidStepDefinitions androidStepDefinitions;
 
-    AdbTestHelperBridge(AndroidStepDefinitions androidStepDefinitions) {
+    AndroidStepDefTestHelperBridge(AndroidStepDefinitions androidStepDefinitions) {
         this.androidStepDefinitions = androidStepDefinitions;
     }
 
@@ -19,7 +22,15 @@ class AdbTestHelperBridge {
         AdbTestHelper.INSTANCE.failOnText(getConnectedAdbDevice(), text);
     }
 
+    boolean installedPackageIsVersion(String packageName, String versionName) {
+        return Objects.equals(getPackageVersionName(packageName), versionName);
+    }
+
     void waitForText(String text) {
         AdbTestHelper.INSTANCE.waitForText(getConnectedAdbDevice(), text);
+    }
+
+    private String getPackageVersionName(String packageName) {
+        return AdbPackageManager.INSTANCE.getPackageVersionName(getConnectedAdbDevice(), packageName);
     }
 }

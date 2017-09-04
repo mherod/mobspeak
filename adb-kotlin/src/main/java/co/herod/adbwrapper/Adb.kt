@@ -35,6 +35,9 @@ object Adb {
     fun getInputMethodDumpsys(adbDevice: AdbDevice): Flowable<Map<String, String>> =
             adbDevice.dumpsysMap(AdbDeviceProperties.PROPS_INPUT_METHOD).toFlowable()
 
+    fun getPackageDumpsys(adbDevice: AdbDevice, packageName: String): Flowable<Map<String, String>> =
+            adbDevice.dumpsysMap("package $packageName").toFlowable()
+
     private fun AdbDevice.dumpsysMap(type: String): Single<Map<String, String>> =
             processFactory.observableProcess(AdbProcesses.dumpsys(this, type))
                     .filter { "=" in it }
