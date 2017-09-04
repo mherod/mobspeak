@@ -4,12 +4,12 @@ Feature: Migration
     Given I have a connected device
     When I uninstall the package "com.myunidays"
     Then I have a connected device without the package "com.myunidays"
-    When I install the apk at "app-live-release-6.1.apk"
+    When I install the apk at "/Users/matthewherod/releases/app-live-release-6.1.0.apk"
     Then I have a connected device with the package "com.myunidays" version "6.1.0"
     Then I launch the app "com.myunidays"
     Then I see the "Skip" text
     Then I do not see the "Error" text
-    When I update the app with the apk at "app-live-release-6.2.apk"
+    When I update the app with the apk at "/Users/matthewherod/releases/app-live-release-6.2.0.apk"
     Then I have a connected device with the package "com.myunidays" version "6.2.0"
     Then I launch the app "com.myunidays"
     Then I see the "Skip" text

@@ -8,6 +8,9 @@ internal object AdbProcesses {
 
     fun dumpUiHierarchyProcess(adbDevice: AdbDevice?) = adb(adbDevice, "exec-out uiautomator dump /dev/tty")
 
+    fun uiautomatorDump(adbDevice: AdbDevice?) = adb(adbDevice, "shell uiautomator dump")
+    fun pullWindowDump(adbDevice: AdbDevice?) = adb(adbDevice, "shell cat /storage/sdcard/window_dump.xml")
+
     fun dumpsys(adbDevice: AdbDevice?, type: String) = adb(adbDevice, dumpsys(type))
 
     fun pressKey(adbDevice: AdbDevice?, key: Int) = adb(adbDevice, inputKeyEvent(key))
@@ -16,7 +19,7 @@ internal object AdbProcesses {
 
     fun tap(adbDevice: AdbDevice?, x: Int, y: Int) = adb(adbDevice, inputTap(x, y))
 
-    fun adb(adbDevice: AdbDevice?, command: String) = AdbCommand.Builder()
+    fun adb(adbDevice: AdbDevice?, command: String): ProcessBuilder? = AdbCommand.Builder()
             .setDevice(adbDevice)
             .setCommand(command)
             .processBuilder()

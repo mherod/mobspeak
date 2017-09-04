@@ -25,6 +25,14 @@ object AdbUi {
             .observeOn(Schedulers.newThread())
             .subscribeOn(Schedulers.newThread())
 
+    fun fetchUiHierarchy(adbDevice: AdbDevice): Observable<AdbUiNode> = Adb.dumpUiHierarchy(adbDevice)
+            .map { it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1) }
+            .map { AdbUiHierarchy(it, adbDevice) }
+            .map { it.xmlString }
+            .compose { UiHierarchyHelper.uiXmlToNodes(it) }
+            .map { AdbUiNode(it) }
+            .doOnEach(AdbBusManager.getAdbUiNodeBus())
+
     private fun streamUiNodes() = streamUiNodeStringsInternal().map { AdbUiNode(it) }
 
     fun AdbDevice.streamUiNodeStrings() = streamUiNodes().map { it.toString() }

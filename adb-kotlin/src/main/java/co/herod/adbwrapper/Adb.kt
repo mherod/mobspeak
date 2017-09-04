@@ -42,9 +42,13 @@ object Adb {
                     .toMap({ it[0].trim { it <= ' ' } }) { it[1].trim { it <= ' ' } }
 
     fun dumpUiHierarchy(adbDevice: AdbDevice?): Observable<String> =
-            processFactory.observableProcess(AdbProcesses.dumpUiHierarchyProcess(adbDevice))
+            // processFactory.observableProcess(AdbProcesses.dumpUiHierarchyProcess(adbDevice))
+            processFactory.observableProcess(AdbProcesses.uiautomatorDump(adbDevice))
+                    .concatWith(processFactory.observableProcess(AdbProcesses.pullWindowDump(adbDevice)))
+                    .retry().timeout(10, TimeUnit.SECONDS)
+                    .filter { it.contains("<?xml") }
 
-    fun command(adbDevice: AdbDevice, command: String): Observable<String> =
+    fun command(adbDevice: AdbDevice?, command: String): Observable<String> =
             processFactory.observableProcess(AdbProcesses.adb(adbDevice, command))
 
     internal fun blocking(device: AdbDevice?, command: String) {

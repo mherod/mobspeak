@@ -3,6 +3,7 @@ package co.herod.adbwrapper
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.toFlowable
 import java.util.concurrent.TimeUnit
 
 internal class ProcessFactory : IProcessFactory {
@@ -12,6 +13,13 @@ internal class ProcessFactory : IProcessFactory {
             .flatMap { stringsFromProcess(it) }
             .map { it.trim { it <= ' ' } }
             .toObservable()
+            .flatMap {
+                if (it.startsWith("ERROR: ")) {
+                    Observable.error(AdbError(it))
+                } else {
+                    Observable.just(it)
+                }
+            }
             .doOnEach(AdbBusManager.getAdbBus())
 
     override fun blocking(processBuilder: ProcessBuilder, timeout: Int, timeUnit: TimeUnit) {
@@ -24,9 +32,7 @@ internal class ProcessFactory : IProcessFactory {
         processBuilder?.let { blocking(it, 10, TimeUnit.SECONDS) }
     }
 
-    private fun stringsFromProcess(it: Process): Flowable<String>? {
-        return Flowable.fromPublisher { s ->
-            it.inputStream.bufferedReader().forEachLine { s.onNext(it) }; s.onComplete()
-        }
+    private fun stringsFromProcess(it: Process): Flowable<String> {
+        return it.inputStream.bufferedReader().lineSequence().toFlowable()
     }
 }
