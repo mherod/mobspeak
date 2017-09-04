@@ -8,11 +8,9 @@ Feature: Migration
     Then I have a connected device with the package "com.myunidays" version "6.1.0"
     Then I launch the app "com.myunidays"
     Then I see the "Skip" text
-    Then I do not see the "Error" text"
+    Then I do not see the "Error" text
     When I update the app with the apk at "app-live-release-6.2.apk"
     Then I have a connected device with the package "com.myunidays" version "6.2.0"
     Then I launch the app "com.myunidays"
     Then I see the "Skip" text
     Then I do not see the "Error" text
-
-
