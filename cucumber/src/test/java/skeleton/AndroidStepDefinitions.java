@@ -22,10 +22,9 @@ public class AndroidStepDefinitions {
 
     @When("^I turn the screen on$")
     public void iTurnTheScreenOn() throws Throwable {
+
         AdbDeviceActions.INSTANCE.turnDeviceScreenOn(connectedAdbDevice);
     }
-
-
 
     @Then("^I should see the lock screen$")
     public void iShouldSeeTheLockScreen() throws Throwable {
@@ -92,8 +91,8 @@ public class AndroidStepDefinitions {
         throw new PendingException();
     }
 
-    @Then("^I don't see the text \"([^\"]*)\"$")
-    public void iDonTSeeTheText(String arg0) throws Throwable {
+    @Then("^I do not see the text \"([^\"]*)\"$")
+    public void iDoNotSeeTheText3(String arg0) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
@@ -140,12 +139,6 @@ public class AndroidStepDefinitions {
         throw new PendingException();
     }
 
-    @When("^I navigate to Settings$")
-    public void iNavigateToSettings() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
     @Then("^I scroll down$")
     public void iScrollDown() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
@@ -154,30 +147,6 @@ public class AndroidStepDefinitions {
 
     @Then("^I scroll up$")
     public void iScrollUp() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @When("^I navigate to \"([^\"]*)\" as company \"([^\"]*)\"$")
-    public void iNavigateToAsCompany(String arg0, String arg1) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^I see Quick Entry with items$")
-    public void iSeeQuickEntryWithItems() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @When("^I switch to company \"([^\"]*)\"$")
-    public void iSwitchToCompany(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @When("^I switch from company \"([^\"]*)\" to \"([^\"]*)\"$")
-    public void iSwitchFromCompanyTo(String arg0, String arg1) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
@@ -194,20 +163,8 @@ public class AndroidStepDefinitions {
         throw new PendingException();
     }
 
-    @Then("^I see Quick Entry empty$")
-    public void iSeeQuickEntryEmpty() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
     @When("^I click the right switcher$")
     public void iClickTheRightSwitcher() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^I see Quick Entry items$")
-    public void iSeeQuickEntryItems() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
@@ -242,12 +199,6 @@ public class AndroidStepDefinitions {
         throw new PendingException();
     }
 
-    @Then("^I see Quick Entry$")
-    public void iSeeQuickEntry() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
     @When("^I click the floating action button$")
     public void iClickTheFloatingActionButton() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
@@ -256,12 +207,6 @@ public class AndroidStepDefinitions {
 
     @Then("^I dismiss the tip dialog$")
     public void iDismissTheTipDialog() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^I see entry creation$")
-    public void iSeeEntryCreation() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
