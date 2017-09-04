@@ -253,12 +253,6 @@ public class AndroidStepDefinitions {
         throw new PendingException();
     }
 
-    @Then("^I wait for delete of \"([^\"]*)\"$")
-    public void iWaitForDeleteOf(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
     @Then("^I wait for the \"([^\"]*)\" text$")
     public void iWaitForTheText(String arg0) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
@@ -351,6 +345,90 @@ public class AndroidStepDefinitions {
 
     @Then("^I do not see any whitespace$")
     public void iDoNotSeeAnyWhitespace() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I drag up along the left side$")
+    public void iDragUpAlongTheLeftSide() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I drag up along the right side$")
+    public void iDragUpAlongTheRightSide() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I drag down along the left side$")
+    public void iDragDownAlongTheLeftSide() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I drag down along the right side$")
+    public void iDragDownAlongTheRightSide() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I swipe up along the left side$")
+    public void iSwipeUpAlongTheLeftSide() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I swipe up along the right side$")
+    public void iSwipeUpAlongTheRightSide() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I swipe up$")
+    public void iSwipeUp() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I drag up$")
+    public void iDragUp() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I drag down$")
+    public void iDragDown() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I swipe down along the right side$")
+    public void iSwipeDownAlongTheRightSide() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I swipe down along the left side$")
+    public void iSwipeDownAlongTheLeftSide() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I launch the app \"([^\"]*)\"$")
+    public void iLaunchTheApp(String arg0) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I install the apk at \"([^\"]*)\"$")
+    public void iInstallTheApkAt(String arg0) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^I update the app with the apk at \"([^\"]*)\"$")
+    public void iUpdateTheAppWithTheApkAt(String arg0) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
