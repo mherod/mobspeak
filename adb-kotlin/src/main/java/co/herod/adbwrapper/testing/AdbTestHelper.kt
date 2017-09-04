@@ -1,5 +1,7 @@
-package co.herod.adbwrapper
+package co.herod.adbwrapper.testing
 
+import co.herod.adbwrapper.AdbBusManager
+import co.herod.adbwrapper.AdbUi
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiNode
 import io.reactivex.Observable

@@ -4,10 +4,7 @@ import junit.framework.AssertionFailedError;
 
 import java.util.List;
 
-import co.herod.adbwrapper.AdbDeviceActions;
-import co.herod.adbwrapper.AdbDeviceManager;
-import co.herod.adbwrapper.AdbPackageManager;
-import co.herod.adbwrapper.model.AdbDevice;
+import co.herod.adbwrapper.testing.AndroidStepDefDelegate;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -15,56 +12,19 @@ import cucumber.api.java.en.When;
 
 public class AndroidStepDefinitions {
 
-    private final AndroidStepDefTestHelperBridge testHelper;
-
-    private AdbDevice connectedAdbDevice = null;
+    private final AndroidStepDefDelegate stepDefDelegate;
 
     public AndroidStepDefinitions() {
-        testHelper = new AndroidStepDefTestHelperBridge(this);
-    }
-
-    AdbDevice getConnectedAdbDevice() {
-        return connectedAdbDevice;
-    }
-
-    @Given("^I am not logged in$")
-    public void iAmNotLoggedIn() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        stepDefDelegate = new AndroidStepDefDelegate();
     }
 
     @Given("^I am on the \"([^\"]*)\" activity$")
-    public void iAmOnTheActivity(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Given("^I am ready$")
-    public void iAmReady() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @When("^I attempt login with username \"([^\"]*)\" and password \"([^\"]*)\"$")
-    public void iAttemptLoginWithUsernameAndPassword(String arg0, String arg1) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void assertActivityName(String activityName) throws Throwable {
+        stepDefDelegate.assertActivityName(activityName);
     }
 
     @When("^I click the floating action button$")
-    public void iClickTheFloatingActionButton() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @When("^I click the left switcher$")
-    public void iClickTheLeftSwitcher() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @When("^I click the right switcher$")
-    public void iClickTheRightSwitcher() throws Throwable {
+    public void tapFloatingActionButton() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
@@ -75,8 +35,8 @@ public class AndroidStepDefinitions {
         throw new PendingException();
     }
 
-    @Then("^I dismiss the tip dialog$")
-    public void iDismissTheTipDialog() throws Throwable {
+    @Then("^I dismiss the dialog$")
+    public void dismissDialog() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
@@ -95,12 +55,12 @@ public class AndroidStepDefinitions {
 
     @Then("^I do not see the \"([^\"]*)\" text$")
     public void iDoNotSeeTheText(String text) throws Throwable {
-        testHelper.failOnText(text);
+        stepDefDelegate.failOnText(text);
     }
 
     @Then("^I do not see the text \"([^\"]*)\"$")
     public void iDoNotSeeTheText2(String text) throws Throwable {
-        testHelper.failOnText(text);
+        stepDefDelegate.failOnText(text);
     }
 
     @Then("^I do not see the text \"([^\"]*)\" disappear$")
@@ -196,16 +156,13 @@ public class AndroidStepDefinitions {
     @Given("^I have a connected device$")
     public void iHaveAConnectedDevice() throws Throwable {
 
-        if (connectedAdbDevice == null) {
-            connectedAdbDevice = AdbDeviceManager.INSTANCE.getConnectedDevice();
-        }
+        stepDefDelegate.connectDevice();
     }
 
     @Then("^I have a connected device with the package \"([^\"]*)\" version \"([^\"]*)\"$")
     public void iHaveAConnectedDeviceWithThePackageVersion(String packageName, String versionName) throws Throwable {
 
-        final List<String> packages = AdbPackageManager.INSTANCE.listPackages(connectedAdbDevice)
-                .blockingGet();
+        final List<String> packages = stepDefDelegate.getInstalledPackages();
 
         if (!packages.contains(packageName)) {
             throw new AssertionFailedError("Packages list did not contain " + packageName);
@@ -213,7 +170,7 @@ public class AndroidStepDefinitions {
 
         // TODO check version
 
-        if (!testHelper.installedPackageIsVersion(packageName, versionName)) {
+        if (!stepDefDelegate.installedPackageIsVersion(packageName, versionName)) {
             throw new AssertionFailedError("Package was not correct version");
         }
 
@@ -222,8 +179,7 @@ public class AndroidStepDefinitions {
     @Then("^I have a connected device without the package \"([^\"]*)\"$")
     public void iHaveAConnectedDeviceWithoutThePackage(String packageName) throws Throwable {
 
-        final List<String> packages = AdbPackageManager.INSTANCE.listPackages(connectedAdbDevice)
-                .blockingGet();
+        final List<String> packages = stepDefDelegate.getInstalledPackages();
 
         if (packages.contains(packageName)) {
             throw new AssertionFailedError("Packages list contained " + packageName);
@@ -232,24 +188,18 @@ public class AndroidStepDefinitions {
 
     @Given("^I have a device with power at least (\\d+)$")
     public void iHaveADeviceWithPowerAtLeast(int minPower) throws Throwable {
-
-        if (connectedAdbDevice == null) {
-            connectedAdbDevice = AdbDeviceManager.INSTANCE.getConnectedDevice();
-        }
-
-        // TODO assert power
+        stepDefDelegate.connectDevice();
+        stepDefDelegate.assertPower(minPower);
     }
 
     @When("^I install the apk at \"([^\"]*)\"$")
     public void iInstallTheApkAt(String apkPath) throws Throwable {
-
-        AdbPackageManager.INSTANCE.installPackage(connectedAdbDevice, apkPath);
+        stepDefDelegate.installApk(apkPath);
     }
 
     @When("^I launch the app \"([^\"]*)\"$")
     public void iLaunchTheApp(String packageName) throws Throwable {
-
-        AdbPackageManager.INSTANCE.launchApp(connectedAdbDevice, packageName);
+        stepDefDelegate.launchApp(packageName);
     }
 
     @When("^I login with username \"([^\"]*)\" and password \"([^\"]*)\"$")
@@ -315,13 +265,13 @@ public class AndroidStepDefinitions {
     @Then("^I see the \"([^\"]*)\" text$")
     public void iSeeTheText(String text) throws Throwable {
 
-        testHelper.waitForText(text);
+        stepDefDelegate.waitForText(text);
     }
 
     @When("^I see the text \"([^\"]*)\"$")
     public void iSeeTheText2(String text) throws Throwable {
 
-        testHelper.waitForText(text);
+        stepDefDelegate.waitForText(text);
     }
 
     @When("^I select the \"([^\"]*)\" drawer option$")
@@ -426,37 +376,32 @@ public class AndroidStepDefinitions {
     }
 
     @When("^I turn the screen on$")
-    public void iTurnTheScreenOn() throws Throwable {
-
-        AdbDeviceActions.INSTANCE.turnDeviceScreenOn(connectedAdbDevice);
+    public void turnScreenOn() throws Throwable {
+        stepDefDelegate.turnScreenOn();
     }
 
     @When("^I uninstall the package \"([^\"]*)\"$")
-    public void iUninstallThePackage(String packageName) throws Throwable {
-
-        AdbPackageManager.INSTANCE.uninstallPackage(connectedAdbDevice, packageName);
+    public void uninstallPackage(String packageName) throws Throwable {
+        stepDefDelegate.uninstallPackage(packageName);
     }
 
     @When("^I update the app with the apk at \"([^\"]*)\"$")
-    public void iUpdateTheAppWithTheApkAt(String apkPath) throws Throwable {
-
-        AdbPackageManager.INSTANCE.updatePackage(connectedAdbDevice, apkPath);
+    public void updateApk(String apkPath) throws Throwable {
+        stepDefDelegate.updateApk(apkPath);
     }
 
     @Then("^I wait$")
     public void iWait() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        stepDefDelegate.waitSeconds(3);
     }
 
     @Then("^I wait for (\\d+) seconds$")
-    public void iWaitForSeconds(int arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void waitSeconds(int waitSeconds) throws Throwable {
+        stepDefDelegate.waitSeconds(waitSeconds);
     }
 
     @Then("^I wait for the \"([^\"]*)\" text$")
-    public void iWaitForTheText(String arg0) throws Throwable {
+    public void iWaitForTheText(String text) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
