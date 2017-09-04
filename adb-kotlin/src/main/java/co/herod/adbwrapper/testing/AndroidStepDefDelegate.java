@@ -21,12 +21,10 @@ public class AndroidStepDefDelegate {
     }
 
     public void connectDevice() {
-
         setAdbDevice(getConnectedDevice());
     }
 
     public AdbDevice getConnectedDevice() {
-
         return AdbDeviceManager.INSTANCE.getConnectedDevice();
     }
 
@@ -36,17 +34,14 @@ public class AndroidStepDefDelegate {
     }
 
     private AdbDevice getAdbDevice() {
-
         return adbDevice;
     }
 
     public void setAdbDevice(AdbDevice adbDevice) {
-
         this.adbDevice = adbDevice;
     }
 
     public List<String> getInstalledPackages() {
-
         return AdbPackageManager.INSTANCE.listPackages(adbDevice).blockingGet();
     }
 
@@ -56,37 +51,30 @@ public class AndroidStepDefDelegate {
     }
 
     public boolean installedPackageIsVersion(String packageName, String versionName) {
-
         return Objects.equals(getPackageVersionName(packageName), versionName);
     }
 
     private String getPackageVersionName(String packageName) {
-
         return AdbPackageManager.INSTANCE.getPackageVersionName(getAdbDevice(), packageName);
     }
 
     public void launchApp(String packageName) {
-
         AdbPackageManager.INSTANCE.launchApp(getConnectedDevice(), packageName);
     }
 
     public void turnScreenOn() {
-
         AdbDeviceActions.INSTANCE.turnDeviceScreenOn(getConnectedDevice());
     }
 
     public void uninstallPackage(String packageName) {
-
         AdbPackageManager.INSTANCE.uninstallPackage(getConnectedDevice(), packageName);
     }
 
     public void updateApk(String apkPath) {
-
         AdbPackageManager.INSTANCE.updatePackage(getConnectedDevice(), apkPath);
     }
 
     public void waitForText(String text) {
-
         AdbTestHelper.INSTANCE.waitForText(getAdbDevice(), text);
     }
 

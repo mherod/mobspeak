@@ -187,18 +187,18 @@ public class AndroidStepDefinitions {
     }
 
     @Given("^I have a device with power at least (\\d+)$")
-    public void iHaveADeviceWithPowerAtLeast(int minPower) throws Throwable {
+    public void connectDeviceAssertPower(int minPower) throws Throwable {
         stepDefDelegate.connectDevice();
         stepDefDelegate.assertPower(minPower);
     }
 
     @When("^I install the apk at \"([^\"]*)\"$")
-    public void iInstallTheApkAt(String apkPath) throws Throwable {
+    public void installApk(String apkPath) throws Throwable {
         stepDefDelegate.installApk(apkPath);
     }
 
     @When("^I launch the app \"([^\"]*)\"$")
-    public void iLaunchTheApp(String packageName) throws Throwable {
+    public void launchApp(String packageName) throws Throwable {
         stepDefDelegate.launchApp(packageName);
     }
 

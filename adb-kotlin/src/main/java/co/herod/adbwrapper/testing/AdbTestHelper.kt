@@ -20,7 +20,7 @@ object AdbTestHelper {
 
         AdbBusManager.getAdbUiNodeBus()
                 .filter { Objects.nonNull(it) }
-                .timeout(10, TimeUnit.SECONDS)
+                .timeout(20, TimeUnit.SECONDS)
                 .onErrorResumeNext(Observable.empty<AdbUiNode>())
                 .blockingForEach { adbUiNode ->
                     if (adbUiNode.text.toLowerCase().contains(text.toLowerCase())) {
@@ -37,7 +37,7 @@ object AdbTestHelper {
         try {
             AdbBusManager.getAdbUiNodeBus()
                     .filter { adbUiNode -> adbUiNode.text.contains(text) }
-                    .timeout(20, TimeUnit.SECONDS)
+                    .timeout(30, TimeUnit.SECONDS)
                     .blockingForEach { throw BlockingBreakerThrowable() }
         } catch (e: BlockingBreakerThrowable) {
             // good!

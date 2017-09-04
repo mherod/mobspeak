@@ -44,12 +44,24 @@ object Adb {
                     .map { it.trim { it <= ' ' }.split("=".toRegex(), 2) }
                     .toMap({ it[0].trim { it <= ' ' } }) { it[1].trim { it <= ' ' } }
 
-    fun dumpUiHierarchy(adbDevice: AdbDevice?): Observable<String> =
-            // processFactory.observableProcess(AdbProcesses.dumpUiHierarchyProcess(adbDevice))
+    fun dumpUiHierarchy(adbDevice: AdbDevice?): Observable<String> {
+        return primaryDumpUiHierarchy(adbDevice)
+                .onErrorResumeNext(fallbackDumpUiHierarchy(adbDevice)
+                        .onErrorResumeNext(dumpUiHierarchy(adbDevice)))
+                .retry()
+                .timeout(30, TimeUnit.SECONDS)
+    }
+
+    private fun primaryDumpUiHierarchy(adbDevice: AdbDevice?) =
+            processFactory.observableProcess(AdbProcesses.dumpUiHierarchyProcess(adbDevice))
+                    .filter { it.contains("<?xml") }
+                    .timeout(5, TimeUnit.SECONDS)
+
+    private fun fallbackDumpUiHierarchy(adbDevice: AdbDevice?) =
             processFactory.observableProcess(AdbProcesses.uiautomatorDump(adbDevice))
                     .concatWith(processFactory.observableProcess(AdbProcesses.pullWindowDump(adbDevice)))
-                    .retry().timeout(10, TimeUnit.SECONDS)
                     .filter { it.contains("<?xml") }
+                    .timeout(10, TimeUnit.SECONDS)
 
     fun command(adbDevice: AdbDevice?, command: String): Observable<String> =
             processFactory.observableProcess(AdbProcesses.adb(adbDevice, command))
