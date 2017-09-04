@@ -95,18 +95,11 @@ public class AndroidStepDefinitions {
 
     @Then("^I do not see the \"([^\"]*)\" text$")
     public void iDoNotSeeTheText(String text) throws Throwable {
-
         testHelperBridge.failOnText(text);
     }
 
     @Then("^I do not see the text \"([^\"]*)\"$")
     public void iDoNotSeeTheText2(String text) throws Throwable {
-
-        testHelperBridge.failOnText(text);
-    }
-
-    private void failOnText(String text) {
-
         testHelperBridge.failOnText(text);
     }
 
