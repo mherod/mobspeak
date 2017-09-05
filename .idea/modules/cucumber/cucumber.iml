@@ -41,8 +41,8 @@
     <output-test url="file://$MODULE_DIR$/../../../cucumber/build/classes/test" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../cucumber">
-      <sourceFolder url="file://$MODULE_DIR$/../../../cucumber/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../cucumber/src/main/kotlin" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../cucumber/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../cucumber/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../../cucumber/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../cucumber/src/test/kotlin" isTestSource="true" />

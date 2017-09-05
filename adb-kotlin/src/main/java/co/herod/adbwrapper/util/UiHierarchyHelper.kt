@@ -1,8 +1,11 @@
 package co.herod.adbwrapper.util
 
+import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.AdbUiNode
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import java.util.*
 
 object UiHierarchyHelper {
 
@@ -55,6 +58,14 @@ object UiHierarchyHelper {
             .map { s -> if (s.endsWith(">").not()) s + ">"; s }
             .filter { "=" in it }
             .filter { it.contains(KEY_STRING_BOUNDS) }
+
+    fun rawDumpToNodes(upstream: Observable<String>, adbDevice: AdbDevice?): Observable<AdbUiNode>? = upstream
+            .filter { Objects.nonNull(it) }
+            .map { AdbUiHierarchy(it, adbDevice) }
+            .map { it.xmlString }
+            .compose { UiHierarchyHelper.uiXmlToNodes(it) }
+            .map { AdbUiNode(it) }
+            .filter { Objects.nonNull(it) }
 
     fun getHeight(coordinates: Array<Int>) = coordinates[3] - coordinates[1]
 

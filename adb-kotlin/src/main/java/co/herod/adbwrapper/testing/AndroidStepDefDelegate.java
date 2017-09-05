@@ -2,20 +2,23 @@ package co.herod.adbwrapper.testing;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import co.herod.adbwrapper.AdbDeviceActions;
 import co.herod.adbwrapper.AdbDeviceManager;
 import co.herod.adbwrapper.AdbPackageManager;
 import co.herod.adbwrapper.model.AdbDevice;
 
-public class AndroidStepDefDelegate {
+public class AndroidStepDefDelegate implements AndroidTestHelper {
 
     private AdbDevice adbDevice = null;
 
+    @Override
     public void assertActivityName(String activityName) {
         // TODO
     }
 
+    @Override
     public void assertPower(int minPower) {
         // TODO
     }
@@ -28,9 +31,14 @@ public class AndroidStepDefDelegate {
         return AdbDeviceManager.INSTANCE.getConnectedDevice();
     }
 
+    @Override
     public void failOnText(String text) {
+        failOnText(text, 10, TimeUnit.SECONDS);
+    }
 
-        AdbTestHelper.INSTANCE.failOnText(getAdbDevice(), text);
+    @Override
+    public void failOnText(String text, int timeout, TimeUnit timeUnit) {
+        AdbTestHelper.INSTANCE.failOnText(getAdbDevice(), text, timeout, timeUnit);
     }
 
     private AdbDevice getAdbDevice() {
@@ -46,7 +54,6 @@ public class AndroidStepDefDelegate {
     }
 
     public void installApk(String apkPath) {
-
         AdbPackageManager.INSTANCE.installPackage(getConnectedDevice(), apkPath);
     }
 
@@ -75,7 +82,11 @@ public class AndroidStepDefDelegate {
     }
 
     public void waitForText(String text) {
-        AdbTestHelper.INSTANCE.waitForText(getAdbDevice(), text);
+        waitForText(text, 30, TimeUnit.SECONDS);
+    }
+
+    public void waitForText(String text, int timeout, TimeUnit timeUnit) {
+        AdbTestHelper.INSTANCE.waitForText(getAdbDevice(), text, timeout, timeUnit);
     }
 
     public void waitSeconds(int waitSeconds) {

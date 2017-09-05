@@ -1,38 +1,81 @@
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
+import io.reactivex.Observable
 
-internal object AdbProcesses {
+interface AdbOps {
+    fun devices(): ProcessBuilder?
+    fun devicesObservable(): Observable<String>
+    fun uiautomatorDumpExecOut(adbDevice: AdbDevice?): ProcessBuilder?
+    fun uiautomatorDumpExecOutObservable(adbDevice: AdbDevice?): Observable<String>
+    fun uiautomatorDump(adbDevice: AdbDevice?): ProcessBuilder?
+    fun uiautomatorDumpObservable(adbDevice: AdbDevice?): Observable<String>
+    fun readDeviceFile(adbDevice: AdbDevice?, filePath: String): ProcessBuilder?
+    fun readDeviceFileObservable(adbDevice: AdbDevice?, filePath: String): Observable<String>
+    fun dumpsys(adbDevice: AdbDevice?, type: String): ProcessBuilder?
+    fun pressKey(adbDevice: AdbDevice?, key: Int): ProcessBuilder?
+    fun inputText(adbDevice: AdbDevice, inputText: String): ProcessBuilder?
+    fun tap(adbDevice: AdbDevice?, x: Int, y: Int): ProcessBuilder?
+    fun adb(adbDevice: AdbDevice?, command: String): ProcessBuilder?
+    fun dumpsys(type: String): String
+    fun inputKeyEvent(key: Int): String
+    fun inputTap(x: Int, y: Int): String
+    fun inputText(inputText: String): String
+}
 
-    fun devices(): ProcessBuilder? = AdbCommand.Builder().setCommand(Adb.DEVICES).processBuilder()
+internal object AdbProcesses : AdbOps {
 
-    fun dumpUiHierarchyProcess(adbDevice: AdbDevice?) = adb(adbDevice, "exec-out uiautomator dump /dev/tty")
+    override fun devices(): ProcessBuilder? = AdbCommand.Builder()
+            .setCommand(Adb.DEVICES)
+            .processBuilder()
 
-    fun uiautomatorDump(adbDevice: AdbDevice?) = adb(adbDevice, "shell uiautomator dump")
-    fun pullWindowDump(adbDevice: AdbDevice?) = adb(adbDevice, "shell cat /storage/sdcard/window_dump.xml")
+    override fun devicesObservable(): Observable<String> =
+            devices().toObservable()
 
-    fun dumpsys(adbDevice: AdbDevice?, type: String) = adb(adbDevice, dumpsys(type))
+    override fun uiautomatorDumpExecOut(adbDevice: AdbDevice?): ProcessBuilder? =
+            adb(adbDevice, "exec-out uiautomator dump /dev/tty")
 
-    fun pressKey(adbDevice: AdbDevice?, key: Int) = adb(adbDevice, inputKeyEvent(key))
+    override fun uiautomatorDumpExecOutObservable(adbDevice: AdbDevice?): Observable<String> =
+            uiautomatorDumpExecOut(adbDevice).toObservable()
 
-    fun inputText(adbDevice: AdbDevice, inputText: String) = adb(adbDevice, inputText(inputText))
+    override fun uiautomatorDump(adbDevice: AdbDevice?): ProcessBuilder? =
+            adb(adbDevice, "shell uiautomator dump")
 
-    fun tap(adbDevice: AdbDevice?, x: Int, y: Int) = adb(adbDevice, inputTap(x, y))
+    override fun uiautomatorDumpObservable(adbDevice: AdbDevice?): Observable<String> =
+            uiautomatorDump(adbDevice).toObservable()
 
-    fun adb(adbDevice: AdbDevice?, command: String): ProcessBuilder? = AdbCommand.Builder()
+    override fun readDeviceFile(adbDevice: AdbDevice?, filePath: String): ProcessBuilder? =
+            adb(adbDevice, "shell cat $filePath")
+
+    override fun readDeviceFileObservable(adbDevice: AdbDevice?, filePath: String): Observable<String> =
+            readDeviceFile(adbDevice, "shell cat $filePath").toObservable()
+
+    override fun dumpsys(adbDevice: AdbDevice?, type: String) = adb(adbDevice, dumpsys(type))
+
+    override fun pressKey(adbDevice: AdbDevice?, key: Int) = adb(adbDevice, inputKeyEvent(key))
+
+    override fun inputText(adbDevice: AdbDevice, inputText: String): ProcessBuilder? = adb(adbDevice, inputText(inputText))
+
+    override fun tap(adbDevice: AdbDevice?, x: Int, y: Int): ProcessBuilder? = adb(adbDevice, inputTap(x, y))
+
+    override fun adb(adbDevice: AdbDevice?, command: String): ProcessBuilder? = AdbCommand.Builder()
             .setDevice(adbDevice)
             .setCommand(command)
             .processBuilder()
 
-    private fun dumpsys(type: String) =
+    override fun dumpsys(type: String) =
             String.format("${AdbCommand.SHELL} dumpsys %s", type)
 
-    private fun inputKeyEvent(key: Int) =
+    override fun inputKeyEvent(key: Int) =
             String.format("${AdbCommand.SHELL} input keyevent %d", key)
 
-    private fun inputTap(x: Int, y: Int) =
+    override fun inputTap(x: Int, y: Int) =
             String.format("${AdbCommand.SHELL} input tap %d %d", x, y)
 
-    private fun inputText(inputText: String) =
+    override fun inputText(inputText: String) =
             String.format("${AdbCommand.SHELL} input text %s", inputText)
+
+    private fun ProcessBuilder?.toObservable(): Observable<String> {
+        return Adb.processFactory.observableProcess(this)
+    }
 }

@@ -11,8 +11,8 @@ internal class ProcessFactory : IProcessFactory {
     override fun observableProcess(processBuilder: ProcessBuilder?): Observable<String> = Flowable.just(processBuilder)
             .map { it.start() }
             .flatMap { stringsFromProcess(it) }
-            .map { it.trim { it <= ' ' } }
             .toObservable()
+            .map { it.trim { it <= ' ' } }
             .flatMap {
                 if (it.startsWith("ERROR: ")) {
                     Observable.error(AdbError(it))

@@ -5,11 +5,11 @@ import io.reactivex.ObservableTransformer
 
 import java.util.concurrent.TimeUnit
 
-open class FixedDurationTransformer(
+open class FixedDurationTransformer<T>(
         private val timeout: Int,
         private val timeUnit: TimeUnit
-) : ObservableTransformer<String, String> {
+) : ObservableTransformer<T, T> {
 
-    override fun apply(upstream: Observable<String>): Observable<String> =
+    override fun apply(upstream: Observable<T>): Observable<T> =
             upstream.retry().timeout(timeout.toLong(), timeUnit)
 }

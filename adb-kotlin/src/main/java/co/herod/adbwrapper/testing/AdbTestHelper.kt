@@ -1,11 +1,10 @@
 package co.herod.adbwrapper.testing
 
-import co.herod.adbwrapper.AdbBusManager
-import co.herod.adbwrapper.AdbUi
+import co.herod.adbwrapper.Adb
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiNode
+import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
 import io.reactivex.Observable
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -14,30 +13,26 @@ import java.util.concurrent.TimeUnit
 
 object AdbTestHelper {
 
-    fun AdbDevice.failOnText(text: String) {
+    fun AdbDevice.failOnText(text: String, timeout: Long, timeUnit: TimeUnit) {
 
-        AdbUi.startStreamingUiHierarchy(this).subscribe()
-
-        AdbBusManager.getAdbUiNodeBus()
-                .filter { Objects.nonNull(it) }
-                .timeout(20, TimeUnit.SECONDS)
+        Adb.dumpUiNodes(this)
+                .compose(ResultChangeFixedDurationTransformer())
+                .timeout(timeout, timeUnit)
                 .onErrorResumeNext(Observable.empty<AdbUiNode>())
                 .blockingForEach { adbUiNode ->
-                    if (adbUiNode.text.toLowerCase().contains(text.toLowerCase())) {
+                    if (text.toLowerCase() in adbUiNode.text.toLowerCase()) {
                         throw AssertionFailedError("Text was visible")
                     }
                 }
     }
 
 
-    fun AdbDevice.waitForText(text: String) {
-
-        AdbUi.startStreamingUiHierarchy(this).subscribe()
+    fun AdbDevice.waitForText(text: String, timeout: Long, timeUnit: TimeUnit) {
 
         try {
-            AdbBusManager.getAdbUiNodeBus()
-                    .filter { adbUiNode -> adbUiNode.text.contains(text) }
-                    .timeout(30, TimeUnit.SECONDS)
+            Adb.dumpUiNodes(this)
+                    .filter { text in it.text }
+                    .timeout(timeout, timeUnit)
                     .blockingForEach { throw BlockingBreakerThrowable() }
         } catch (e: BlockingBreakerThrowable) {
             // good!
@@ -45,6 +40,4 @@ object AdbTestHelper {
     }
 }
 
-
 class BlockingBreakerThrowable : RuntimeException()
-class AssertionFailedError(val s: String) : Throwable()
