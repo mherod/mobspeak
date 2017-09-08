@@ -21,9 +21,12 @@ interface AdbOps {
     fun inputKeyEvent(key: Int): String
     fun inputTap(x: Int, y: Int): String
     fun inputText(inputText: String): String
+    fun launchUrl(adbDevice: AdbDevice?, url: String?): ProcessBuilder?
 }
 
 internal object AdbProcesses : AdbOps {
+
+    private val androidIntentActionView = "android.intent.action.VIEW"
 
     override fun devices(): ProcessBuilder? = AdbCommand.Builder()
             .setCommand(Adb.DEVICES)
@@ -57,6 +60,13 @@ internal object AdbProcesses : AdbOps {
     override fun inputText(adbDevice: AdbDevice, inputText: String): ProcessBuilder? = adb(adbDevice, inputText(inputText))
 
     override fun tap(adbDevice: AdbDevice?, x: Int, y: Int): ProcessBuilder? = adb(adbDevice, inputTap(x, y))
+
+    override fun launchUrl(adbDevice: AdbDevice?, url: String?) =
+            adb(adbDevice, "${AdbCommand.SHELL}  " +
+                    "am " +
+                    "start " +
+                    "-a $androidIntentActionView " +
+                    "-d '$url'")
 
     override fun adb(adbDevice: AdbDevice?, command: String): ProcessBuilder? = AdbCommand.Builder()
             .setDevice(adbDevice)

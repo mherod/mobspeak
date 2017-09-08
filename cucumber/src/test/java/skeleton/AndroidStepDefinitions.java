@@ -156,7 +156,6 @@ public class AndroidStepDefinitions {
 
     @Given("^I have a connected device$")
     public void iHaveAConnectedDevice() throws Throwable {
-
         androidTestHelper.connectDevice();
     }
 

@@ -1,8 +1,6 @@
 package co.herod.adbwrapper.testing
 
-import co.herod.adbwrapper.Adb
-import co.herod.adbwrapper.AdbDeviceActions
-import co.herod.adbwrapper.AdbPackageManager
+import co.herod.adbwrapper.*
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiNode
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
@@ -15,19 +13,25 @@ import java.util.function.Predicate
  */
 
 object AdbTestHelper : AndroidTestHelper {
+
+    private var _adbDevice: AdbDevice? = null
+    var adbDevice: AdbDevice?
+        get() = _adbDevice
+        set(value) {
+            _adbDevice = value
+        }
+
     override fun assertScreenOn() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        turnScreenOn()
     }
 
     override fun assertScreenOff() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        turnScreenOff()
     }
 
     override fun turnScreenOff() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        AdbDeviceActions.turnDeviceScreenOff(adbDevice)
     }
-
-    var adbDevice: AdbDevice? = null;
 
     override fun assertActivityName(activityName: String?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -37,9 +41,7 @@ object AdbTestHelper : AndroidTestHelper {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun backButton() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun backButton() = AdbDeviceActions.pressBackButton(adbDevice)
 
     override fun closeLeftDrawer() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -62,43 +64,61 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun failOnText(text: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        text?.let { adbDevice?.failOnText(it, 5, TimeUnit.SECONDS) }
     }
 
     override fun failOnText(text: String?, timeout: Int, timeUnit: TimeUnit?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        text?.let { adbDevice?.failOnText(it, timeout, TimeUnit.SECONDS) }
     }
 
-    override fun getInstalledPackages(): MutableList<String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getInstalledPackages(): MutableList<String>? {
+        return AdbPackageManager.listPackages(adbDevice)?.blockingGet()
     }
 
-    override fun getPackageVersionName(packageName: String?): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getPackageVersionName(packageName: String?): String? {
+        return packageName?.let { AdbPackageManager.getPackageVersionName(adbDevice, it) }
     }
 
     override fun installApk(apkPath: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        apkPath?.let { AdbPackageManager.installPackage(adbDevice, it) }
     }
 
     override fun installedPackageIsVersion(packageName: String?, versionName: String?): Boolean {
-        return getPackageVersionName(packageName) == versionName;
+        return getPackageVersionName(packageName) == versionName
     }
 
     override fun launchApp(packageName: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        packageName?.let { AdbPackageManager.launchApp(adbDevice, it) }
     }
 
     override fun launchUrl(url: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        AdbProcesses.launchUrl(adbDevice, url)
     }
 
     override fun takeScreenshot() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        adbDevice?.let { ScreenshotHelper.screenshot(it, false) };
     }
 
     override fun touchText(text: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        text?.let {
+            Adb.dumpUiNodes(adbDevice)
+                    .compose(ResultChangeFixedDurationTransformer())
+                    .timeout(5, TimeUnit.SECONDS)
+                    .onErrorResumeNext(Observable.empty<AdbUiNode>())
+                    .blockingForEach { adbUiNode ->
+                        when (it) {
+                            in adbUiNode.text.toLowerCase() -> {
+                                adbDevice?.let { adbDevice1 ->
+                                    AdbDeviceActions.tapCentre(
+                                            adbDevice1,
+                                            adbUiNode
+                                    )
+                                }
+                            }
+                        }
+                    }
+        }
     }
 
     override fun turnScreenOn() {
@@ -114,15 +134,28 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun waitForText(text: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        adbDevice?.let {
+            text?.let { text ->
+                it.waitForText(
+                        text = text,
+                        timeout = 5,
+                        timeUnit = TimeUnit.SECONDS
+                )
+            }
+        }
     }
 
     override fun waitForText(text: String?, timeout: Int, timeUnit: TimeUnit?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        adbDevice?.let { waitForText(text, timeout, timeUnit) }
     }
 
     override fun waitForUiNode(adbUiNodePredicate: Predicate<AdbUiNode>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        Adb.dumpUiNodes(adbDevice)
+                .compose(ResultChangeFixedDurationTransformer())
+                .filter {adbUiNode -> adbUiNodePredicate?.test(adbUiNode) == true }
+                .timeout(10, TimeUnit.SECONDS)
+                .subscribe()
     }
 
     override fun waitSeconds(waitSeconds: Int) = try {
@@ -130,13 +163,13 @@ object AdbTestHelper : AndroidTestHelper {
     } catch (ignored: InterruptedException) {
     }
 
-    fun AdbDevice.failOnText(text: String, timeout: Long, timeUnit: TimeUnit) {
+    fun AdbDevice.failOnText(text: String, timeout: Int, timeUnit: TimeUnit) {
 
         Adb.dumpUiNodes(this)
                 .compose(ResultChangeFixedDurationTransformer())
-                .timeout(timeout, timeUnit)
+                .timeout(timeout.toLong(), timeUnit)
                 .onErrorResumeNext(Observable.empty<AdbUiNode>())
-                .blockingForEach { adbUiNode ->
+                .blockingForEach { adbUiNode: AdbUiNode ->
                     if (text.toLowerCase() in adbUiNode.text.toLowerCase()) {
                         throw AssertionFailedError("Text was visible")
                     }

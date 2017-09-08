@@ -13,31 +13,31 @@ object AdbDeviceActions {
     private const val KEY_EVENT_POWER = 26
     private const val KEY_EVENT_BACKSPACE = 67
 
-    fun AdbDevice?.pressHomeButton() {
-        Adb.pressKeyBlocking(this, KEY_EVENT_HOME)
+    fun pressHomeButton(adbDevice: AdbDevice?) {
+        Adb.pressKeyBlocking(adbDevice, KEY_EVENT_HOME)
     }
 
-    fun AdbDevice?.pressBackButton() {
-        Adb.pressKeyBlocking(this, KEY_EVENT_BACK)
+    fun pressBackButton(adbDevice: AdbDevice?) {
+        Adb.pressKeyBlocking(adbDevice, KEY_EVENT_BACK)
     }
 
-    fun AdbDevice?.pressPowerButton() {
-        Adb.pressKeyBlocking(this, KEY_EVENT_POWER)
+    fun pressPowerButton(adbDevice: AdbDevice?) {
+        Adb.pressKeyBlocking(adbDevice, KEY_EVENT_POWER)
     }
 
-    fun AdbDevice?.pressBackspaceButton() {
-        Adb.pressKeyBlocking(this, KEY_EVENT_BACKSPACE)
+    fun pressBackspaceButton(adbDevice: AdbDevice?) {
+        Adb.pressKeyBlocking(adbDevice, KEY_EVENT_BACKSPACE)
     }
 
     fun turnDeviceScreenOn(adbDevice: AdbDevice?) {
-        while (!AdbDeviceProperties.isScreenOn(adbDevice)) adbDevice.pressPowerButton()
+        while (!AdbDeviceProperties.isScreenOn(adbDevice)) pressPowerButton(adbDevice)
     }
 
     fun turnDeviceScreenOff(adbDevice: AdbDevice?) {
-        while (AdbDeviceProperties.isScreenOn(adbDevice)) adbDevice.pressPowerButton()
+        while (AdbDeviceProperties.isScreenOn(adbDevice)) pressPowerButton(adbDevice)
     }
 
-    fun AdbDevice.tapCentre(adbUiNode: AdbUiNode) = this.tapCentre(adbUiNode.bounds!!)
+    fun tapCentre(adbDevice: AdbDevice, adbUiNode: AdbUiNode) = adbUiNode.bounds?.let { adbDevice.tapCentre(it) }
 
     private fun AdbDevice.tapCentre(c: Array<Int>) = Adb.processFactory.blocking(AdbProcesses.tap(this,
             UiHierarchyHelper.centreX(c),

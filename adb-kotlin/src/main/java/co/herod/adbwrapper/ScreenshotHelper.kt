@@ -19,7 +19,7 @@ object ScreenshotHelper {
     private val SCREENSHOT_EXPIRY_MILLIS = 10000
 
     @CheckReturnValue
-    private fun AdbDevice.screenshot(ignoreCache: Boolean): File {
+    fun screenshot(adbDevice: AdbDevice, ignoreCache: Boolean): File {
 
         val file = FileUtil.getFile("screen.png")
 
@@ -30,7 +30,7 @@ object ScreenshotHelper {
             return file
         }
 
-        AdbUi.pullScreenCapture(this)
+        AdbUi.pullScreenCapture(adbDevice)
         return file
     }
 
@@ -70,7 +70,7 @@ object ScreenshotHelper {
             height: Int
     ): BufferedImage? {
 
-        val screenshot = this.screenshot(false)
+        val screenshot = screenshot(this, false)
         try {
             return ImageUtil.cropImage(screenshot, coordinates[0], coordinates[1], width, height)
         } catch (e: IOException) {
