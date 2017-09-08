@@ -1,11 +1,9 @@
 package co.herod.adbwrapper.testing;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
-import co.herod.adbwrapper.AdbDeviceActions;
 import co.herod.adbwrapper.AdbDeviceManager;
 import co.herod.adbwrapper.AdbPackageManager;
 import co.herod.adbwrapper.model.AdbDevice;
@@ -18,22 +16,22 @@ public class AndroidStepDefDelegate implements AndroidTestHelper {
 
     @Override
     public void assertActivityName(String activityName) {
-        // TODO
+        adbTestHelper().assertActivityName(activityName);
     }
 
     @Override
     public void assertPower(int minPower) {
-        // TODO
+        adbTestHelper().assertPower(minPower);
     }
 
     @Override
     public void backButton() {
-
+        adbTestHelper().backButton();
     }
 
     @Override
     public void closeLeftDrawer() {
-
+        adbTestHelper().closeLeftDrawer();
     }
 
     public void connectDevice() {
@@ -42,21 +40,17 @@ public class AndroidStepDefDelegate implements AndroidTestHelper {
 
     @Override
     public void dismissDialog() {
-
+        adbTestHelper().dismissDialog();
     }
 
     @Override
     public void dragDown(Function1<Integer, Integer> widthFunction) {
-
+        adbTestHelper().dragDown(widthFunction);
     }
 
     @Override
     public void dragUp(Function1<Integer, Integer> widthFunction) {
-
-    }
-
-    public AdbDevice getConnectedDevice() {
-        return AdbDeviceManager.INSTANCE.getConnectedDevice();
+        adbTestHelper().dragUp(widthFunction);
     }
 
     @Override
@@ -66,7 +60,7 @@ public class AndroidStepDefDelegate implements AndroidTestHelper {
 
     @Override
     public void failOnText(String text, int timeout, TimeUnit timeUnit) {
-        AdbTestHelper.INSTANCE.failOnText(getAdbDevice(), text, timeout, timeUnit);
+        adbTestHelper().failOnText(getAdbDevice(), text, timeout, timeUnit);
     }
 
     @Override
@@ -76,6 +70,16 @@ public class AndroidStepDefDelegate implements AndroidTestHelper {
 
     @Override
     public void touchText(String text) {
+
+    }
+
+    @Override
+    public void assertScreenOn() {
+
+    }
+
+    @Override
+    public void assertScreenOff() {
 
     }
 
@@ -97,7 +101,7 @@ public class AndroidStepDefDelegate implements AndroidTestHelper {
 
     @Override
     public boolean installedPackageIsVersion(String packageName, String versionName) {
-        return Objects.equals(getPackageVersionName(packageName), versionName);
+        return adbTestHelper().installedPackageIsVersion(packageName, versionName);
     }
 
     @Override
@@ -112,27 +116,32 @@ public class AndroidStepDefDelegate implements AndroidTestHelper {
 
     @Override
     public void launchUrl(String url) {
-
+        adbTestHelper().launchUrl(url);
     }
 
     @Override
     public void turnScreenOn() {
-        AdbDeviceActions.INSTANCE.turnDeviceScreenOn(getConnectedDevice());
+        adbTestHelper().turnScreenOn();
+    }
+
+    @Override
+    public void turnScreenOff() {
+        adbTestHelper().turnScreenOff();
     }
 
     @Override
     public void uninstallPackage(String packageName) {
-        AdbPackageManager.INSTANCE.uninstallPackage(getConnectedDevice(), packageName);
+        adbTestHelper().uninstallPackage(packageName);
     }
 
     @Override
     public void updateApk(String apkPath) {
-        AdbPackageManager.INSTANCE.updatePackage(getConnectedDevice(), apkPath);
+        adbTestHelper().updateApk(apkPath);
     }
 
     @Override
     public void waitForUiNode(Predicate<AdbUiNode> adbUiNodePredicate) {
-
+        adbTestHelper().waitForUiNode(adbUiNodePredicate);
     }
 
     @Override
@@ -142,15 +151,22 @@ public class AndroidStepDefDelegate implements AndroidTestHelper {
 
     @Override
     public void waitForText(String text, int timeout, TimeUnit timeUnit) {
-        AdbTestHelper.INSTANCE.waitForText(getAdbDevice(), text, timeout, timeUnit);
+        adbTestHelper().waitForText(getAdbDevice(), text, timeout, timeUnit);
     }
 
     @Override
     public void waitSeconds(int waitSeconds) {
+        adbTestHelper().waitSeconds(waitSeconds);
+    }
 
-        try {
-            Thread.sleep(waitSeconds * 1000);
-        } catch (InterruptedException ignored) {
-        }
+    private AdbDevice getConnectedDevice() {
+        return AdbDeviceManager.INSTANCE.getConnectedDevice();
+    }
+
+    private AdbTestHelper adbTestHelper() {
+
+        final AdbTestHelper adbTestHelper = AdbTestHelper.INSTANCE;
+        adbTestHelper.setAdbDevice(getConnectedDevice());
+        return adbTestHelper;
     }
 }

@@ -33,33 +33,39 @@ public interface AndroidTestHelper {
 
     void failOnText(String text, int timeout, TimeUnit timeUnit);
 
+    List<String> getInstalledPackages();
+
+    String getPackageVersionName(String packageName);
+
+    void installApk(String apkPath);
+
+    boolean installedPackageIsVersion(String packageName, String versionName);
+
+    void launchApp(String packageName);
+
+    void launchUrl(String url);
+
     void takeScreenshot();
 
     void touchText(String text);
 
-    abstract void waitForText(String text);
+    void assertScreenOn();
 
-    abstract void waitForText(String text, int timeout, TimeUnit timeUnit);
+    void assertScreenOff();
 
-    List<String> getInstalledPackages();
+    void turnScreenOn();
 
-    void installApk(String apkPath);
+    void turnScreenOff();
 
-    abstract boolean installedPackageIsVersion(String packageName, String versionName);
+    void uninstallPackage(String packageName);
 
-    String getPackageVersionName(String packageName);
+    void updateApk(String apkPath);
 
-    abstract void launchApp(String packageName);
+    void waitForText(String text);
 
-    abstract void launchUrl(String url);
+    void waitForText(String text, int timeout, TimeUnit timeUnit);
 
-    abstract void turnScreenOn();
+    void waitForUiNode(Predicate<AdbUiNode> adbUiNodePredicate);
 
-    abstract void uninstallPackage(String packageName);
-
-    abstract void updateApk(String apkPath);
-
-    abstract void waitForUiNode(Predicate<AdbUiNode> adbUiNodePredicate);
-
-    abstract void waitSeconds(int waitSeconds);
+    void waitSeconds(int waitSeconds);
 }
