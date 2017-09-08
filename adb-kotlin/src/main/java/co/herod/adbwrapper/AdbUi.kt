@@ -59,7 +59,7 @@ object AdbUi {
 
 //    private fun AdbDevice.screenshotBlocking(ignoreCache: Boolean) {
 //
-//        Observable.fromCallable<File> { ScreenshotHelper.screenshot(this, ignoreCache) }
+//        Observable.fromCallable<File> { ScreenshotHelper.takeScreenshot(this, ignoreCache) }
 //                .timeout(10, TimeUnit.SECONDS)
 //                .blockingSubscribe()
 //    }

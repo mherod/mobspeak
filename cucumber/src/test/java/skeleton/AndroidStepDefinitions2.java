@@ -3,6 +3,7 @@ package skeleton;
 import junit.framework.AssertionFailedError;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import co.herod.adbwrapper.testing.AndroidStepDefDelegate;
 import co.herod.adbwrapper.testing.AndroidTestHelper;
@@ -11,11 +12,11 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-public class AndroidStepDefinitions {
+public class AndroidStepDefinitions2 {
 
     private final AndroidTestHelper androidTestHelper;
 
-    public AndroidStepDefinitions() {
+    public AndroidStepDefinitions2() {
         androidTestHelper = new AndroidStepDefDelegate();
     }
 
@@ -24,22 +25,21 @@ public class AndroidStepDefinitions {
         androidTestHelper.assertActivityName(activityName);
     }
 
-    @When("^I click the floating action button$")
-    public void tapFloatingActionButton() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
+    @Given("^I have a device with power at least (\\d+)$")
+    public void connectDeviceAssertPower(int minPower) throws Throwable {
 
-    @When("^I close the navigation drawer$")
-    public void iCloseTheNavigationDrawer() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        androidTestHelper.connectDevice();
+        androidTestHelper.assertPower(minPower);
     }
 
     @Then("^I dismiss the dialog$")
     public void dismissDialog() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        androidTestHelper.dismissDialog();
+    }
+
+    @When("^I close the navigation drawer$")
+    public void iCloseTheNavigationDrawer() throws Throwable {
+        androidTestHelper.closeLeftDrawer();
     }
 
     @Then("^I do not see any progress indicators$")
@@ -56,12 +56,12 @@ public class AndroidStepDefinitions {
 
     @Then("^I do not see the \"([^\"]*)\" text$")
     public void iDoNotSeeTheText(String text) throws Throwable {
-        androidTestHelper.failOnText(text);
+        androidTestHelper.failOnText(text, 5, TimeUnit.SECONDS);
     }
 
     @Then("^I do not see the text \"([^\"]*)\"$")
     public void iDoNotSeeTheText2(String text) throws Throwable {
-        androidTestHelper.failOnText(text);
+        androidTestHelper.failOnText(text, 5, TimeUnit.SECONDS);
     }
 
     @Then("^I do not see the text \"([^\"]*)\" disappear$")
@@ -71,27 +71,23 @@ public class AndroidStepDefinitions {
     }
 
     @When("^I drag down$")
-    public void iDragDown() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void dragDown() throws Throwable {
+        androidTestHelper.dragDown(width -> width / 3);
     }
 
     @When("^I drag down along the left side$")
-    public void iDragDownAlongTheLeftSide() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void dragDownAlongTheLeftSide() throws Throwable {
+        androidTestHelper.dragDown(width -> width / 3);
     }
 
     @When("^I drag down along the right side$")
     public void iDragDownAlongTheRightSide() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        androidTestHelper.dragDown(width -> width - (width / 3));
     }
 
     @Then("^I drag down from the left side$")
-    public void iDragDownFromTheLeftSide() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void dragDownFromTheLeftSide() throws Throwable {
+        androidTestHelper.dragDown(width -> width / 3);
     }
 
     @Then("^I drag to scroll down$")
@@ -102,32 +98,27 @@ public class AndroidStepDefinitions {
 
     @Then("^I drag to scroll up$")
     public void iDragToScrollUp() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        androidTestHelper.dragUp(width -> width / 2);
     }
 
     @When("^I drag up$")
-    public void iDragUp() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void dragUp() throws Throwable {
+        androidTestHelper.dragUp(width -> width / 2);
     }
 
     @When("^I drag up along the left side$")
-    public void iDragUpAlongTheLeftSide() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void dragUpAlongTheLeftSide() throws Throwable {
+        androidTestHelper.dragUp(width -> width / 3);
     }
 
     @When("^I drag up along the right side$")
     public void iDragUpAlongTheRightSide() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        androidTestHelper.dragUp(width -> width - (width / 3));
     }
 
     @Then("^I drag up from the left side$")
     public void iDragUpFromTheLeftSide() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        androidTestHelper.dragUp(width -> width / 3);
     }
 
     @Then("^I enter \"([^\"]*)\" into \"([^\"]*)\"$")
@@ -149,14 +140,12 @@ public class AndroidStepDefinitions {
     }
 
     @When("^I go back$")
-    public void iGoBack() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void goBack() throws Throwable {
+        androidTestHelper.backButton();
     }
 
     @Given("^I have a connected device$")
     public void iHaveAConnectedDevice() throws Throwable {
-
         androidTestHelper.connectDevice();
     }
 
@@ -185,22 +174,6 @@ public class AndroidStepDefinitions {
         if (packages.contains(packageName)) {
             throw new AssertionFailedError("Packages list contained " + packageName);
         }
-    }
-
-    @Given("^I have a device with power at least (\\d+)$")
-    public void connectDeviceAssertPower(int minPower) throws Throwable {
-        androidTestHelper.connectDevice();
-        androidTestHelper.assertPower(minPower);
-    }
-
-    @When("^I install the apk at \"([^\"]*)\"$")
-    public void installApk(String apkPath) throws Throwable {
-        androidTestHelper.installApk(apkPath);
-    }
-
-    @When("^I launch the app \"([^\"]*)\"$")
-    public void launchApp(String packageName) throws Throwable {
-        androidTestHelper.launchApp(packageName);
     }
 
     @When("^I login with username \"([^\"]*)\" and password \"([^\"]*)\"$")
@@ -265,13 +238,11 @@ public class AndroidStepDefinitions {
 
     @Then("^I see the \"([^\"]*)\" text$")
     public void iSeeTheText(String text) throws Throwable {
-
         androidTestHelper.waitForText(text);
     }
 
     @When("^I see the text \"([^\"]*)\"$")
     public void iSeeTheText2(String text) throws Throwable {
-
         androidTestHelper.waitForText(text);
     }
 
@@ -283,7 +254,8 @@ public class AndroidStepDefinitions {
 
     @Then("^I should see the lock screen$")
     public void iShouldSeeTheLockScreen() throws Throwable {
-
+        androidTestHelper.waitForUiNode(adbUiNode -> adbUiNode.toString()
+                .contains("com.android.systemui:id/keyguard_status_area"));
     }
 
     @When("^I swipe down along the left side$")
@@ -341,27 +313,23 @@ public class AndroidStepDefinitions {
     }
 
     @When("^I swipe up$")
-    public void iSwipeUp() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void swipeUp() throws Throwable {
+        androidTestHelper.dragUp(width -> width / 2);
     }
 
     @When("^I swipe up along the left side$")
-    public void iSwipeUpAlongTheLeftSide() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void swipeUpAlongTheLeftSide() throws Throwable {
+        androidTestHelper.dragUp(width -> width / 3);
     }
 
     @When("^I swipe up along the right side$")
-    public void iSwipeUpAlongTheRightSide() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void swipeUpAlongTheRightSide() throws Throwable {
+        androidTestHelper.dragUp(width -> width - (width / 3));
     }
 
     @Then("^I take a screenshot$")
-    public void iTakeAScreenshot() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void takeScreenshot() throws Throwable {
+        androidTestHelper.takeScreenshot();
     }
 
     @When("^I touch the menu dropdown$")
@@ -371,7 +339,59 @@ public class AndroidStepDefinitions {
     }
 
     @When("^I touch the \"([^\"]*)\" text$")
-    public void iTouchTheText(String arg0) throws Throwable {
+    public void iTouchTheText(String text) throws Throwable {
+        androidTestHelper.touchText(text);
+    }
+
+    @Then("^I wait$")
+    public void iWait() throws Throwable {
+        androidTestHelper.waitSeconds(3);
+    }
+
+    @Then("^I wait for the \"([^\"]*)\" text$")
+    public void iWaitForTheText(String text) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^I wait for the \"([^\"]*)\" text to disappear$")
+    public void iWaitForTheTextToDisappear(String arg0) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^I wait for \"([^\"]*)\" to appear$")
+    public void iWaitForToAppear(String text) throws Throwable {
+        androidTestHelper.waitForText(text, 5, TimeUnit.SECONDS);
+    }
+
+    @Then("^I wait up to (\\d+) seconds for \"([^\"]*)\" to appear$")
+    public void iWaitUpToSecondsForToAppear(int seconds, String text) throws Throwable {
+        androidTestHelper.waitForText(text, seconds, TimeUnit.SECONDS);
+    }
+
+    @Then("^I wait up to (\\d+) seconds to see \"([^\"]*)\"$")
+    public void iWaitUpToSecondsToSee(int seconds, String text) throws Throwable {
+        androidTestHelper.waitForText(text, seconds, TimeUnit.SECONDS);
+    }
+
+    @When("^I install the apk at \"([^\"]*)\"$")
+    public void installApk(String apkPath) throws Throwable {
+        androidTestHelper.installApk(apkPath);
+    }
+
+    @When("^I launch the app \"([^\"]*)\"$")
+    public void launchApp(String packageName) throws Throwable {
+        androidTestHelper.launchApp(packageName);
+    }
+
+    @When("^I launch the url \"([^\"]*)\"$")
+    public void launchUrl(String url) throws Throwable {
+        androidTestHelper.launchUrl(url);
+    }
+
+    @When("^I click the floating action button$")
+    public void tapFloatingActionButton() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
@@ -391,43 +411,8 @@ public class AndroidStepDefinitions {
         androidTestHelper.updateApk(apkPath);
     }
 
-    @Then("^I wait$")
-    public void iWait() throws Throwable {
-        androidTestHelper.waitSeconds(3);
-    }
-
     @Then("^I wait for (\\d+) seconds$")
     public void waitSeconds(int waitSeconds) throws Throwable {
         androidTestHelper.waitSeconds(waitSeconds);
-    }
-
-    @Then("^I wait for the \"([^\"]*)\" text$")
-    public void iWaitForTheText(String text) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^I wait for the \"([^\"]*)\" text to disappear$")
-    public void iWaitForTheTextToDisappear(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^I wait for \"([^\"]*)\" to appear$")
-    public void iWaitForToAppear(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^I wait up to (\\d+) seconds for \"([^\"]*)\" to appear$")
-    public void iWaitUpToSecondsForToAppear(int arg0, String arg1) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^I wait up to (\\d+) seconds to see \"([^\"]*)\"$")
-    public void iWaitUpToSecondsToSee(int arg0, String arg1) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
     }
 }
