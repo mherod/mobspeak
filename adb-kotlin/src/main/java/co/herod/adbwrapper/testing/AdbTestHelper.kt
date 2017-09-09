@@ -122,7 +122,7 @@ object AdbTestHelper : AndroidTestHelper {
 
     override fun launchUrl(url: String?) {
         withAdbDevice {
-            AdbProcesses.launchUrl(this, url)
+            AdbProcesses.launchUrlObservable(this, url).blockingSubscribe()
         }
     }
 
@@ -182,7 +182,7 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun waitForText(text: String?) {
-        waitForText(text, 5, TimeUnit.SECONDS)
+        waitForText(text, 10, TimeUnit.SECONDS)
     }
 
     override fun waitForText(text: String?, timeout: Int, timeUnit: TimeUnit) {
@@ -196,8 +196,8 @@ object AdbTestHelper : AndroidTestHelper {
                             lowerCaseText in it.text.toLowerCase()
                         },
                         function = { "Found" },
-                        timeout = 20,
-                        timeUnit = TimeUnit.SECONDS
+                        timeout = timeout,
+                        timeUnit = timeUnit
                 )
             } ?: throw AssertionError("Cannot touch empty text")
         }
@@ -247,7 +247,7 @@ object AdbTestHelper : AndroidTestHelper {
 //        }
 //    }
 
-    private fun waitForUiNodeForFunc(adbUiNodePredicate: Predicate<AdbUiNode>?, function: (AdbUiNode) -> String?, timeout: Long, timeUnit: TimeUnit) {
+    private fun waitForUiNodeForFunc(adbUiNodePredicate: Predicate<AdbUiNode>?, function: (AdbUiNode) -> String?, timeout: Int, timeUnit: TimeUnit) {
 
         withAdbDevice {
             Adb.dumpUiNodes(this)
@@ -257,7 +257,7 @@ object AdbTestHelper : AndroidTestHelper {
                     .doOnNext(System.out::println)
                     .map { function(it).orEmpty() }
                     .retry()
-                    .timeout(timeout, timeUnit)
+                    .timeout(timeout.toLong(), timeUnit)
                     .blockingFirst()
         }
     }

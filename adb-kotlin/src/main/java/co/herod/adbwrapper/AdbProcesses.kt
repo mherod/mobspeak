@@ -2,6 +2,7 @@ package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 
 interface AdbOps {
     fun devices(): ProcessBuilder?
@@ -27,6 +28,7 @@ interface AdbOps {
     fun dumpsysPiped(type: String, pipe: String): String
     fun dumpsysPipedObservable(adbDevice: AdbDevice?, type: String, pipe: String): Observable<String>
     fun tapObservable(adbDevice: AdbDevice?, x: Int, y: Int): Observable<String>
+    fun launchUrlObservable(adbDevice: AdbDevice?, url: String?): Observable<String>
 }
 
 internal object AdbProcesses : AdbOps {
@@ -86,6 +88,14 @@ internal object AdbProcesses : AdbOps {
                     "start " +
                     "-a $androidIntentActionView " +
                     "-d '$url'")
+
+    override fun launchUrlObservable(adbDevice: AdbDevice?, url: String?): Observable<String> =
+            adb(adbDevice, "${AdbCommand.SHELL}  " +
+                    "am " +
+                    "start " +
+                    "-a $androidIntentActionView " +
+                    "-d '$url'" +
+                    "").toObservable()
 
     override fun adb(adbDevice: AdbDevice?, command: String): ProcessBuilder? = AdbCommand.Builder()
             .setDevice(adbDevice)

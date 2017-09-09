@@ -40,8 +40,8 @@
     <output-test url="file://$MODULE_DIR$/../../../cucumber/build/classes/test" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../cucumber">
-      <sourceFolder url="file://$MODULE_DIR$/../../../cucumber/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../cucumber/src/main/kotlin" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../cucumber/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../cucumber/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../../cucumber/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../cucumber/src/test/kotlin" isTestSource="true" />
@@ -52,30 +52,30 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="adb-kotlin" scope="TEST" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.cucumber:tag-expressions:1.0.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.cucumber:gherkin:4.1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.cucumber:cucumber-jvm-deps:1.0.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: info.cukes:cucumber-html:0.2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.reactivestreams:reactive-streams:1.0.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.cucumber:cucumber-core:2.0.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.reactivex.rxjava2:rxkotlin:2.1.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.reactivex.rxjava2:rxjava:2.1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.4-3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.cucumber:cucumber-junit:2.0.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.cucumber:cucumber-java:2.0.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.12" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.4-3" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.4-3" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.4-3" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.4-3" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.4-3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.4-3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.4-3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.4-3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.4-3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.12" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.cucumber:cucumber-java:2.0.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.cucumber:cucumber-junit:2.0.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.4-3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.reactivex.rxjava2:rxjava:2.1.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.reactivex.rxjava2:rxkotlin:2.1.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.cucumber:cucumber-core:2.0.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.reactivestreams:reactive-streams:1.0.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: info.cukes:cucumber-html:0.2.6" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.cucumber:cucumber-jvm-deps:1.0.6" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.cucumber:gherkin:4.1.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.cucumber:tag-expressions:1.0.1" level="project" />
     <orderEntry type="module" module-name="adb-kotlin" />
     <orderEntry type="library" scope="PROVIDED" name="kotlin-stdlib-jre8-1.1.4-3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="kotlin-stdlib-1.1.4-3" level="project" />
@@ -93,13 +93,5 @@
     <orderEntry type="library" scope="TEST" name="cucumber-jvm-deps-1.0.6" level="project" />
     <orderEntry type="library" scope="TEST" name="gherkin-4.1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="tag-expressions-1.0.1" level="project" />
-    <orderEntry type="library" exported="" name="cucumber.cucumber-1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="cucumber.cucumber-1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="cucumber.cucumber-1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="cucumber.cucumber-1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="cucumber.cucumber-1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="cucumber.cucumber-1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="cucumber.cucumber-1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="cucumber.cucumber-1.0-SNAPSHOT" level="project" />
   </component>
 </module>
