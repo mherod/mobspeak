@@ -4,7 +4,6 @@ import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.AdbUiNode
 import co.herod.adbwrapper.util.UiHierarchyHelper
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.*
@@ -39,19 +38,37 @@ object Adb {
     fun getInputMethodDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
             adbDevice.dumpsysMap(AdbDeviceProperties.PROPS_INPUT_METHOD).toObservable()
 
-    fun getPackageDumpsys(adbDevice: AdbDevice, packageName: String): Flowable<Map<String, String>> =
-            adbDevice.dumpsysMap("package $packageName").toFlowable()
+    fun getPackageDumpsys(adbDevice: AdbDevice, packageName: String): Observable<Map<String, String>> =
+            adbDevice.dumpsysMap("package $packageName").toObservable()
 
-    fun getActivityDumpsys(adbDevice: AdbDevice): Flowable<Map<String, String>> =
-            adbDevice.dumpsysMap("activity").toFlowable()
+    fun getActivityDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
+            adbDevice.dumpsysMap("activity").toObservable()
 
-    fun getActivitiesDumpsys(adbDevice: AdbDevice): Flowable<Map<String, String>> =
-            adbDevice.dumpsysMap("activity activities").toFlowable()
+    fun getActivitiesDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
+            adbDevice.dumpsysMap("activity activities").toObservable()
+
+    fun getWindowsDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
+            adbDevice.dumpsysMap("\"window windows").toObservable()
+
+    fun getWindowFocusDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
+            adbDevice.dumpsysPipedMap(
+                    "\"window windows",
+                    "grep -E 'mCurrentFocus|mFocusedApp'"
+            ).toObservable()
 
     private fun AdbDevice.dumpsysMap(type: String): Single<Map<String, String>> =
-            AdbProcesses.dumpsysObservable(this, type)
-                    .filter { "=" in it }
-                    .map { it.trim { it <= ' ' }.split("=".toRegex(), 2) }
+            AdbProcesses
+                    .dumpsysObservable(this, type)
+                    .processDumpsys("=")
+
+    private fun AdbDevice.dumpsysPipedMap(type: String, pipe: String): Single<Map<String, String>> =
+            AdbProcesses
+                    .dumpsysPipedObservable(this, type, pipe)
+                    .processDumpsys("=")
+
+    private fun Observable<String>.processDumpsys(c: String): Single<Map<String, String>> =
+            this.filter { c in it }
+                    .map { it.trim { it <= ' ' }.split(c.toRegex(), 2) }
                     .toMap({ it[0].trim { it <= ' ' } }) { it[1].trim { it <= ' ' } }
 
     fun dumpUiNodes(adbDevice: AdbDevice?): Observable<AdbUiNode> = dumpUiHierarchy(adbDevice)
@@ -64,24 +81,23 @@ object Adb {
             primaryDumpUiHierarchy(adbDevice)
                     .timeout(30, TimeUnit.SECONDS)
 
-    internal fun primaryDumpUiHierarchy(adbDevice: AdbDevice?): Observable<String> =
+    private fun primaryDumpUiHierarchy(adbDevice: AdbDevice?): Observable<String> =
             AdbProcesses.uiautomatorDumpExecOutObservable(adbDevice)
-                    //.doOnNext(System.out::println)
                     .filter { "<?xml" in it }
-                    .timeout(10, TimeUnit.SECONDS)
+                    .timeout(5, TimeUnit.SECONDS)
                     .retry()
+                    .timeout(10, TimeUnit.SECONDS)
                     .onErrorResumeNext(fallbackDumpUiHierarchy(adbDevice))
 
-    internal fun fallbackDumpUiHierarchy(adbDevice: AdbDevice?): Observable<String> =
+    private fun fallbackDumpUiHierarchy(adbDevice: AdbDevice?): Observable<String> =
             AdbProcesses.uiautomatorDumpObservable(adbDevice)
                     .map { it.split(' ').last() }
                     .filter { ".xml" in it }
                     .flatMap { AdbProcesses.readDeviceFileObservable(adbDevice, it) }
                     .filter { "<?xml" in it }
-                    // .doOnNext(System.out::println)
-                    .timeout(10, TimeUnit.SECONDS)
+                    .timeout(5, TimeUnit.SECONDS)
                     .retry()
-    //.onErrorResumeNext(primaryDumpUiHierarchy(adbDevice))
+                    .timeout(20, TimeUnit.SECONDS)
 
     fun command(adbDevice: AdbDevice?, command: String): Observable<String> =
             processFactory.observableProcess(AdbProcesses.adb(adbDevice, command))

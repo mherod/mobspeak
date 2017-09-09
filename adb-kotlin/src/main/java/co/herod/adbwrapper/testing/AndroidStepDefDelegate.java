@@ -139,12 +139,12 @@ public class AndroidStepDefDelegate implements AndroidTestHelper {
 
     @Override
     public void waitForText(String text) {
-        adbTestHelper().waitForText(getAdbDevice(), text, 30, TimeUnit.SECONDS);
+        adbTestHelper().waitForText(text, 30, TimeUnit.SECONDS);
     }
 
     @Override
     public void waitForText(String text, int timeout, TimeUnit timeUnit) {
-        adbTestHelper().waitForText(getAdbDevice(), text, timeout, timeUnit);
+        adbTestHelper().waitForText(text, timeout, timeUnit);
     }
 
     @Override

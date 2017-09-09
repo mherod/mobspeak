@@ -24,6 +24,9 @@ interface AdbOps {
     fun launchUrl(adbDevice: AdbDevice?, url: String?): ProcessBuilder?
     fun dumpsysObservable(adbDevice: AdbDevice?, type: String): Observable<String>
     fun pressKeyObservable(adbDevice: AdbDevice?, key: Int): Observable<String>
+    fun dumpsysPiped(type: String, pipe: String): String
+    fun dumpsysPipedObservable(adbDevice: AdbDevice?, type: String, pipe: String): Observable<String>
+    fun tapObservable(adbDevice: AdbDevice?, x: Int, y: Int): Observable<String>
 }
 
 internal object AdbProcesses : AdbOps {
@@ -60,6 +63,9 @@ internal object AdbProcesses : AdbOps {
     override fun dumpsysObservable(adbDevice: AdbDevice?, type: String) =
             adb(adbDevice, dumpsys(type)).toObservable()
 
+    override fun dumpsysPipedObservable(adbDevice: AdbDevice?, type: String, pipe: String) =
+            adb(adbDevice, dumpsysPiped(type, pipe)).toObservable()
+
     override fun pressKey(adbDevice: AdbDevice?, key: Int) =
             adb(adbDevice, inputKeyEvent(key))
 
@@ -68,7 +74,11 @@ internal object AdbProcesses : AdbOps {
 
     override fun inputText(adbDevice: AdbDevice, inputText: String): ProcessBuilder? = adb(adbDevice, inputText(inputText))
 
-    override fun tap(adbDevice: AdbDevice?, x: Int, y: Int): ProcessBuilder? = adb(adbDevice, inputTap(x, y))
+    override fun tap(adbDevice: AdbDevice?, x: Int, y: Int): ProcessBuilder? =
+            adb(adbDevice, inputTap(x, y))
+
+    override fun tapObservable(adbDevice: AdbDevice?, x: Int, y: Int): Observable<String> =
+            adb(adbDevice, inputTap(x, y)).toObservable()
 
     override fun launchUrl(adbDevice: AdbDevice?, url: String?) =
             adb(adbDevice, "${AdbCommand.SHELL}  " +
@@ -84,6 +94,9 @@ internal object AdbProcesses : AdbOps {
 
     override fun dumpsys(type: String) =
             String.format("${AdbCommand.SHELL} dumpsys %s", type)
+
+    override fun dumpsysPiped(type: String, pipe: String) =
+            String.format("${AdbCommand.SHELL} \"dumpsys %s | %\"", type, pipe)
 
     override fun inputKeyEvent(key: Int) =
             String.format("${AdbCommand.SHELL} input keyevent %d", key)

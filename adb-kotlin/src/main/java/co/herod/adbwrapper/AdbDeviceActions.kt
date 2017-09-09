@@ -4,6 +4,7 @@ import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiNode
 import co.herod.adbwrapper.util.UiHierarchyHelper
 import io.reactivex.Completable
+import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 object AdbDeviceActions {
@@ -37,12 +38,15 @@ object AdbDeviceActions {
         while (AdbDeviceProperties.isScreenOn(adbDevice)) pressPowerButton(adbDevice)
     }
 
-    fun tapCentre(adbDevice: AdbDevice, adbUiNode: AdbUiNode) =
-            adbUiNode.bounds?.let { adbDevice.tapCentre(it) }
+    fun tapCentre(adbDevice: AdbDevice, adbUiNode: AdbUiNode): String =
+            adbUiNode.bounds?.let { bounds ->
+                adbDevice.tapCentre(bounds).blockingSubscribe()
+            }.toString()
 
-    private fun AdbDevice.tapCentre(c: Array<Int>) = Adb.processFactory.blocking(AdbProcesses.tap(this,
-            UiHierarchyHelper.centreX(c),
-            UiHierarchyHelper.centreY(c)))
+    private fun AdbDevice.tapCentre(c: Array<Int>): Observable<String> =
+            AdbProcesses.tapObservable(this,
+                    UiHierarchyHelper.centreX(c),
+                    UiHierarchyHelper.centreY(c))
 
     fun AdbDevice.tapUiNode(s: AdbUiNode) {
         UiHierarchyHelper.extractBoundsInts(s)?.subscribe { tapCentre(it) }

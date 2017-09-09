@@ -38,7 +38,15 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun assertActivityName(activityName: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        withAdbDevice {
+            Adb.getWindowFocusDumpsys(this)
+                    .flatMapIterable { it.values }
+                    .filter { activityName?.toLowerCase().toString() in it.toLowerCase() }
+                    .firstOrError()
+                    .timeout(5, TimeUnit.SECONDS)
+                    .retry()
+                    .timeout(10, TimeUnit.SECONDS)
+        }
     }
 
     override fun assertPower(minPower: Int) {
@@ -126,25 +134,20 @@ object AdbTestHelper : AndroidTestHelper {
 
     override fun touchText(text: String?) {
 
-        val lowerCaseText = text?.toLowerCase()
+        val lowerCaseText: String? = text?.toLowerCase()
 
         withAdbDevice {
             lowerCaseText?.let { lowerCaseText ->
-                Adb.dumpUiNodes(this)
-                        .compose(ResultChangeFixedDurationTransformer())
-                        .filter { lowerCaseText in it.text.toLowerCase() }
-                        .flatMap {
-                            Observable.fromCallable({
-                                AdbDeviceActions.tapCentre(
-                                        this,
-                                        it
-                                )
-                            })
-                        }
-                        .retry()
-                        .timeout(10, TimeUnit.SECONDS)
-                        .doOnNext(System.out::println)
-                        .blockingFirst()
+                waitForUiNodeForFunc(
+                        adbUiNodePredicate = Predicate {
+                            lowerCaseText in it.text.toLowerCase()
+                        },
+                        function = {
+                            AdbDeviceActions.tapCentre(this, it)
+                        },
+                        timeout = 20,
+                        timeUnit = TimeUnit.SECONDS
+                )
             } ?: throw AssertionError("Cannot touch empty text")
         }
     }
@@ -183,24 +186,33 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun waitForText(text: String?, timeout: Int, timeUnit: TimeUnit) {
-        adbDevice?.let {
-            text?.let { text ->
-                it.waitForText(
-                        text = text,
-                        timeout = timeout,
-                        timeUnit = timeUnit
+
+        val lowerCaseText: String? = text?.toLowerCase()
+
+        withAdbDevice {
+            lowerCaseText?.let { lowerCaseText ->
+                waitForUiNodeForFunc(
+                        adbUiNodePredicate = Predicate {
+                            lowerCaseText in it.text.toLowerCase()
+                        },
+                        function = { "Found" },
+                        timeout = 20,
+                        timeUnit = TimeUnit.SECONDS
                 )
-            } ?: throw AssertionError("Text was null")
-        } ?: throw NoConnectedAdbDeviceException()
+            } ?: throw AssertionError("Cannot touch empty text")
+        }
     }
 
     override fun waitForUiNode(adbUiNodePredicate: Predicate<AdbUiNode>?) {
 
-        Adb.dumpUiNodes(adbDevice)
-                .compose(ResultChangeFixedDurationTransformer())
-                .filter { adbUiNode -> adbUiNodePredicate?.test(adbUiNode) == true }
-                .timeout(10, TimeUnit.SECONDS)
-                .subscribe()
+        withAdbDevice {
+            waitForUiNodeForFunc(
+                    adbUiNodePredicate = adbUiNodePredicate,
+                    function = { "Found" },
+                    timeout = 20,
+                    timeUnit = TimeUnit.SECONDS
+            )
+        }
     }
 
     override fun waitSeconds(waitSeconds: Int) = try {
@@ -222,19 +234,32 @@ object AdbTestHelper : AndroidTestHelper {
                 }
     }
 
-    fun AdbDevice.waitForText(text: String, timeout: Int, timeUnit: TimeUnit) {
+//    fun AdbDevice.waitForText(text: String, timeout: Int, timeUnit: TimeUnit) {
+//
+//        try {
+//            Adb.dumpUiNodes(this)
+//                    .filter { text in it.text }
+//                    .timeout(timeout.toLong(), timeUnit)
+//                    .doOnNext(System.out::println)
+//                    .blockingForEach { throw BlockingBreakerThrowable() }
+//        } catch (e: BlockingBreakerThrowable) {
+//            // good!
+//        }
+//    }
 
-        try {
+    private fun waitForUiNodeForFunc(adbUiNodePredicate: Predicate<AdbUiNode>?, function: (AdbUiNode) -> String?, timeout: Long, timeUnit: TimeUnit) {
+
+        withAdbDevice {
             Adb.dumpUiNodes(this)
-                    .filter { text in it.text }
-                    .timeout(timeout.toLong(), timeUnit)
+                    .compose(ResultChangeFixedDurationTransformer())
+                    .filter { adbUiNodePredicate?.test(it) == true }
+                    .timeout(8, timeUnit)
                     .doOnNext(System.out::println)
-                    .blockingForEach { throw BlockingBreakerThrowable() }
-        } catch (e: BlockingBreakerThrowable) {
-            // good!
+                    .map { function(it).orEmpty() }
+                    .retry()
+                    .timeout(timeout, timeUnit)
+                    .blockingFirst()
         }
-        with(adbDevice) {}
-
     }
 
     private inline fun <R> withAdbDevice(block: AdbDevice.() -> R): R {
