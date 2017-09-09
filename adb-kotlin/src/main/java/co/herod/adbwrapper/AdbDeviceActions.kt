@@ -37,7 +37,8 @@ object AdbDeviceActions {
         while (AdbDeviceProperties.isScreenOn(adbDevice)) pressPowerButton(adbDevice)
     }
 
-    fun tapCentre(adbDevice: AdbDevice, adbUiNode: AdbUiNode) = adbUiNode.bounds!!.let { adbDevice.tapCentre(it) }
+    fun tapCentre(adbDevice: AdbDevice, adbUiNode: AdbUiNode) =
+            adbUiNode.bounds?.let { adbDevice.tapCentre(it) }
 
     private fun AdbDevice.tapCentre(c: Array<Int>) = Adb.processFactory.blocking(AdbProcesses.tap(this,
             UiHierarchyHelper.centreX(c),

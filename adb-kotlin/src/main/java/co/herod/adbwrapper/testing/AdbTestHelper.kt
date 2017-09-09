@@ -133,15 +133,18 @@ object AdbTestHelper : AndroidTestHelper {
                 Adb.dumpUiNodes(this)
                         .compose(ResultChangeFixedDurationTransformer())
                         .filter { lowerCaseText in it.text.toLowerCase() }
-                        .doOnNext(System.out::println)
-                        .timeout(10, TimeUnit.SECONDS)
-                        .blockingFirst()
-                        .also { adbUiNode ->
-                            AdbDeviceActions.tapCentre(
-                                    this,
-                                    adbUiNode
-                            )
+                        .flatMap {
+                            Observable.fromCallable({
+                                AdbDeviceActions.tapCentre(
+                                        this,
+                                        it
+                                )
+                            })
                         }
+                        .retry()
+                        .timeout(10, TimeUnit.SECONDS)
+                        .doOnNext(System.out::println)
+                        .blockingFirst()
             } ?: throw AssertionError("Cannot touch empty text")
         }
     }
