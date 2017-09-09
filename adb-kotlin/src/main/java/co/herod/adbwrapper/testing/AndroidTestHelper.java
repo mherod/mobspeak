@@ -1,5 +1,7 @@
 package co.herod.adbwrapper.testing;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
@@ -16,6 +18,8 @@ public interface AndroidTestHelper {
     void assertActivityName(String activityName);
 
     void assertPower(int minPower);
+
+    void assertValidApk(@Nullable String apkPath);
 
     void backButton();
 

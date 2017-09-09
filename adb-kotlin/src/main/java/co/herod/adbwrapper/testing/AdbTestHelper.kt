@@ -5,6 +5,8 @@ import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiNode
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
 import io.reactivex.Observable
+import java.io.File
+import java.lang.AssertionError
 import java.util.concurrent.TimeUnit
 import java.util.function.Predicate
 
@@ -30,7 +32,9 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun turnScreenOff() {
-        AdbDeviceActions.turnDeviceScreenOff(adbDevice)
+        withAdbDevice {
+            AdbDeviceActions.turnDeviceScreenOff(this)
+        }
     }
 
     override fun assertActivityName(activityName: String?) {
@@ -41,14 +45,14 @@ object AdbTestHelper : AndroidTestHelper {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun backButton() = AdbDeviceActions.pressBackButton(adbDevice)
+    override fun backButton() = withAdbDevice { AdbDeviceActions.pressBackButton(this) }
 
     override fun closeLeftDrawer() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun connectDevice() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        adbDevice = AdbDeviceManager.getConnectedDevice()
     }
 
     override fun dismissDialog() {
@@ -76,11 +80,20 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun getPackageVersionName(packageName: String?): String? {
-        return packageName?.let { AdbPackageManager.getPackageVersionName(adbDevice, it) }
+        withAdbDevice {
+            return packageName?.let {
+                AdbPackageManager.getPackageVersionName(adbDevice, it)
+            }
+        }
     }
 
     override fun installApk(apkPath: String?) {
-        apkPath?.let { AdbPackageManager.installPackage(adbDevice, it) }
+
+        assertValidApk(apkPath)
+
+        apkPath?.let {
+            AdbPackageManager.installPackage(adbDevice, it)
+        }
     }
 
     override fun installedPackageIsVersion(packageName: String?, versionName: String?): Boolean {
@@ -88,36 +101,49 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun launchApp(packageName: String?) {
-        packageName?.let { AdbPackageManager.launchApp(adbDevice, it) }
+
+        withAdbDevice {
+            packageName?.let { packageName ->
+                AdbPackageManager.launchApp(
+                        this,
+                        packageName
+                )
+            } ?: throw AssertionError("Package name is null")
+        }
     }
 
     override fun launchUrl(url: String?) {
-        AdbProcesses.launchUrl(adbDevice, url)
+        withAdbDevice {
+            AdbProcesses.launchUrl(this, url)
+        }
     }
 
     override fun takeScreenshot() {
-        adbDevice?.let { ScreenshotHelper.screenshot(it, false) };
+        withAdbDevice {
+            ScreenshotHelper.screenshot(this, false)
+        }
     }
 
     override fun touchText(text: String?) {
 
-        text?.let {
-            Adb.dumpUiNodes(adbDevice)
-                    .compose(ResultChangeFixedDurationTransformer())
-                    .timeout(5, TimeUnit.SECONDS)
-                    .onErrorResumeNext(Observable.empty<AdbUiNode>())
-                    .blockingForEach { adbUiNode ->
-                        when (it) {
-                            in adbUiNode.text.toLowerCase() -> {
-                                adbDevice?.let { adbDevice1 ->
-                                    AdbDeviceActions.tapCentre(
-                                            adbDevice1,
-                                            adbUiNode
-                                    )
-                                }
-                            }
+        val lowerCaseText = text?.toLowerCase();
+
+        withAdbDevice {
+            lowerCaseText?.let { lowerCaseText ->
+                Adb.dumpUiNodes(this)
+                        .compose(ResultChangeFixedDurationTransformer())
+                        .filter { lowerCaseText in it.text.toLowerCase() }
+                        .doOnNext(System.out::println)
+                        .timeout(10, TimeUnit.SECONDS)
+                        .firstOrError()
+                        .blockingGet()
+                        .also { adbUiNode ->
+                            AdbDeviceActions.tapCentre(
+                                    this,
+                                    adbUiNode
+                            )
                         }
-                    }
+            } ?: throw AssertionError("Cannot touch empty text")
         }
     }
 
@@ -126,34 +152,44 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun uninstallPackage(packageName: String?) {
-        packageName?.let { AdbPackageManager.uninstallPackage(adbDevice, it) }
+
+        packageName?.let {
+            AdbPackageManager.uninstallPackage(adbDevice, it)
+        }
     }
 
     override fun updateApk(apkPath: String?) {
+
+        assertValidApk(apkPath)
+
         apkPath?.let { AdbPackageManager.updatePackage(adbDevice, it) }
     }
 
+    override fun assertValidApk(apkPath: String?) {
+        assert(!File(apkPath).exists().not()) { "Apk does not exist at $apkPath" }
+    }
+
     override fun waitForText(text: String?) {
+        waitForText(text, 5, TimeUnit.SECONDS)
+    }
+
+    override fun waitForText(text: String?, timeout: Int, timeUnit: TimeUnit) {
         adbDevice?.let {
             text?.let { text ->
                 it.waitForText(
                         text = text,
-                        timeout = 5,
-                        timeUnit = TimeUnit.SECONDS
+                        timeout = timeout,
+                        timeUnit = timeUnit
                 )
-            }
-        }
-    }
-
-    override fun waitForText(text: String?, timeout: Int, timeUnit: TimeUnit?) {
-        adbDevice?.let { waitForText(text, timeout, timeUnit) }
+            } ?: throw AssertionError("Text was null")
+        } ?: throw NoConnectedAdbDeviceException()
     }
 
     override fun waitForUiNode(adbUiNodePredicate: Predicate<AdbUiNode>?) {
 
         Adb.dumpUiNodes(adbDevice)
                 .compose(ResultChangeFixedDurationTransformer())
-                .filter {adbUiNode -> adbUiNodePredicate?.test(adbUiNode) == true }
+                .filter { adbUiNode -> adbUiNodePredicate?.test(adbUiNode) == true }
                 .timeout(10, TimeUnit.SECONDS)
                 .subscribe()
     }
@@ -169,24 +205,37 @@ object AdbTestHelper : AndroidTestHelper {
                 .compose(ResultChangeFixedDurationTransformer())
                 .timeout(timeout.toLong(), timeUnit)
                 .onErrorResumeNext(Observable.empty<AdbUiNode>())
+                .doOnNext(System.out::println)
                 .blockingForEach { adbUiNode: AdbUiNode ->
                     if (text.toLowerCase() in adbUiNode.text.toLowerCase()) {
-                        throw AssertionFailedError("Text was visible")
+                        throw AssertionError("Text was visible")
                     }
                 }
     }
 
-    fun AdbDevice.waitForText(text: String, timeout: Long, timeUnit: TimeUnit) {
+    fun AdbDevice.waitForText(text: String, timeout: Int, timeUnit: TimeUnit) {
 
         try {
             Adb.dumpUiNodes(this)
                     .filter { text in it.text }
-                    .timeout(timeout, timeUnit)
+                    .timeout(timeout.toLong(), timeUnit)
+                    .doOnNext(System.out::println)
                     .blockingForEach { throw BlockingBreakerThrowable() }
         } catch (e: BlockingBreakerThrowable) {
             // good!
         }
+        with(adbDevice) {}
+
+    }
+
+    private inline fun <R> withAdbDevice(block: AdbDevice.() -> R): R {
+        return adbDevice?.block() ?: throw NoConnectedAdbDeviceException()
     }
 }
 
+private operator fun CharSequence.contains(lowerCaseText: String?): Boolean {
+    return lowerCaseText in this.toString()
+}
+
+class NoConnectedAdbDeviceException : AssertionError("No connected device!")
 class BlockingBreakerThrowable : RuntimeException()

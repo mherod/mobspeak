@@ -46,7 +46,7 @@ object AdbPackageManager {
     fun getPackageVersionName(adbDevice: AdbDevice?, packageName: String): String? {
         return adbDevice?.let {
             Adb.getPackageDumpsys(it, packageName)
-                    .map { a -> a["versionName"] }
+                    .map { it["versionName"] }
                     .blockingFirst()
         }
     }

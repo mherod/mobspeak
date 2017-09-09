@@ -22,6 +22,7 @@ interface AdbOps {
     fun inputTap(x: Int, y: Int): String
     fun inputText(inputText: String): String
     fun launchUrl(adbDevice: AdbDevice?, url: String?): ProcessBuilder?
+    fun dumpsysObservable(adbDevice: AdbDevice?, type: String): Observable<String>
 }
 
 internal object AdbProcesses : AdbOps {
@@ -54,6 +55,9 @@ internal object AdbProcesses : AdbOps {
             readDeviceFile(adbDevice, "shell cat $filePath").toObservable()
 
     override fun dumpsys(adbDevice: AdbDevice?, type: String) = adb(adbDevice, dumpsys(type))
+
+    override fun dumpsysObservable(adbDevice: AdbDevice?, type: String) =
+            adb(adbDevice, dumpsys(type)).toObservable()
 
     override fun pressKey(adbDevice: AdbDevice?, key: Int) = adb(adbDevice, inputKeyEvent(key))
 

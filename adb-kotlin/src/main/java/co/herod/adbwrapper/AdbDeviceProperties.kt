@@ -14,29 +14,28 @@ internal object AdbDeviceProperties {
 
     private const val KEY_SCREEN_STATE = "mScreenState"
 
-    fun AdbDevice.inputMethodProperties(): Flowable<Entry<String, String>>? {
+    fun inputMethodProperties(adbDevice: AdbDevice): Flowable<Entry<String, String>> {
 
-        return Flowable.just(this)
-                .flatMap { Adb.getInputMethodDumpsys(this) }
+        return Flowable.just(adbDevice)
+                .flatMap { Adb.getInputMethodDumpsys(adbDevice) }
                 .flatMapIterable({ it.entries })
-                .filter { it.key.contains(" ") }
-                .sorted(Comparator.comparing<Entry<String, String>, String>({ it.key }))
-
+                .filter { " " in it.key }
+                .sorted(Comparator.comparing<Entry<String, String>, String> { it.key })
     }
 
-    private fun AdbDevice.displayProperties(): Flowable<Entry<String, String>> {
+    fun displayProperties(adbDevice: AdbDevice): Flowable<Entry<String, String>> {
 
-        return Flowable.just(this)
+        return Flowable.just(adbDevice)
                 .flatMap { Adb.getDisplayDumpsys(it) }
                 .flatMapIterable({ it.entries })
-                .filter { it.key.contains(" ") }
-                .sorted(Comparator.comparing<Entry<String, String>, String>({ it.key }))
+                .filter { " " in it.key }
+                .sorted(Comparator.comparing<Entry<String, String>, String> { it.key })
     }
 
     private fun AdbDevice?.isScreenOnSingle(): Single<Boolean> {
 
         return Flowable.just(this)
-                .flatMap { it.displayProperties() }
+                .flatMap { displayProperties(it) }
                 .filter { entry -> entry.key == KEY_SCREEN_STATE }
                 .map { it -> PropHelper.hasPositiveValue(it) }
                 .firstOrError()

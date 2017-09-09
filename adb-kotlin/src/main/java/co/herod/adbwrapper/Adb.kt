@@ -42,8 +42,14 @@ object Adb {
     fun getPackageDumpsys(adbDevice: AdbDevice, packageName: String): Flowable<Map<String, String>> =
             adbDevice.dumpsysMap("package $packageName").toFlowable()
 
+    fun getActivityDumpsys(adbDevice: AdbDevice): Flowable<Map<String, String>> =
+            adbDevice.dumpsysMap("activity").toFlowable()
+
+    fun getActivitiesDumpsys(adbDevice: AdbDevice): Flowable<Map<String, String>> =
+            adbDevice.dumpsysMap("activity activities").toFlowable()
+
     private fun AdbDevice.dumpsysMap(type: String): Single<Map<String, String>> =
-            processFactory.observableProcess(AdbProcesses.dumpsys(this, type))
+            AdbProcesses.dumpsysObservable(this, type)
                     .filter { "=" in it }
                     .map { it.trim { it <= ' ' }.split("=".toRegex(), 2) }
                     .toMap({ it[0].trim { it <= ' ' } }) { it[1].trim { it <= ' ' } }
@@ -60,7 +66,7 @@ object Adb {
 
     internal fun primaryDumpUiHierarchy(adbDevice: AdbDevice?): Observable<String> =
             AdbProcesses.uiautomatorDumpExecOutObservable(adbDevice)
-                    .doOnNext(System.out::print)
+                    //.doOnNext(System.out::println)
                     .filter { "<?xml" in it }
                     .timeout(10, TimeUnit.SECONDS)
                     .retry()
@@ -72,7 +78,7 @@ object Adb {
                     .filter { ".xml" in it }
                     .flatMap { AdbProcesses.readDeviceFileObservable(adbDevice, it) }
                     .filter { "<?xml" in it }
-                    .doOnNext(System.out::print)
+                    // .doOnNext(System.out::println)
                     .timeout(10, TimeUnit.SECONDS)
                     .retry()
     //.onErrorResumeNext(primaryDumpUiHierarchy(adbDevice))

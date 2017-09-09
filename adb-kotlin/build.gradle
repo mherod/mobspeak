@@ -30,3 +30,13 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+task copyJar {
+    doLast {
+        copy {
+            from jar
+            into System.getProperty("user.home") + '/.jepo/'
+        }
+    }
+}
+build.dependsOn copyJar
