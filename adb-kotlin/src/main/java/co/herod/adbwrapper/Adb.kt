@@ -28,16 +28,16 @@ object Adb {
                 processFactory.blocking(it, 5, TimeUnit.SECONDS)
             }
 
-    fun pressKeyBlocking(adbDevice: AdbDevice?, key: Int) =
-            AdbProcesses.pressKey(adbDevice, key)?.let {
-                processFactory.blocking(it, 5, TimeUnit.SECONDS)
-            }
+    fun pressKeyBlocking(adbDevice: AdbDevice?, key: Int): String =
+            AdbProcesses.pressKeyObservable(adbDevice, key)
+                    .timeout(10, TimeUnit.SECONDS)
+                    .blockingLast("")
 
-    fun getDisplayDumpsys(adbDevice: AdbDevice): Flowable<Map<String, String>> =
-            adbDevice.dumpsysMap(AdbDeviceProperties.PROPS_DISPLAY).toFlowable()
+    fun getDisplayDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
+            adbDevice.dumpsysMap(AdbDeviceProperties.PROPS_DISPLAY).toObservable()
 
-    fun getInputMethodDumpsys(adbDevice: AdbDevice): Flowable<Map<String, String>> =
-            adbDevice.dumpsysMap(AdbDeviceProperties.PROPS_INPUT_METHOD).toFlowable()
+    fun getInputMethodDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
+            adbDevice.dumpsysMap(AdbDeviceProperties.PROPS_INPUT_METHOD).toObservable()
 
     fun getPackageDumpsys(adbDevice: AdbDevice, packageName: String): Flowable<Map<String, String>> =
             adbDevice.dumpsysMap("package $packageName").toFlowable()

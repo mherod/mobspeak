@@ -126,7 +126,7 @@ object AdbTestHelper : AndroidTestHelper {
 
     override fun touchText(text: String?) {
 
-        val lowerCaseText = text?.toLowerCase();
+        val lowerCaseText = text?.toLowerCase()
 
         withAdbDevice {
             lowerCaseText?.let { lowerCaseText ->
@@ -135,8 +135,7 @@ object AdbTestHelper : AndroidTestHelper {
                         .filter { lowerCaseText in it.text.toLowerCase() }
                         .doOnNext(System.out::println)
                         .timeout(10, TimeUnit.SECONDS)
-                        .firstOrError()
-                        .blockingGet()
+                        .blockingFirst()
                         .also { adbUiNode ->
                             AdbDeviceActions.tapCentre(
                                     this,
@@ -148,13 +147,16 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun turnScreenOn() {
-        AdbDeviceActions.turnDeviceScreenOn(adbDevice)
+        withAdbDevice {
+            AdbDeviceActions.turnDeviceScreenOn(this)
+        }
     }
 
     override fun uninstallPackage(packageName: String?) {
-
-        packageName?.let {
-            AdbPackageManager.uninstallPackage(adbDevice, it)
+        withAdbDevice {
+            packageName?.let {
+                AdbPackageManager.uninstallPackage(this, it)
+            }
         }
     }
 
@@ -162,7 +164,11 @@ object AdbTestHelper : AndroidTestHelper {
 
         assertValidApk(apkPath)
 
-        apkPath?.let { AdbPackageManager.updatePackage(adbDevice, it) }
+        withAdbDevice {
+            apkPath?.let {
+                AdbPackageManager.updatePackage(this, it)
+            }
+        }
     }
 
     override fun assertValidApk(apkPath: String?) {
@@ -231,10 +237,6 @@ object AdbTestHelper : AndroidTestHelper {
     private inline fun <R> withAdbDevice(block: AdbDevice.() -> R): R {
         return adbDevice?.block() ?: throw NoConnectedAdbDeviceException()
     }
-}
-
-private operator fun CharSequence.contains(lowerCaseText: String?): Boolean {
-    return lowerCaseText in this.toString()
 }
 
 class NoConnectedAdbDeviceException : AssertionError("No connected device!")

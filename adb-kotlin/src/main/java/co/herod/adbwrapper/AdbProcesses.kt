@@ -23,6 +23,7 @@ interface AdbOps {
     fun inputText(inputText: String): String
     fun launchUrl(adbDevice: AdbDevice?, url: String?): ProcessBuilder?
     fun dumpsysObservable(adbDevice: AdbDevice?, type: String): Observable<String>
+    fun pressKeyObservable(adbDevice: AdbDevice?, key: Int): Observable<String>
 }
 
 internal object AdbProcesses : AdbOps {
@@ -59,7 +60,11 @@ internal object AdbProcesses : AdbOps {
     override fun dumpsysObservable(adbDevice: AdbDevice?, type: String) =
             adb(adbDevice, dumpsys(type)).toObservable()
 
-    override fun pressKey(adbDevice: AdbDevice?, key: Int) = adb(adbDevice, inputKeyEvent(key))
+    override fun pressKey(adbDevice: AdbDevice?, key: Int) =
+            adb(adbDevice, inputKeyEvent(key))
+
+    override fun pressKeyObservable(adbDevice: AdbDevice?, key: Int) =
+            adb(adbDevice, inputKeyEvent(key)).toObservable()
 
     override fun inputText(adbDevice: AdbDevice, inputText: String): ProcessBuilder? = adb(adbDevice, inputText(inputText))
 

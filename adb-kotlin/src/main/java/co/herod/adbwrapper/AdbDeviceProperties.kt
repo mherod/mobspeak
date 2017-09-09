@@ -2,9 +2,10 @@ package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.util.PropHelper
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.Map.Entry
 
 internal object AdbDeviceProperties {
@@ -14,34 +15,31 @@ internal object AdbDeviceProperties {
 
     private const val KEY_SCREEN_STATE = "mScreenState"
 
-    fun inputMethodProperties(adbDevice: AdbDevice): Flowable<Entry<String, String>> {
+    fun inputMethodProperties(adbDevice: AdbDevice): Observable<Entry<String, String>> {
 
-        return Flowable.just(adbDevice)
-                .flatMap { Adb.getInputMethodDumpsys(adbDevice) }
+        return Adb.getInputMethodDumpsys(adbDevice)
                 .flatMapIterable({ it.entries })
                 .filter { " " in it.key }
                 .sorted(Comparator.comparing<Entry<String, String>, String> { it.key })
     }
 
-    fun displayProperties(adbDevice: AdbDevice): Flowable<Entry<String, String>> {
+    fun displayProperties(adbDevice: AdbDevice): Observable<Entry<String, String>> {
 
-        return Flowable.just(adbDevice)
-                .flatMap { Adb.getDisplayDumpsys(it) }
-                .flatMapIterable({ it.entries })
+        return Adb.getDisplayDumpsys(adbDevice)
+                .flatMapIterable { it.entries }
                 .filter { " " in it.key }
                 .sorted(Comparator.comparing<Entry<String, String>, String> { it.key })
     }
 
     private fun AdbDevice?.isScreenOnSingle(): Single<Boolean> {
 
-        return Flowable.just(this)
-                .flatMap { displayProperties(it) }
+        return displayProperties(this!!)
                 .filter { entry -> entry.key == KEY_SCREEN_STATE }
                 .map { it -> PropHelper.hasPositiveValue(it) }
-                .firstOrError()
+                .first(true) // TODO
     }
 
     fun isScreenOn(adbDevice: AdbDevice?): Boolean {
-        return adbDevice.isScreenOnSingle().blockingGet()
+        return adbDevice.isScreenOnSingle().delay(2, TimeUnit.SECONDS).blockingGet()
     }
 }
