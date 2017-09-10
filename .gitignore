@@ -136,3 +136,6 @@ screen.png
 *.png
 adb-kotlin/build/
 cucumber/build/
+
+.idea/modules/adb-kotlin/adb-kotlin.iml
+.idea/modules/cucumber/cucumber.iml
