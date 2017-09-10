@@ -83,7 +83,7 @@ object AdbTestHelper : AndroidTestHelper {
         failOnText(text, timeout, TimeUnit.SECONDS)
     }
 
-    override fun getInstalledPackages(): MutableList<String>?  = withAdbDevice {
+    override fun getInstalledPackages(): MutableList<String>  = withAdbDevice {
         return AdbPackageManager.listPackages(this)
     }
 

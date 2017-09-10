@@ -15,7 +15,7 @@ object AdbUi {
     fun startStreamingUiHierarchy(adbDevice: AdbDevice): Observable<AdbUiNode> = Adb.dumpUiHierarchy(adbDevice)
             .map { it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1) }
             .compose(ResultChangeFixedDurationTransformer())
-            // .doOnNext(TEXT_KEY -> screenshotBlocking(adbDevice, true))
+            // .doOnNext(s -> screenshotBlocking(adbDevice, true))
             .map { AdbUiHierarchy(it, adbDevice) }
             .doOnEach(AdbBusManager.getAdbUiHierarchyBus())
             .map { it.xmlString }

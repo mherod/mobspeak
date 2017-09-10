@@ -39,7 +39,7 @@ public class Utils {
     }
 
     private static String outputEntry(@NotNull final Map.Entry<String, String> entry) {
-        return String.format("%TEXT_KEY is %TEXT_KEY", entry.getKey(), entry.getValue());
+        return String.format("%s is %s", entry.getKey(), entry.getValue());
     }
 
     private static Map<String, String> propertyMap(@NotNull final AdbDevice adbDevice, @NotNull final Function<AdbDevice, ObservableSource<? extends Map.Entry<String, String>>> properties) {

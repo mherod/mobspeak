@@ -11,6 +11,9 @@ internal class AdbCommand(
         private val deviceIdentifier: String?,
         private val command: String?
 ) {
+    init {
+        System.out.println(toString())
+    }
 
     fun toProcessBuilder(): ProcessBuilder = ProcessBuilder()
             .command(createCommandStrings())
@@ -26,7 +29,27 @@ internal class AdbCommand(
     }
 
     private fun getCommand(): String =
-            ADB + (if (deviceIdentifier != null) " -TEXT_KEY $deviceIdentifier" else "") + " " + command
+            ADB + (if (deviceIdentifier != null) " -s $deviceIdentifier" else "") + " " + command
+
+    override fun toString(): String {
+        return "AdbCommand(deviceIdentifier=$deviceIdentifier, command=$command)"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is AdbCommand) return false
+
+        if (deviceIdentifier != other.deviceIdentifier) return false
+        if (command != other.command) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = deviceIdentifier?.hashCode() ?: 0
+        result = 31 * result + (command?.hashCode() ?: 0)
+        return result
+    }
 
     class Builder {
 
@@ -66,6 +89,10 @@ internal class AdbCommand(
 
         private fun ProcessBuilder.toObservable(): Observable<String> {
             return processFactory.observableProcess(this)
+        }
+
+        override fun toString(): String {
+            return "Builder(processFactory=$processFactory, deviceIdentifier=$deviceIdentifier, command=$command)"
         }
     }
 
