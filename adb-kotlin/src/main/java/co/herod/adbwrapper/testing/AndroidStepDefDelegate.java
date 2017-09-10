@@ -18,6 +18,11 @@ public class AndroidStepDefDelegate implements AndroidTestHelper {
     }
 
     @Override
+    public void assertNotActivityName(String activityName) {
+        adbTestHelper().assertNotActivityName(activityName);
+    }
+
+    @Override
     public void assertPower(int minPower) {
         adbTestHelper().assertPower(minPower);
     }

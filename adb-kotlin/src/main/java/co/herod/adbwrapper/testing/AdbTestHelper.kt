@@ -31,29 +31,41 @@ object AdbTestHelper : AndroidTestHelper {
         turnScreenOff()
     }
 
-    override fun turnScreenOff() {
-        withAdbDevice {
-            AdbDeviceActions.turnDeviceScreenOff(this)
-        }
+    override fun turnScreenOff() = withAdbDevice {
+        AdbDeviceActions.turnDeviceScreenOff(this)
     }
 
-    override fun assertActivityName(activityName: String?) {
-        withAdbDevice {
-            Adb.getWindowFocusDumpsys(this)
-                    .flatMapIterable { it.values }
-                    .filter { activityName?.toLowerCase().toString() in it.toLowerCase() }
-                    .firstOrError()
-                    .timeout(5, TimeUnit.SECONDS)
-                    .retry()
-                    .timeout(10, TimeUnit.SECONDS)
-        }
+    override fun assertActivityName(activityName: String) = withAdbDevice {
+        Adb.getWindowFocusDumpsys(this)
+                .flatMapIterable { it.values }
+                .doOnNext(System.out::println)
+                .filter { activityName.toLowerCase() in it.toLowerCase() }
+                .firstOrError()
+                .timeout(5, TimeUnit.SECONDS)
+                .retry()
+                .timeout(10, TimeUnit.SECONDS)
+                .blockingGet().forEach {  }
+    }
+
+    override fun assertNotActivityName(activityName: String) = withAdbDevice {
+        Adb.getWindowFocusDumpsys(this)
+                .flatMapIterable { it.values }
+                .doOnNext(System.out::println)
+                .filter { (activityName.toLowerCase() in it.toLowerCase()).not() }
+                .firstOrError()
+                .timeout(5, TimeUnit.SECONDS)
+                .retry()
+                .timeout(10, TimeUnit.SECONDS)
+                .blockingGet().forEach {  }
     }
 
     override fun assertPower(minPower: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun backButton() = withAdbDevice { AdbDeviceActions.pressBackButton(this) }
+    override fun backButton() = withAdbDevice {
+        AdbDeviceActions.pressBackButton(this)
+    }
 
     override fun closeLeftDrawer() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -76,7 +88,7 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun failOnText(text: String) = withAdbDevice {
-        failOnText(text, 5, TimeUnit.SECONDS)
+        failOnText(text, 10, TimeUnit.SECONDS)
     }
 
     override fun failOnText(text: String, timeout: Int, timeUnit: TimeUnit) = withAdbDevice {
@@ -84,7 +96,7 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun getInstalledPackages(): MutableList<String>  = withAdbDevice {
-        return AdbPackageManager.listPackages(this)
+        AdbPackageManager.listPackages(this)
     }
 
     override fun getPackageVersionName(packageName: String): String? = withAdbDevice {
@@ -101,13 +113,8 @@ object AdbTestHelper : AndroidTestHelper {
     override fun installedPackageIsVersion(packageName: String, versionName: String): Boolean =
             getPackageVersionName(packageName) == versionName
 
-    override fun launchApp(packageName: String?) = withAdbDevice {
-        packageName?.let { packageName ->
-            AdbPackageManager.launchApp(
-                    this,
-                    packageName
-            )
-        } ?: throw AssertionError("Package name is null")
+    override fun launchApp(packageName: String) = withAdbDevice {
+        AdbPackageManager.launchApp(this, packageName)
     }
 
     override fun launchUrl(url: String) = withAdbDevice {
@@ -138,18 +145,12 @@ object AdbTestHelper : AndroidTestHelper {
         }
     }
 
-    override fun turnScreenOn() {
-        withAdbDevice {
-            AdbDeviceActions.turnDeviceScreenOn(this)
-        }
+    override fun turnScreenOn() = withAdbDevice {
+        AdbDeviceActions.turnDeviceScreenOn(this)
     }
 
-    override fun uninstallPackage(packageName: String?) {
-        withAdbDevice {
-            packageName?.let {
-                AdbPackageManager.uninstallPackage(this, it)
-            }
-        }
+    override fun uninstallPackage(packageName: String) = withAdbDevice {
+        AdbPackageManager.uninstallPackage(this, packageName)
     }
 
     override fun updateApk(apkPath: String) = withAdbDevice {
@@ -182,16 +183,13 @@ object AdbTestHelper : AndroidTestHelper {
         } ?: throw AssertionError("Cannot touch empty text")
     }
 
-    override fun waitForUiNode(adbUiNodePredicate: Predicate<AdbUiNode>?) {
-
-        withAdbDevice {
-            waitForUiNodeForFunc(
-                    adbUiNodePredicate = adbUiNodePredicate,
-                    function = { "Found" },
-                    timeout = 20,
-                    timeUnit = TimeUnit.SECONDS
-            )
-        }
+    override fun waitForUiNode(adbUiNodePredicate: Predicate<AdbUiNode>?) = withAdbDevice {
+        waitForUiNodeForFunc(
+                adbUiNodePredicate = adbUiNodePredicate,
+                function = { "Found" },
+                timeout = 20,
+                timeUnit = TimeUnit.SECONDS
+        )
     }
 
     override fun waitSeconds(waitSeconds: Int) = try {
@@ -205,7 +203,6 @@ object AdbTestHelper : AndroidTestHelper {
                 .compose(ResultChangeFixedDurationTransformer())
                 .timeout(timeout.toLong(), timeUnit)
                 .onErrorResumeNext(Observable.empty<AdbUiNode>())
-                .doOnNext(System.out::println)
                 .blockingForEach { adbUiNode: AdbUiNode ->
                     if (text.toLowerCase() in adbUiNode.text.toLowerCase()) {
                         throw AssertionError("Text was visible")

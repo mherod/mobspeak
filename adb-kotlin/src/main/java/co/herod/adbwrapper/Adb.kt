@@ -48,7 +48,7 @@ object Adb {
 
     fun getWindowFocusDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
             adbDevice.dumpsysMap(
-                    "\"window windows",
+                    "window windows",
                     "grep -E 'mCurrentFocus|mFocusedApp'"
             ).toObservable()
 

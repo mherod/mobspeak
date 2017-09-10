@@ -25,6 +25,11 @@ public class AndroidStepDefinitions2 {
         androidTestHelper.assertActivityName(activityName);
     }
 
+    @Then("^I am not on the \"([^\"]*)\" activity$")
+    public void assertNotActivityName(String activityName) throws Throwable {
+        androidTestHelper.assertNotActivityName(activityName);
+    }
+
     @Given("^I have a device with power at least (\\d+)$")
     public void connectDeviceAssertPower(int minPower) throws Throwable {
 

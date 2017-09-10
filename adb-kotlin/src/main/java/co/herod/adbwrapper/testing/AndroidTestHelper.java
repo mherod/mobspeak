@@ -17,6 +17,8 @@ public interface AndroidTestHelper {
 
     void assertActivityName(String activityName);
 
+    void assertNotActivityName(String activityName);
+
     void assertPower(int minPower);
 
     void assertValidApk(@Nullable String apkPath);
