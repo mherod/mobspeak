@@ -84,7 +84,7 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun getInstalledPackages(): MutableList<String>?  = withAdbDevice {
-        return AdbPackageManager.listPackages(this)?.blockingGet()
+        return AdbPackageManager.listPackages(this)
     }
 
     override fun getPackageVersionName(packageName: String): String? = withAdbDevice {

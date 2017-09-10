@@ -1,7 +1,6 @@
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
-import io.reactivex.Single
 import java.util.*
 
 /**
@@ -10,21 +9,8 @@ import java.util.*
 
 object AdbPackageManager {
 
-    private const val SPACE = " "
-    private const val UNINSTALL = "uninstall"
-
     fun launchApp(adbDevice: AdbDevice, packageName: String) {
         Adb.now(adbDevice, "shell monkey -p $packageName 1")
-    }
-
-    fun uninstallPackage(adbDevice: AdbDevice, packageName: String) {
-
-        //noinspection StringBufferReplaceableByString,StringBufferWithoutInitialCapacity
-        Adb.now(adbDevice, StringBuilder()
-                .append(UNINSTALL)
-                .append(SPACE)
-                .append(packageName)
-                .toString())
     }
 
     fun installPackage(adbDevice: AdbDevice, apkPath: String) {
@@ -35,13 +21,17 @@ object AdbPackageManager {
         Adb.now(adbDevice, "install -r $apkPath")
     }
 
-    fun listPackages(adbDevice: AdbDevice): Single<MutableList<String>>? {
-        return Adb.command(adbDevice, "shell pm list packages")
-                .filter { it.contains(":") }
-                .map { it.split(":").last() }
-                .toSortedList()
-                .onErrorReturn { Collections.emptyList() }
+    fun uninstallPackage(adbDevice: AdbDevice, packageName: String) {
+        Adb.now(adbDevice, "uninstall $packageName")
     }
+
+    fun listPackages(adbDevice: AdbDevice): MutableList<String>? =
+            Adb.command(adbDevice, "shell pm list packages")
+                    .filter { ":" in it }
+                    .map { it.split(":").last() }
+                    .toSortedList()
+                    .onErrorReturn { Collections.emptyList() }
+                    .blockingGet()
 
     fun getPackageVersionName(adbDevice: AdbDevice, packageName: String): String? =
             Adb.getPackageDumpsys(adbDevice, packageName)

@@ -6,14 +6,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
-import co.herod.adbwrapper.AdbPackageManager;
 import co.herod.adbwrapper.model.AdbDevice;
 import co.herod.adbwrapper.model.AdbUiNode;
 import kotlin.jvm.functions.Function1;
 
 public class AndroidStepDefDelegate implements AndroidTestHelper {
-
-    private AdbDevice adbDevice = null;
 
     @Override
     public void assertActivityName(String activityName) {
@@ -61,7 +58,7 @@ public class AndroidStepDefDelegate implements AndroidTestHelper {
 
     @Override
     public void failOnText(String text) {
-        failOnText(text, 10, TimeUnit.SECONDS);
+        adbTestHelper().failOnText(text);
     }
 
     @Override
@@ -70,12 +67,12 @@ public class AndroidStepDefDelegate implements AndroidTestHelper {
     }
 
     public List<String> getInstalledPackages() {
-        return AdbPackageManager.INSTANCE.listPackages(adbDevice).blockingGet();
+        return adbTestHelper().getInstalledPackages();
     }
 
     @Override
     public String getPackageVersionName(String packageName) {
-        return AdbPackageManager.INSTANCE.getPackageVersionName(getAdbDevice(), packageName);
+        return adbTestHelper().getPackageVersionName(packageName);
     }
 
     public void installApk(String apkPath) {
