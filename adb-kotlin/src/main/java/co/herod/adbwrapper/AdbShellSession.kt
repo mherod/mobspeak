@@ -7,7 +7,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.util.concurrent.TimeUnit
 
-object AdbShell {
+object AdbShellSession {
 
     @JvmStatic
     fun main(args: Array<String>) {

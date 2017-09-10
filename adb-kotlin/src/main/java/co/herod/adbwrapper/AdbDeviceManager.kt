@@ -9,17 +9,26 @@ import java.util.concurrent.TimeUnit
 object AdbDeviceManager {
 
     @CheckReturnValue
-    fun getConnectedDevice(): AdbDevice = getConnectedDeviceSingle().blockingGet()
+    fun getConnectedDevice(): AdbDevice =
+            getConnectedDeviceSingle()
+                    .blockingGet()
 
     @CheckReturnValue
-    private fun getConnectedDeviceSingle(): Single<AdbDevice> = connectedDevices()
-            .filter(AdbDevice::isConnectedDevice)
-            .firstOrError()
-            .retryWhen { handler -> handler.delay(1, TimeUnit.SECONDS) }
-            .timeout(10, TimeUnit.SECONDS)
+    private fun getConnectedDeviceSingle(): Single<AdbDevice> =
+            connectedDevices()
+                    .filter(AdbDevice::isConnectedDevice)
+                    .firstOrError()
+                    .retryWhen { handler -> handler.delay(1, TimeUnit.SECONDS) }
+                    .timeout(10, TimeUnit.SECONDS)
 
     @CheckReturnValue
-    fun getAllDevices(): List<AdbDevice> = connectedDevices().toList().blockingGet()
+    fun getAllDevices(): List<AdbDevice> =
+            connectedDevices()
+                    .toList()
+                    .blockingGet()
 
-    private fun connectedDevices(): Observable<AdbDevice> = Adb.devices()
+    private fun connectedDevices(): Observable<AdbDevice> =
+            AdbProcesses.devices()
+                    .filter { "\t" in it }
+                    .map { AdbDevice.parseAdbString(it) }
 }

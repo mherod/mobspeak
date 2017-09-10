@@ -15,7 +15,7 @@ object AdbUi {
     fun startStreamingUiHierarchy(adbDevice: AdbDevice): Observable<AdbUiNode> = Adb.dumpUiHierarchy(adbDevice)
             .map { it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1) }
             .compose(ResultChangeFixedDurationTransformer())
-            // .doOnNext(s -> screenshotBlocking(adbDevice, true))
+            // .doOnNext(TEXT_KEY -> screenshotBlocking(adbDevice, true))
             .map { AdbUiHierarchy(it, adbDevice) }
             .doOnEach(AdbBusManager.getAdbUiHierarchyBus())
             .map { it.xmlString }
@@ -51,9 +51,9 @@ object AdbUi {
 
     internal fun pullScreenCapture(adbDevice: AdbDevice) {
         with(Adb) {
-            blocking(adbDevice, "shell screencap -p /sdcard/screen.png")
-            blocking(adbDevice, "pull /sdcard/screen.png")
-            blocking(adbDevice, "shell rm /sdcard/screen.png")
+            now(adbDevice, "shell screencap -p /sdcard/screen.png")
+            now(adbDevice, "pull /sdcard/screen.png")
+            now(adbDevice, "shell rm /sdcard/screen.png")
         }
     }
 

@@ -6,15 +6,13 @@ object AdbDeviceServices {
 
     private const val DISABLE = "disable"
     private const val ENABLE = "enable"
-
     private const val SERVICE = "svc"
-
     private const val SPACE = " "
 
-    fun enableService(adbDevice: AdbDevice?, enable: Boolean, serviceType: String) {
+    fun enableService(adbDevice: AdbDevice, enable: Boolean, serviceType: String) {
 
         //noinspection StringBufferReplaceableByString,StringBufferWithoutInitialCapacity
-        Adb.blocking(adbDevice, StringBuilder()
+        Adb.now(adbDevice, StringBuilder()
                 .append(AdbCommand.SHELL)
                 .append(SPACE)
                 .append(SERVICE)

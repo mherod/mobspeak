@@ -3,22 +3,23 @@ package co.herod.adbwrapper.util
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.AdbUiNode
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import java.util.*
 
 object UiHierarchyHelper {
 
-    private val KEY_DELIMITER = "=\""
+    private const val KEY_DELIMITER = "=\""
 
-    private val KEY_STRING_BOUNDS = "bounds".getKeyString()
-    private val KEY_STRING_TEXT = "text".getKeyString()
+    private const val KEY_BOUNDS = "bounds"
 
-    fun extractText(s: String): String = extract(s, KEY_STRING_TEXT)
+    private const val KEY_TEXT = "text"
 
-    private fun String.getKeyString() = String.format("%s%s", this, KEY_DELIMITER)
+    private val KEY_BOUNDS_DELIM = KEY_BOUNDS + KEY_DELIMITER
+    private val KEY_TEXT_DELIM = KEY_TEXT + KEY_DELIMITER
 
-    private fun String.extractBounds() = extract(this, KEY_STRING_BOUNDS)
+    fun extractText(s: String): String = extract(s, KEY_TEXT_DELIM)
+
+    private fun String.extractBounds() = extract(this, KEY_BOUNDS_DELIM)
             .replace("][", ",")
             .replace("[^\\d,]".toRegex(), "")
 
@@ -29,24 +30,20 @@ object UiHierarchyHelper {
             val beginIndex = s1.length
             return substring.substring(beginIndex, substring.substring(beginIndex).indexOf("\"") + beginIndex)
         } catch (exception: StringIndexOutOfBoundsException) {
-
-            System.err.printf("%s %s", s, s1)
             exception.printStackTrace()
-
             throw exception
         }
-
     }
 
-    fun centreX(coordinates: Array<Int>) = (coordinates[0] + coordinates[2]) / 2
-    fun centreY(coordinates: Array<Int>) = (coordinates[1] + coordinates[3]) / 2
+    fun centreX(coordinates: Array<Int>): Int = (coordinates[0] + coordinates[2]) / 2
+    fun centreY(coordinates: Array<Int>): Int = (coordinates[1] + coordinates[3]) / 2
 
     fun nodeTextContains(s: String?, s1: String?): Boolean =
-            s1 == null || s1.isEmpty() || s != null && !s.isEmpty() && extractText(s).contains(s1)
+            s1 == null || s1.isEmpty() || s != null && !s.isEmpty() && s1 in extractText(s)
 
     fun extractBoundsInts(s: AdbUiNode): Observable<Array<Int>>? = s.toString().to(extractBoundsInts(s)).second
 
-    fun extractBoundsInts(s: String): Flowable<Array<Int>>? = Flowable.just(s)
+    fun extractBoundsInts(s: String): Observable<Array<Int>>? = Observable.just(s)
             .map { it.extractBounds() }
             .map { it.split(",".toRegex()).dropLastWhile { it.isEmpty() } }
             .map { it.map { Integer.parseInt(it) } }
@@ -57,7 +54,7 @@ object UiHierarchyHelper {
             .map { it.trim { it <= ' ' } }
             .map { s -> if (s.endsWith(">").not()) s + ">"; s }
             .filter { "=" in it }
-            .filter { it.contains(KEY_STRING_BOUNDS) }
+            .filter { KEY_BOUNDS_DELIM in it }
 
     fun rawDumpToNodes(upstream: Observable<String>, adbDevice: AdbDevice?): Observable<AdbUiNode>? = upstream
             .filter { Objects.nonNull(it) }
@@ -67,10 +64,5 @@ object UiHierarchyHelper {
             .map { AdbUiNode(it) }
             .filter { Objects.nonNull(it) }
 
-    fun getHeight(coordinates: Array<Int>) = coordinates[3] - coordinates[1]
-
-    fun getWidth(coordinates: Array<Int>) = coordinates[2] - coordinates[0]
-
     fun isPackage(packageIdentifier: String, s: String) = "package=\"$packageIdentifier\"" in s
-
 }

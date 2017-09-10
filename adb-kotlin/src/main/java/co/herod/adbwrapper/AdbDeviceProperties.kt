@@ -8,6 +8,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.Map.Entry
 
+@Suppress("MemberVisibilityCanPrivate")
 internal object AdbDeviceProperties {
 
     const val PROPS_DISPLAY = "display"

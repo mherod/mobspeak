@@ -13,29 +13,29 @@ object AdbPackageManager {
     private const val SPACE = " "
     private const val UNINSTALL = "uninstall"
 
-    fun launchApp(adbDevice: AdbDevice?, packageName: String) {
-        Adb.blocking(adbDevice, "shell monkey -p $packageName 1")
+    fun launchApp(adbDevice: AdbDevice, packageName: String) {
+        Adb.now(adbDevice, "shell monkey -p $packageName 1")
     }
 
-    fun uninstallPackage(adbDevice: AdbDevice?, packageName: String) {
+    fun uninstallPackage(adbDevice: AdbDevice, packageName: String) {
 
         //noinspection StringBufferReplaceableByString,StringBufferWithoutInitialCapacity
-        Adb.blocking(adbDevice, StringBuilder()
+        Adb.now(adbDevice, StringBuilder()
                 .append(UNINSTALL)
                 .append(SPACE)
                 .append(packageName)
                 .toString())
     }
 
-    fun installPackage(adbDevice: AdbDevice?, apkPath: String) {
-        Adb.blocking(adbDevice, "install $apkPath")
+    fun installPackage(adbDevice: AdbDevice, apkPath: String) {
+        Adb.now(adbDevice, "install $apkPath")
     }
 
-    fun updatePackage(adbDevice: AdbDevice?, apkPath: String) {
-        Adb.blocking(adbDevice, "install -r $apkPath")
+    fun updatePackage(adbDevice: AdbDevice, apkPath: String) {
+        Adb.now(adbDevice, "install -r $apkPath")
     }
 
-    fun listPackages(adbDevice: AdbDevice?): Single<MutableList<String>>? {
+    fun listPackages(adbDevice: AdbDevice): Single<MutableList<String>>? {
         return Adb.command(adbDevice, "shell pm list packages")
                 .filter { it.contains(":") }
                 .map { it.split(":").last() }
@@ -43,11 +43,8 @@ object AdbPackageManager {
                 .onErrorReturn { Collections.emptyList() }
     }
 
-    fun getPackageVersionName(adbDevice: AdbDevice?, packageName: String): String? {
-        return adbDevice?.let {
-            Adb.getPackageDumpsys(it, packageName)
+    fun getPackageVersionName(adbDevice: AdbDevice, packageName: String): String? =
+            Adb.getPackageDumpsys(adbDevice, packageName)
                     .map { it["versionName"] }
                     .blockingFirst()
-        }
-    }
 }

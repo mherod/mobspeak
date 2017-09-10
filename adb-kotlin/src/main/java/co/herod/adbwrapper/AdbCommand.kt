@@ -1,6 +1,7 @@
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
+import io.reactivex.Observable
 import java.util.*
 
 /**
@@ -25,20 +26,14 @@ internal class AdbCommand(
     }
 
     private fun getCommand(): String =
-            ADB + (if (deviceIdentifier != null) " -s " + deviceIdentifier else "") + " " + command
+            ADB + (if (deviceIdentifier != null) " -TEXT_KEY $deviceIdentifier" else "") + " " + command
 
     class Builder {
 
+        private val processFactory: IProcessFactory = ProcessFactory()
+
         private var deviceIdentifier: String? = null
         private var command: String? = null
-
-        private fun build(): AdbCommand? {
-            return AdbCommand(deviceIdentifier, command)
-        }
-
-        internal fun processBuilder(): ProcessBuilder? {
-            return build()?.toProcessBuilder()
-        }
 
         fun setDevice(adbDevice: AdbDevice?): Builder {
             if (adbDevice != null) {
@@ -55,6 +50,22 @@ internal class AdbCommand(
         fun setCommand(command: String): Builder {
             this.command = command
             return this
+        }
+
+        internal fun observable(): Observable<String> {
+            return processBuilder()?.toObservable() ?: Observable.error(IllegalStateException())
+        }
+
+        private fun build(): AdbCommand? {
+            return AdbCommand(deviceIdentifier, command)
+        }
+
+        private fun processBuilder(): ProcessBuilder? {
+            return build()?.toProcessBuilder()
+        }
+
+        private fun ProcessBuilder.toObservable(): Observable<String> {
+            return processFactory.observableProcess(this)
         }
     }
 

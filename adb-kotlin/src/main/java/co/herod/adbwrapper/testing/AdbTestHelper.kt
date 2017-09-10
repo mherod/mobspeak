@@ -75,61 +75,47 @@ object AdbTestHelper : AndroidTestHelper {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun failOnText(text: String?) {
-        text?.let { adbDevice?.failOnText(it, 5, TimeUnit.SECONDS) }
+    override fun failOnText(text: String) = withAdbDevice {
+        failOnText(text, 5, TimeUnit.SECONDS)
     }
 
-    override fun failOnText(text: String?, timeout: Int, timeUnit: TimeUnit?) {
-        text?.let { adbDevice?.failOnText(it, timeout, TimeUnit.SECONDS) }
+    override fun failOnText(text: String, timeout: Int, timeUnit: TimeUnit) = withAdbDevice {
+        failOnText(text, timeout, TimeUnit.SECONDS)
     }
 
-    override fun getInstalledPackages(): MutableList<String>? {
-        return AdbPackageManager.listPackages(adbDevice)?.blockingGet()
+    override fun getInstalledPackages(): MutableList<String>?  = withAdbDevice {
+        return AdbPackageManager.listPackages(this)?.blockingGet()
     }
 
-    override fun getPackageVersionName(packageName: String?): String? {
-        withAdbDevice {
-            return packageName?.let {
-                AdbPackageManager.getPackageVersionName(adbDevice, it)
-            }
-        }
+    override fun getPackageVersionName(packageName: String): String? = withAdbDevice {
+        AdbPackageManager.getPackageVersionName(this, packageName)
     }
 
-    override fun installApk(apkPath: String?) {
+    override fun installApk(apkPath: String) = withAdbDevice {
 
         assertValidApk(apkPath)
 
-        apkPath?.let {
-            AdbPackageManager.installPackage(adbDevice, it)
-        }
+        AdbPackageManager.installPackage(this, apkPath)
     }
 
-    override fun installedPackageIsVersion(packageName: String?, versionName: String?): Boolean {
-        return getPackageVersionName(packageName) == versionName
+    override fun installedPackageIsVersion(packageName: String, versionName: String): Boolean =
+            getPackageVersionName(packageName) == versionName
+
+    override fun launchApp(packageName: String?) = withAdbDevice {
+        packageName?.let { packageName ->
+            AdbPackageManager.launchApp(
+                    this,
+                    packageName
+            )
+        } ?: throw AssertionError("Package name is null")
     }
 
-    override fun launchApp(packageName: String?) {
-
-        withAdbDevice {
-            packageName?.let { packageName ->
-                AdbPackageManager.launchApp(
-                        this,
-                        packageName
-                )
-            } ?: throw AssertionError("Package name is null")
-        }
+    override fun launchUrl(url: String) = withAdbDevice {
+        AdbProcesses.launchUrl(this, url).blockingSubscribe()
     }
 
-    override fun launchUrl(url: String?) {
-        withAdbDevice {
-            AdbProcesses.launchUrlObservable(this, url).blockingSubscribe()
-        }
-    }
-
-    override fun takeScreenshot() {
-        withAdbDevice {
-            ScreenshotHelper.screenshot(this, false)
-        }
+    override fun takeScreenshot(): Unit = withAdbDevice {
+        ScreenshotHelper.screenshot(this, false)
     }
 
     override fun touchText(text: String?) {
@@ -166,41 +152,34 @@ object AdbTestHelper : AndroidTestHelper {
         }
     }
 
-    override fun updateApk(apkPath: String?) {
+    override fun updateApk(apkPath: String) = withAdbDevice {
 
         assertValidApk(apkPath)
 
-        withAdbDevice {
-            apkPath?.let {
-                AdbPackageManager.updatePackage(this, it)
-            }
-        }
+        AdbPackageManager.updatePackage(this, apkPath)
     }
 
     override fun assertValidApk(apkPath: String?) {
         assert(!File(apkPath).exists().not()) { "Apk does not exist at $apkPath" }
     }
 
-    override fun waitForText(text: String?) {
-        waitForText(text, 10, TimeUnit.SECONDS)
-    }
+    override fun waitForText(text: String?) = waitForText(
+            text = text,
+            timeout = 10,
+            timeUnit = TimeUnit.SECONDS
+    )
 
-    override fun waitForText(text: String?, timeout: Int, timeUnit: TimeUnit) {
-
-        val lowerCaseText: String? = text?.toLowerCase()
-
-        withAdbDevice {
-            lowerCaseText?.let { lowerCaseText ->
-                waitForUiNodeForFunc(
-                        adbUiNodePredicate = Predicate {
-                            lowerCaseText in it.text.toLowerCase()
-                        },
-                        function = { "Found" },
-                        timeout = timeout,
-                        timeUnit = timeUnit
-                )
-            } ?: throw AssertionError("Cannot touch empty text")
-        }
+    override fun waitForText(text: String?, timeout: Int, timeUnit: TimeUnit) = withAdbDevice {
+        text?.toLowerCase()?.let { lowerCaseText ->
+            waitForUiNodeForFunc(
+                    adbUiNodePredicate = Predicate {
+                        lowerCaseText in it.text.toLowerCase()
+                    },
+                    function = { "Found" },
+                    timeout = timeout,
+                    timeUnit = timeUnit
+            )
+        } ?: throw AssertionError("Cannot touch empty text")
     }
 
     override fun waitForUiNode(adbUiNodePredicate: Predicate<AdbUiNode>?) {
@@ -247,7 +226,12 @@ object AdbTestHelper : AndroidTestHelper {
 //        }
 //    }
 
-    private fun waitForUiNodeForFunc(adbUiNodePredicate: Predicate<AdbUiNode>?, function: (AdbUiNode) -> String?, timeout: Int, timeUnit: TimeUnit) {
+    private fun waitForUiNodeForFunc(
+            adbUiNodePredicate: Predicate<AdbUiNode>?,
+            function: (AdbUiNode) -> String?,
+            timeout: Int,
+            timeUnit: TimeUnit
+    ) {
 
         withAdbDevice {
             Adb.dumpUiNodes(this)
@@ -268,4 +252,3 @@ object AdbTestHelper : AndroidTestHelper {
 }
 
 class NoConnectedAdbDeviceException : AssertionError("No connected device!")
-class BlockingBreakerThrowable : RuntimeException()

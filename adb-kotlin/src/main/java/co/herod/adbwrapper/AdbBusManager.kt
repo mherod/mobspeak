@@ -10,20 +10,17 @@ import io.reactivex.Observable
  */
 object AdbBusManager : IAdbBusManager {
 
-    private val _ADB_BUS: BusSubject<String> = MainBusSubject()
-    override fun getAdbBus(): BusSubject<String> = _ADB_BUS
+    private val _adbBus: BusSubject<String> = MainBusSubject()
+    private val _adbUiHierarchyBus: BusSubject<AdbUiHierarchy> = AdbUiHierarchyBus()
+    private val _adbUiNodeBus: BusSubject<AdbUiNode> = AdbUiNodeBus()
 
-    private val _ADB_UI_HIERARCHY_BUS: BusSubject<AdbUiHierarchy> = AdbUiHierarchyBus()
-    override fun getAdbUiHierarchyBus(): BusSubject<AdbUiHierarchy> = _ADB_UI_HIERARCHY_BUS
-
-    private val _ADB_UI_NODE_BUS: BusSubject<AdbUiNode> = AdbUiNodeBus()
-    override fun getAdbUiNodeBus(): BusSubject<AdbUiNode> = _ADB_UI_NODE_BUS
+    override fun getAdbBus(): BusSubject<String> = _adbBus
+    override fun getAdbUiHierarchyBus(): BusSubject<AdbUiHierarchy> = _adbUiHierarchyBus
+    override fun getAdbUiNodeBus(): BusSubject<AdbUiNode> = _adbUiNodeBus
 
     internal fun throttledBus(): Observable<String>? = getAdbBus().concatMap { Utils.throttleOutput(it) }
-
-    private class MainBusSubject : BusSubject<String>()
-
-    private class AdbUiHierarchyBus : BusSubject<AdbUiHierarchy>()
-
-    private class AdbUiNodeBus : BusSubject<AdbUiNode>()
 }
+
+class MainBusSubject : BusSubject<String>()
+class AdbUiHierarchyBus : BusSubject<AdbUiHierarchy>()
+class AdbUiNodeBus : BusSubject<AdbUiNode>()
