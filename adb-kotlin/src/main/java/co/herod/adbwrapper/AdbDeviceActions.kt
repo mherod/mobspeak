@@ -1,5 +1,6 @@
 package co.herod.adbwrapper
 
+import co.herod.adbwrapper.AdbProcesses.tap
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiNode
 import co.herod.adbwrapper.util.UiHierarchyHelper
@@ -36,8 +37,8 @@ object AdbDeviceActions {
         while (AdbDeviceProperties.isScreenOn(adbDevice)) pressPowerButton(adbDevice)
     }
 
-    fun AdbDevice.tapUiNode(adbUiNode: AdbUiNode) {
-        tapCoords(this, adbUiNode.centreX, adbUiNode.centreY)
+    fun swipe(adbDevice: AdbDevice, x1: Int, y1: Int, x2: Int, y2: Int, speed: Int = 1000) {
+        AdbProcesses.swipe(adbDevice, x1, y1, x2, y2, speed)
     }
 
     fun tapCentre(adbDevice: AdbDevice, adbUiNode: AdbUiNode): String =
@@ -46,13 +47,10 @@ object AdbDeviceActions {
             }.toString()
 
     private fun AdbDevice.tapCentre(c: Array<Int>): Observable<String> =
-            AdbProcesses.tapObservable(this,
+            tap(this,
                     UiHierarchyHelper.centreX(c),
                     UiHierarchyHelper.centreY(c))
 
     private fun tapCoords(adbDevice: AdbDevice, x: Int, y: Int): Boolean =
             AdbProcesses.tap(adbDevice, x, y).blockingLast("") != null
-
-    private fun AdbDevice.tap(x: Int, y: Int): Observable<String> =
-            AdbProcesses.tapObservable(this, x, y)
 }

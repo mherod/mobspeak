@@ -13,6 +13,10 @@ object AdbPackageManager {
         Adb.now(adbDevice, "shell monkey -p $packageName 1")
     }
 
+    fun forceStop(adbDevice: AdbDevice, packageName: String) {
+        Adb.now(adbDevice, "shell am force-stop $packageName")
+    }
+
     fun installPackage(adbDevice: AdbDevice, apkPath: String) {
         Adb.now(adbDevice, "install $apkPath")
     }

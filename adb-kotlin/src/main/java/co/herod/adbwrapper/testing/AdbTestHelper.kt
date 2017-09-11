@@ -6,7 +6,7 @@ import co.herod.adbwrapper.model.AdbUiNode
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
 import io.reactivex.Observable
 import java.io.File
-import java.lang.AssertionError
+import java.lang.*
 import java.util.concurrent.TimeUnit
 import java.util.function.Predicate
 
@@ -17,12 +17,12 @@ import java.util.function.Predicate
 object AdbTestHelper : AndroidTestHelper {
 
     private var _adbDevice: AdbDevice? = null
+
     var adbDevice: AdbDevice?
         get() = _adbDevice
         set(value) {
             _adbDevice = value
         }
-
     override fun assertScreenOn() {
         turnScreenOn()
     }
@@ -79,12 +79,64 @@ object AdbTestHelper : AndroidTestHelper {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun dragDown(widthFunction: ((Int) -> Int)?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun dragDown(widthFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
+
+        val windowBounds = Adb.getWindowsDumpsys(this)
+                .map { it["mBounds"] }
+                .map { it.substring(it.lastIndexOf('[') + 1, it.lastIndexOf(']')) }
+                .map { it.split(',') }
+                .blockingFirst()
+        val width = Integer.parseInt(windowBounds[0])
+        val height = Integer.parseInt(windowBounds[1])
+
+        val x = widthFunction(width);
+
+        AdbDeviceActions.swipe(this, x, (height * edgeOffset).toInt(), x, (height * (1.0 - edgeOffset)).toInt())
     }
 
-    override fun dragUp(widthFunction: ((Int) -> Int)?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun dragUp(widthFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
+
+        val windowBounds = Adb.getWindowsDumpsys(this)
+                .map { it["mBounds"] }
+                .map { it.substring(it.lastIndexOf('[') + 1, it.lastIndexOf(']')) }
+                .map { it.split(',') }
+                .blockingFirst()
+        val width = Integer.parseInt(windowBounds[0])
+        val height = Integer.parseInt(windowBounds[1])
+
+        val x = widthFunction(width);
+
+        AdbDeviceActions.swipe(this, x, (height * (1.0 - edgeOffset)).toInt(), x, (height * edgeOffset).toInt())
+    }
+
+    override fun dragRight(heightFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
+
+        val windowBounds = Adb.getWindowsDumpsys(this)
+                .map { it["mBounds"] }
+                .map { it.substring(it.lastIndexOf('[') + 1, it.lastIndexOf(']')) }
+                .map { it.split(',') }
+                .blockingFirst()
+        val width = Integer.parseInt(windowBounds[0])
+        val height = Integer.parseInt(windowBounds[1])
+
+        val y = heightFunction(height);
+
+        AdbDeviceActions.swipe(this, (width * edgeOffset).toInt(), y, (width * (1.0 - edgeOffset)).toInt(), y)
+    }
+
+    override fun dragLeft(heightFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
+
+        val windowBounds = Adb.getWindowsDumpsys(this)
+                .map { it["mBounds"] }
+                .map { it.substring(it.lastIndexOf('[') + 1, it.lastIndexOf(']')) }
+                .map { it.split(',') }
+                .blockingFirst()
+        val width = Integer.parseInt(windowBounds[0])
+        val height = Integer.parseInt(windowBounds[1])
+
+        val y = heightFunction(height);
+
+        AdbDeviceActions.swipe(this, (width * (1.0 - edgeOffset)).toInt(), y, (width * edgeOffset).toInt(), y)
     }
 
     override fun failOnText(text: String) = withAdbDevice {
@@ -121,28 +173,37 @@ object AdbTestHelper : AndroidTestHelper {
         AdbProcesses.launchUrl(this, url).blockingSubscribe()
     }
 
+    override fun launchUrl(url: String, packageName: String) = withAdbDevice {
+        AdbProcesses.launchUrl(this, url, packageName).blockingSubscribe()}
+
     override fun takeScreenshot(): Unit = withAdbDevice {
         ScreenshotHelper.screenshot(this, false)
     }
 
-    override fun touchText(text: String?) {
+    override fun touchUiNode(adbUiNodePredicate: Predicate<AdbUiNode>) = withAdbDevice {
+        waitForUiNodeForFunc(
+                adbUiNodePredicate = Predicate {
+                    adbUiNodePredicate.test(it)
+                },
+                function = {
+                    AdbDeviceActions.tapCentre(this, it)
+                },
+                timeout = 20,
+                timeUnit = TimeUnit.SECONDS
+        )
+    }
 
-        val lowerCaseText: String? = text?.toLowerCase()
-
-        withAdbDevice {
-            lowerCaseText?.let { lowerCaseText ->
-                waitForUiNodeForFunc(
-                        adbUiNodePredicate = Predicate {
-                            lowerCaseText in it.text.toLowerCase()
-                        },
-                        function = {
-                            AdbDeviceActions.tapCentre(this, it)
-                        },
-                        timeout = 20,
-                        timeUnit = TimeUnit.SECONDS
-                )
-            } ?: throw AssertionError("Cannot touch empty text")
-        }
+    override fun touchText(text: String) = withAdbDevice {
+        waitForUiNodeForFunc(
+                adbUiNodePredicate = Predicate {
+                    text.toLowerCase() in it.text.toLowerCase()
+                },
+                function = {
+                    AdbDeviceActions.tapCentre(this, it)
+                },
+                timeout = 20,
+                timeUnit = TimeUnit.SECONDS
+        )
     }
 
     override fun turnScreenOn() = withAdbDevice {
@@ -164,26 +225,22 @@ object AdbTestHelper : AndroidTestHelper {
         assert(!File(apkPath).exists().not()) { "Apk does not exist at $apkPath" }
     }
 
-    override fun waitForText(text: String?) = waitForText(
-            text = text,
-            timeout = 10,
-            timeUnit = TimeUnit.SECONDS
-    )
-
-    override fun waitForText(text: String?, timeout: Int, timeUnit: TimeUnit) = withAdbDevice {
-        text?.toLowerCase()?.let { lowerCaseText ->
-            waitForUiNodeForFunc(
-                    adbUiNodePredicate = Predicate {
-                        lowerCaseText in it.text.toLowerCase()
-                    },
-                    function = { "Found" },
-                    timeout = timeout,
-                    timeUnit = timeUnit
-            )
-        } ?: throw AssertionError("Cannot touch empty text")
+    override fun waitForTextToFailToDisappear(text: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun waitForUiNode(adbUiNodePredicate: Predicate<AdbUiNode>?) = withAdbDevice {
+    override fun waitForText(text: String, timeout: Int, timeUnit: TimeUnit) = withAdbDevice {
+        waitForUiNodeForFunc(
+                adbUiNodePredicate = Predicate {
+                    text.toLowerCase() in it.text.toLowerCase()
+                },
+                function = { "Found" },
+                timeout = timeout,
+                timeUnit = timeUnit
+        )
+    }
+
+    override fun waitForUiNode(adbUiNodePredicate: Predicate<AdbUiNode>) = withAdbDevice {
         waitForUiNodeForFunc(
                 adbUiNodePredicate = adbUiNodePredicate,
                 function = { "Found" },
@@ -210,26 +267,12 @@ object AdbTestHelper : AndroidTestHelper {
                 }
     }
 
-//    fun AdbDevice.waitForText(text: String, timeout: Int, timeUnit: TimeUnit) {
-//
-//        try {
-//            Adb.dumpUiNodes(this)
-//                    .filter { text in it.text }
-//                    .timeout(timeout.toLong(), timeUnit)
-//                    .doOnNext(System.out::println)
-//                    .blockingForEach { throw BlockingBreakerThrowable() }
-//        } catch (e: BlockingBreakerThrowable) {
-//            // good!
-//        }
-//    }
-
     private fun waitForUiNodeForFunc(
             adbUiNodePredicate: Predicate<AdbUiNode>?,
             function: (AdbUiNode) -> String?,
             timeout: Int,
             timeUnit: TimeUnit
     ) {
-
         withAdbDevice {
             Adb.dumpUiNodes(this)
                     .compose(ResultChangeFixedDurationTransformer())
@@ -241,6 +284,16 @@ object AdbTestHelper : AndroidTestHelper {
                     .timeout(timeout.toLong(), timeUnit)
                     .blockingFirst()
         }
+    }
+
+    override fun waitForTextToDisappear(text: String) {
+
+        try {
+            waitForText(text, 30, TimeUnit.SECONDS)
+        } catch (assertionError: AssertionError) {
+            // ignore error if not found
+        }
+        failOnText(text)
     }
 
     private inline fun <R> withAdbDevice(block: AdbDevice.() -> R): R {
