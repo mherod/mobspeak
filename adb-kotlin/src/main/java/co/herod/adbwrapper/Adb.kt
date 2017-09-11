@@ -43,8 +43,11 @@ object Adb {
     fun getActivitiesDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
             adbDevice.dumpsysMap("activity activities").toObservable()
 
+    fun getWindowDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
+            adbDevice.dumpsysMap("window").toObservable()
+
     fun getWindowsDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap("\"window windows").toObservable()
+            adbDevice.dumpsysMap("window windows").toObservable()
 
     fun getWindowFocusDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
             adbDevice.dumpsysMap(

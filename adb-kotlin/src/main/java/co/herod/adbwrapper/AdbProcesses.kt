@@ -17,7 +17,7 @@ interface AdbOps {
     fun inputText(adbDevice: AdbDevice, inputText: String): Observable<String>
     fun inputKeyEvent(key: Int): String
     fun inputTap(x: Int, y: Int): String
-    fun inputSwipe(x: Int, y: Int, x2: Int, y2: Int, speed: Int = 1000): String
+    fun inputSwipe(x: Int, y: Int, x2: Int, y2: Int, speed: Int = 500): String
     fun inputText(inputText: String): String
     fun dumpsys(adbDevice: AdbDevice, type: String): Observable<String>
     fun dumpsys(type: String): String

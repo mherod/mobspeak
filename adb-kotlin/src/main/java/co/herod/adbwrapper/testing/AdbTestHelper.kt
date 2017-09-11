@@ -81,7 +81,7 @@ object AdbTestHelper : AndroidTestHelper {
 
     override fun dragDown(widthFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
 
-        val windowBounds = Adb.getWindowsDumpsys(this)
+        val windowBounds = Adb.getWindowDumpsys(this)
                 .map { it["mBounds"] }
                 .map { it.substring(it.lastIndexOf('[') + 1, it.lastIndexOf(']')) }
                 .map { it.split(',') }
@@ -96,7 +96,7 @@ object AdbTestHelper : AndroidTestHelper {
 
     override fun dragUp(widthFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
 
-        val windowBounds = Adb.getWindowsDumpsys(this)
+        val windowBounds = Adb.getWindowDumpsys(this)
                 .map { it["mBounds"] }
                 .map { it.substring(it.lastIndexOf('[') + 1, it.lastIndexOf(']')) }
                 .map { it.split(',') }
@@ -111,7 +111,7 @@ object AdbTestHelper : AndroidTestHelper {
 
     override fun dragRight(heightFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
 
-        val windowBounds = Adb.getWindowsDumpsys(this)
+        val windowBounds = Adb.getWindowDumpsys(this)
                 .map { it["mBounds"] }
                 .map { it.substring(it.lastIndexOf('[') + 1, it.lastIndexOf(']')) }
                 .map { it.split(',') }
@@ -126,7 +126,7 @@ object AdbTestHelper : AndroidTestHelper {
 
     override fun dragLeft(heightFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
 
-        val windowBounds = Adb.getWindowsDumpsys(this)
+        val windowBounds = Adb.getWindowDumpsys(this)
                 .map { it["mBounds"] }
                 .map { it.substring(it.lastIndexOf('[') + 1, it.lastIndexOf(']')) }
                 .map { it.split(',') }

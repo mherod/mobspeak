@@ -37,8 +37,8 @@ object AdbDeviceActions {
         while (AdbDeviceProperties.isScreenOn(adbDevice)) pressPowerButton(adbDevice)
     }
 
-    fun swipe(adbDevice: AdbDevice, x1: Int, y1: Int, x2: Int, y2: Int, speed: Int = 1000) {
-        AdbProcesses.swipe(adbDevice, x1, y1, x2, y2, speed)
+    fun swipe(adbDevice: AdbDevice, x1: Int, y1: Int, x2: Int, y2: Int, speed: Int = 500) {
+        AdbProcesses.swipe(adbDevice, x1, y1, x2, y2, speed).blockingSubscribe()
     }
 
     fun tapCentre(adbDevice: AdbDevice, adbUiNode: AdbUiNode): String =
