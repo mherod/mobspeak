@@ -50,10 +50,9 @@ object Adb {
             adbDevice.dumpsysMap("window windows").toObservable()
 
     fun getWindowFocusDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap(
-                    "window windows",
-                    "grep -E 'mCurrentFocus|mFocusedApp'"
-            ).toObservable()
+            getWindowsDumpsys(adbDevice).map {
+                it.filterKeys { it == "mCurrentFocus" || it == "mFocusedApp" }
+            }
 
     private fun AdbDevice.dumpsysMap(type: String): Single<Map<String, String>> =
             dumpsys(this, type).processDumpsys("=")
@@ -84,11 +83,15 @@ object Adb {
             uiautomatorDump(adbDevice)
                     .map { it.split(' ').last() }
                     .filter { ".xml" in it }
-                    .flatMap { readDeviceFile(adbDevice, "shell cat $it") }
+                    .flatMap {
+                        readDeviceFile(adbDevice, "shell cat $it")
+                                .retry()
+                                .timeout(3, TimeUnit.SECONDS)
+                    }
                     .filter { "<?xml" in it }
-                    .timeout(5, TimeUnit.SECONDS)
+                    .timeout(10, TimeUnit.SECONDS)
                     .retry()
-                    .timeout(20, TimeUnit.SECONDS)
+                    .timeout(30, TimeUnit.SECONDS)
 
     fun command(adbDevice: AdbDevice, command: String): Observable<String> =
             AdbProcesses.adb(adbDevice, command)
@@ -99,6 +102,12 @@ object Adb {
 }
 
 private fun Observable<String>.processDumpsys(c: String): Single<Map<String, String>> =
-        this.filter { c in it }
-                .map { it.trim { it <= ' ' }.split(c.toRegex(), 2) }
-                .toMap({ it[0].trim { it <= ' ' } }) { it[1].trim { it <= ' ' } }
+        this
+                // .doOnNext(System.out::println)
+                .filter { c in it }
+                .map { it.trim() }
+                .map { it.split(
+                        regex = c.toRegex(),
+                        limit = 2
+                ) }
+                .toMap({ it[0].trim() }) { it[1].trim() }

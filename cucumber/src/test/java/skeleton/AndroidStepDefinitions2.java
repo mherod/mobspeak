@@ -55,9 +55,8 @@ public class AndroidStepDefinitions2 {
     }
 
     @When("^I close the app \"([^\"]*)\"$")
-    public void iCloseTheApp(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void iCloseTheApp(String packageName) throws Throwable {
+        testHelper().forceStopApp(packageName);
     }
 
     @When("^I close the navigation drawer$")

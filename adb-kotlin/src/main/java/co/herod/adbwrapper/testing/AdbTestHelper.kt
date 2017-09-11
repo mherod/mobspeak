@@ -4,11 +4,11 @@ import co.herod.adbwrapper.*
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiNode
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
-import io.reactivex.Observable
 import java.io.File
 import java.lang.*
 import java.util.concurrent.TimeUnit
 import java.util.function.Predicate
+import kotlin.AssertionError
 
 /**
  * Created by matthewherod on 04/09/2017.
@@ -38,13 +38,12 @@ object AdbTestHelper : AndroidTestHelper {
     override fun assertActivityName(activityName: String) = withAdbDevice {
         Adb.getWindowFocusDumpsys(this)
                 .flatMapIterable { it.values }
-                .doOnNext(System.out::println)
                 .filter { activityName.toLowerCase() in it.toLowerCase() }
                 .firstOrError()
                 .timeout(5, TimeUnit.SECONDS)
                 .retry()
                 .timeout(10, TimeUnit.SECONDS)
-                .blockingGet().forEach {  }
+                .blockingGet().forEach { }
     }
 
     override fun assertNotActivityName(activityName: String) = withAdbDevice {
@@ -91,7 +90,13 @@ object AdbTestHelper : AndroidTestHelper {
 
         val x = widthFunction(width);
 
-        AdbDeviceActions.swipe(this, x, (height * edgeOffset).toInt(), x, (height * (1.0 - edgeOffset)).toInt())
+        AdbDeviceActions.swipe(
+                this,
+                x,
+                (height * edgeOffset).toInt(),
+                x,
+                (height * (1.0 - edgeOffset)).toInt()
+        )
     }
 
     override fun dragUp(widthFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
@@ -106,7 +111,13 @@ object AdbTestHelper : AndroidTestHelper {
 
         val x = widthFunction(width);
 
-        AdbDeviceActions.swipe(this, x, (height * (1.0 - edgeOffset)).toInt(), x, (height * edgeOffset).toInt())
+        AdbDeviceActions.swipe(
+                this,
+                x,
+                (height * (1.0 - edgeOffset)).toInt(),
+                x,
+                (height * edgeOffset).toInt()
+        )
     }
 
     override fun dragRight(heightFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
@@ -121,7 +132,13 @@ object AdbTestHelper : AndroidTestHelper {
 
         val y = heightFunction(height);
 
-        AdbDeviceActions.swipe(this, (width * edgeOffset).toInt(), y, (width * (1.0 - edgeOffset)).toInt(), y)
+        AdbDeviceActions.swipe(
+                this,
+                (width * edgeOffset).toInt(),
+                y,
+                (width * (1.0 - edgeOffset)).toInt(),
+                y
+        )
     }
 
     override fun dragLeft(heightFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
@@ -136,18 +153,24 @@ object AdbTestHelper : AndroidTestHelper {
 
         val y = heightFunction(height);
 
-        AdbDeviceActions.swipe(this, (width * (1.0 - edgeOffset)).toInt(), y, (width * edgeOffset).toInt(), y)
+        AdbDeviceActions.swipe(
+                this,
+                (width * (1.0 - edgeOffset)).toInt(),
+                y,
+                (width * edgeOffset).toInt(),
+                y
+        )
     }
 
     override fun failOnText(text: String) = withAdbDevice {
-        failOnText(text, 10, TimeUnit.SECONDS)
+        failOnText(text)
     }
 
     override fun failOnText(text: String, timeout: Int, timeUnit: TimeUnit) = withAdbDevice {
-        failOnText(text, timeout, TimeUnit.SECONDS)
+        failOnText(text, timeout, timeUnit)
     }
 
-    override fun getInstalledPackages(): MutableList<String>  = withAdbDevice {
+    override fun getInstalledPackages(): MutableList<String> = withAdbDevice {
         AdbPackageManager.listPackages(this)
     }
 
@@ -240,6 +263,10 @@ object AdbTestHelper : AndroidTestHelper {
         )
     }
 
+    override fun forceStopApp(packageName: String) = withAdbDevice {
+        AdbPackageManager.forceStop(this, packageName)
+    }
+
     override fun waitForUiNode(adbUiNodePredicate: Predicate<AdbUiNode>) = withAdbDevice {
         waitForUiNodeForFunc(
                 adbUiNodePredicate = adbUiNodePredicate,
@@ -254,12 +281,10 @@ object AdbTestHelper : AndroidTestHelper {
     } catch (ignored: InterruptedException) {
     }
 
-    fun AdbDevice.failOnText(text: String, timeout: Int, timeUnit: TimeUnit) {
+    private fun AdbDevice.failOnText(text: String, timeout: Int = 5, timeUnit: TimeUnit = TimeUnit.SECONDS) {
 
         Adb.dumpUiNodes(this)
-                .compose(ResultChangeFixedDurationTransformer())
                 .timeout(timeout.toLong(), timeUnit)
-                .onErrorResumeNext(Observable.empty<AdbUiNode>())
                 .blockingForEach { adbUiNode: AdbUiNode ->
                     if (text.toLowerCase() in adbUiNode.text.toLowerCase()) {
                         throw AssertionError("Text was visible")

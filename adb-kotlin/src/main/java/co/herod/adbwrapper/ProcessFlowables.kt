@@ -14,8 +14,11 @@ internal class ProcessFactory : IProcessFactory {
 
     private fun spotAdbError(it: String): Observable<String>? =
             when {
+                it.contains("/system/bin/sh") -> {
+                    Observable.error(AdbError("Invalid command: $it"))
+                }
                 it.startsWith("Android Debug Bridge version ") -> {
-                    Observable.error(AdbError("Invalid command"))
+                    Observable.error(AdbError("Invalid command: $it"))
                 }
                 it.startsWith("ERROR: ") -> {
                     Observable.error(AdbError(it))

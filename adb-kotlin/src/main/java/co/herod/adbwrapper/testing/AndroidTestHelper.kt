@@ -47,6 +47,8 @@ public interface AndroidTestHelper {
 
     fun installedPackageIsVersion(packageName: String, versionName: String): Boolean
 
+    fun forceStopApp(packageName: String)
+
     fun launchApp(packageName: String)
 
     fun launchUrl(url: String)
