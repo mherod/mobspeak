@@ -48,7 +48,7 @@ internal object AdbProcesses : AdbOps {
 
     @CheckReturnValue
     override fun uiautomatorDump(adbDevice: AdbDevice): Observable<String> =
-            adb(adbDevice, "shell uiautomator dump")
+            adb(adbDevice, "shell uiautomator dump /sdcard/uidump.xml")
 
     @CheckReturnValue
     override fun readDeviceFile(adbDevice: AdbDevice, filePath: String): Observable<String> =
