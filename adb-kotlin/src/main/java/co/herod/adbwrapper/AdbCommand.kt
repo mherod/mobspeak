@@ -12,9 +12,9 @@ class AdbCommand(
         val deviceIdentifier: String?,
         val command: String = ""
 ) {
-    init {
-        System.out.println(toString())
-    }
+//    init {
+//        System.out.println(toString())
+//    }
 
     fun isShellCommand(): Boolean = command.startsWith("shell ")
 

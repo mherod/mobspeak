@@ -23,7 +23,7 @@ internal class ProcessFactory : IProcessFactory {
 
                 lineSequence()
                         .toObservable()
-                        .doOnNext(System.out::println)
+                        // .doOnNext(System.out::println)
                         .timeout(3, TimeUnit.SECONDS)
                         .doOnError { destroyForcibly() }
                         .doOnComplete { destroyForcibly() }
@@ -45,7 +45,7 @@ internal class ProcessFactory : IProcessFactory {
 
     override fun observableProcess(processBuilder: ProcessBuilder): Observable<String> =
             Observable.just(processBuilder)
-                    .doOnNext { System.out.println(it.command()) }
+                    // .doOnNext { System.out.println(it.command()) }
                     .flatMap { it.start().stringsFromProcess() }
                     .map { it.trim() }
                     .flatMap { spotAdbError(it) }
