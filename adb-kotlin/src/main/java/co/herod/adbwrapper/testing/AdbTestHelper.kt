@@ -4,6 +4,7 @@ import co.herod.adbwrapper.*
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiNode
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
+import io.reactivex.Observable
 import java.io.File
 import java.lang.*
 import java.util.concurrent.TimeUnit
@@ -287,7 +288,8 @@ object AdbTestHelper : AndroidTestHelper {
 
     private fun AdbDevice.failOnText(text: String, timeout: Int = 5, timeUnit: TimeUnit = TimeUnit.SECONDS) {
 
-        Adb.dumpUiNodes(this)
+        Observable.timer(1, TimeUnit.SECONDS)
+                .flatMap { Adb.dumpUiNodes(this) }
                 .timeout(timeout.toLong(), timeUnit)
                 .blockingForEach { adbUiNode: AdbUiNode ->
                     if (text.toLowerCase() in adbUiNode.text.toLowerCase()) {
@@ -318,10 +320,11 @@ object AdbTestHelper : AndroidTestHelper {
     override fun waitForTextToDisappear(text: String) {
 
         try {
-            waitForText(text, 30, TimeUnit.SECONDS)
+            waitForText(text, 10, TimeUnit.SECONDS)
         } catch (assertionError: AssertionError) {
             // ignore error if not found
         }
+        waitSeconds(5)
         failOnText(text)
     }
 

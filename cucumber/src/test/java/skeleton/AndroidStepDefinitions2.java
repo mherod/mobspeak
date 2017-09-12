@@ -83,13 +83,11 @@ public class AndroidStepDefinitions2 {
 
     @Then("^I do not see the \"([^\"]*)\" text$")
     public void iDoNotSeeTheText(String text) throws Throwable {
-
         AdbTestHelper.INSTANCE.failOnText(text, 5, TimeUnit.SECONDS);
     }
 
     @Then("^I do not see the text \"([^\"]*)\"$")
     public void iDoNotSeeTheText2(String text) throws Throwable {
-
         AdbTestHelper.INSTANCE.failOnText(text, 5, TimeUnit.SECONDS);
     }
 
@@ -101,25 +99,21 @@ public class AndroidStepDefinitions2 {
 
     @When("^I drag down$")
     public void dragDown() throws Throwable {
-
         AdbTestHelper.INSTANCE.dragDown(width -> width / 3, DEFAULT_EDGE_OFFSET);
     }
 
     @When("^I drag down along the left side$")
     public void dragDownAlongTheLeftSide() throws Throwable {
-
         AdbTestHelper.INSTANCE.dragDown(width -> width / 3, DEFAULT_EDGE_OFFSET);
     }
 
     @When("^I drag down along the right side$")
     public void dragDownAlongTheRightSide() throws Throwable {
-
         AdbTestHelper.INSTANCE.dragDown(width -> width - (width / 3), DEFAULT_EDGE_OFFSET);
     }
 
     @Then("^I drag down from the left side$")
     public void dragDownFromTheLeftSide() throws Throwable {
-
         AdbTestHelper.INSTANCE.dragDown(width -> width / 3, DEFAULT_EDGE_OFFSET);
     }
 
@@ -143,7 +137,6 @@ public class AndroidStepDefinitions2 {
 
     @When("^I drag up along the left side$")
     public void dragUpAlongTheLeftSide() throws Throwable {
-
         AdbTestHelper.INSTANCE.dragUp(width -> width / 3, DEFAULT_EDGE_OFFSET);
     }
 
@@ -155,7 +148,6 @@ public class AndroidStepDefinitions2 {
 
     @Then("^I drag up from the left side$")
     public void iDragUpFromTheLeftSide() throws Throwable {
-
         AdbTestHelper.INSTANCE.dragUp(width -> width / 3, DEFAULT_EDGE_OFFSET);
     }
 
@@ -415,7 +407,6 @@ public class AndroidStepDefinitions2 {
 
     @Then("^I wait for the \"([^\"]*)\" text$")
     public void iWaitForTheText(String text) throws Throwable {
-
         AdbTestHelper.INSTANCE.waitForText(text, 30, TimeUnit.SECONDS);
     }
 
