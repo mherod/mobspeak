@@ -27,9 +27,9 @@ object AdbStreams {
                 .map { AdbUiNode(it) }
     }
 
-    private fun String.hasValue(): Boolean = !trim { it <= ' ' }.isEmpty()
+    private fun String.hasValue(): Boolean = !trim().isEmpty()
 
-    private fun String.isAdbInput(): Boolean = startsWith("adb ") && trim { it <= ' ' } != "Killed"
+    private fun String.isAdbInput(): Boolean = startsWith("adb ") && trim() != "Killed"
 
     private fun String.isUiDumpOutput(): Boolean = contains("<node") && contains("bounds=")
 

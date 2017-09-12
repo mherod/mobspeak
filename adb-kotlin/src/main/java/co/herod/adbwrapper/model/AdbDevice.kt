@@ -13,6 +13,8 @@ class AdbDevice {
     var type: String? = null
         private set
 
+    var preferredUiAutomatorStrategy = 0
+
     override fun toString() = "AdbDevice{deviceIdentifier='$deviceIdentifier', type='$type'}"
 
     fun isConnectedDevice(): Boolean = type == DEVICE_CONNECTED_DEVICE
@@ -24,7 +26,7 @@ class AdbDevice {
 
             val adbDevice = AdbDevice()
 
-            val split = adbDeviceString.split("\t".toRegex(), 2).toTypedArray()
+            val split = adbDeviceString.split("\t".toRegex(), 2)
 
             adbDevice.deviceIdentifier = split[0]
             adbDevice.type = split[1]

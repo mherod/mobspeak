@@ -1,37 +1,33 @@
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
-import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.AdbUiNode
 import co.herod.adbwrapper.rx.FixedDurationTransformer
-import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
 import co.herod.adbwrapper.util.UiHierarchyHelper
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 object AdbUi {
 
-    fun startStreamingUiHierarchy(adbDevice: AdbDevice): Observable<AdbUiNode> = Adb.dumpUiHierarchy(adbDevice)
-            .map { it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1) }
-            .compose(ResultChangeFixedDurationTransformer())
-            // .doOnNext(s -> screenshotBlocking(adbDevice, true))
-            .map { AdbUiHierarchy(it, adbDevice) }
-            .doOnEach(AdbBusManager.getAdbUiHierarchyBus())
-            .map { it.xmlString }
-            .compose { UiHierarchyHelper.uiXmlToNodes(it) }
-            .map { AdbUiNode(it) }
-            .doOnEach(AdbBusManager.getAdbUiNodeBus())
-            .observeOn(Schedulers.newThread())
-            .subscribeOn(Schedulers.newThread())
+//    fun startStreamingUiHierarchy(adbDevice: AdbDevice): Observable<AdbUiNode> = Adb.dumpUiHierarchy(adbDevice, 30, TimeUnit.SECONDS)
+//            .map { it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1) }
+//            .compose(ResultChangeFixedDurationTransformer())
+//            // .doOnNext(s -> screenshotBlocking(adbDevice, true))
+//            .map { AdbUiHierarchy(it, adbDevice) }
+//            .doOnEach(AdbBusManager.getAdbUiHierarchyBus())
+//            .map { it.xmlString }
+//            .compose { UiHierarchyHelper.uiXmlToNodes(it) }
+//            .map { AdbUiNode(it) }
+//            .doOnEach(AdbBusManager.getAdbUiNodeBus())
+//            .observeOn(Schedulers.newThread())
+//            .subscribeOn(Schedulers.newThread())
 
-    fun fetchUiHierarchy(adbDevice: AdbDevice): Observable<AdbUiNode> = Adb.dumpUiHierarchy(adbDevice)
-            .map { it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1) }
-            .map { AdbUiHierarchy(it, adbDevice) }
-            .map { it.xmlString }
-            .compose { UiHierarchyHelper.uiXmlToNodes(it) }
-            .map { AdbUiNode(it) }
-            .doOnEach(AdbBusManager.getAdbUiNodeBus())
+//    fun fetchUiHierarchy(adbDevice: AdbDevice): Observable<AdbUiNode> = Adb.dumpUiHierarchy(adbDevice, 30, TimeUnit.SECONDS)
+//            .map { it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1) }
+//            .map { AdbUiHierarchy(it, adbDevice) }
+//            .map { it.xmlString }
+//            .compose { UiHierarchyHelper.uiXmlToNodes(it) }
+//            .map { AdbUiNode(it) }
+//            .doOnEach(AdbBusManager.getAdbUiNodeBus())
 
     private fun streamUiNodes() = streamUiNodeStringsInternal().map { AdbUiNode(it) }
 

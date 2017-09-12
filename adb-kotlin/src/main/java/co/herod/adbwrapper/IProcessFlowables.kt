@@ -7,4 +7,5 @@ import io.reactivex.Observable
  */
 interface IProcessFactory {
     fun observableProcess(processBuilder: ProcessBuilder): Observable<String>
+    fun observableShellProcess(adbCommand: AdbCommand): Observable<String>
 }

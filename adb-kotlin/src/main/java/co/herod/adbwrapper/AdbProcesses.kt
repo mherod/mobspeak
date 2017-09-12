@@ -9,7 +9,6 @@ interface AdbOps {
     fun adb(adbDevice: AdbDevice, command: String): Observable<String>
     fun readDeviceFile(adbDevice: AdbDevice, filePath: String): Observable<String>
     fun uiautomatorDumpExecOut(adbDevice: AdbDevice): Observable<String>
-    fun uiautomatorDumpExecOutObservable(adbDevice: AdbDevice): Observable<String>
     fun uiautomatorDump(adbDevice: AdbDevice): Observable<String>
     fun pressKey(adbDevice: AdbDevice, key: Int): Observable<String>
     fun tap(adbDevice: AdbDevice, x: Int, y: Int): Observable<String>
@@ -27,11 +26,14 @@ interface AdbOps {
     fun launchUrl(adbDevice: AdbDevice, url: String, packageName: String): Observable<String>
     fun intentViewUrl(url: String): String
     fun intentViewUrl(url: String, packageName: String): String
+    fun uiautomatorDumpAndRead(adbDevice: AdbDevice): Observable<String>
 }
 
 internal object AdbProcesses : AdbOps {
 
-    private val intentActionView = "android.intent.action.VIEW"
+    private val INTENT_ACTION_VIEW = "android.intent.action.VIEW"
+
+    private val UI_DUMP_XML_PATH = "/sdcard/window_dump.xml"
 
     @CheckReturnValue
     override fun devices(): Observable<String> = AdbCommand.Builder()
@@ -39,16 +41,16 @@ internal object AdbProcesses : AdbOps {
             .observable()
 
     @CheckReturnValue
+    override fun uiautomatorDumpAndRead(adbDevice: AdbDevice): Observable<String> =
+            adb(adbDevice, "shell \"uiautomator dump $UI_DUMP_XML_PATH; cat $UI_DUMP_XML_PATH; echo\"")
+
+    @CheckReturnValue
     override fun uiautomatorDumpExecOut(adbDevice: AdbDevice): Observable<String> =
             adb(adbDevice, "exec-out uiautomator dump /dev/tty")
 
     @CheckReturnValue
-    override fun uiautomatorDumpExecOutObservable(adbDevice: AdbDevice): Observable<String> =
-            uiautomatorDumpExecOut(adbDevice)
-
-    @CheckReturnValue
     override fun uiautomatorDump(adbDevice: AdbDevice): Observable<String> =
-            adb(adbDevice, "shell uiautomator dump /sdcard/uidump.xml")
+            adb(adbDevice, "shell uiautomator dump $UI_DUMP_XML_PATH")
 
     @CheckReturnValue
     override fun readDeviceFile(adbDevice: AdbDevice, filePath: String): Observable<String> =
@@ -93,10 +95,10 @@ internal object AdbProcesses : AdbOps {
             .observable()
 
     override fun intentViewUrl(url: String): String =
-            "${AdbCommand.SHELL}  am start -a $intentActionView -d '$url'"
+            "${AdbCommand.SHELL}  am start -a $INTENT_ACTION_VIEW -d '$url'"
 
     override fun intentViewUrl(url: String, packageName: String): String =
-            "${AdbCommand.SHELL}  am start -a $intentActionView -d '$url' $packageName"
+            "${AdbCommand.SHELL}  am start -a $INTENT_ACTION_VIEW -d '$url' $packageName"
 
     override fun dumpsys(type: String): String =
             "${AdbCommand.SHELL} dumpsys $type"

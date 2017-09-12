@@ -23,10 +23,10 @@ object AdbTestHelper : AndroidTestHelper {
         set(value) {
             _adbDevice = value
         }
+
     override fun assertScreenOn() {
         turnScreenOn()
     }
-
     override fun assertScreenOff() {
         turnScreenOff()
     }
@@ -203,6 +203,10 @@ object AdbTestHelper : AndroidTestHelper {
         ScreenshotHelper.screenshot(this, false)
     }
 
+    override fun typeText(text: String) = withAdbDevice {
+        AdbProcesses.inputText(this, text).blockingSubscribe()
+    }
+
     override fun touchUiNode(adbUiNodePredicate: Predicate<AdbUiNode>) = withAdbDevice {
         waitForUiNodeForFunc(
                 adbUiNodePredicate = Predicate {
@@ -294,9 +298,9 @@ object AdbTestHelper : AndroidTestHelper {
 
     private fun waitForUiNodeForFunc(
             adbUiNodePredicate: Predicate<AdbUiNode>?,
-            function: (AdbUiNode) -> String?,
-            timeout: Int,
-            timeUnit: TimeUnit
+            function: (AdbUiNode) -> String? = { "No Action" },
+            timeout: Int = 30,
+            timeUnit: TimeUnit = TimeUnit.SECONDS
     ) {
         withAdbDevice {
             Adb.dumpUiNodes(this)

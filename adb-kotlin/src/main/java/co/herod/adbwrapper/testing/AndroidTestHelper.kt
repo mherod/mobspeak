@@ -59,6 +59,8 @@ public interface AndroidTestHelper {
 
     fun touchText(text: String)
 
+    fun typeText(text: String)
+
     fun assertScreenOn()
 
     fun assertScreenOff()

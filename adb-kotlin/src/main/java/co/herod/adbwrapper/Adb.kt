@@ -4,6 +4,8 @@ import co.herod.adbwrapper.AdbProcesses.dumpsys
 import co.herod.adbwrapper.AdbProcesses.pressKey
 import co.herod.adbwrapper.AdbProcesses.readDeviceFile
 import co.herod.adbwrapper.AdbProcesses.uiautomatorDump
+import co.herod.adbwrapper.AdbProcesses.uiautomatorDumpAndRead
+import co.herod.adbwrapper.AdbProcesses.uiautomatorDumpExecOut
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.AdbUiNode
@@ -22,6 +24,8 @@ object Adb {
 
     fun typeText(adbDevice: AdbDevice, inputText: String) =
             AdbProcesses.inputText(adbDevice, inputText)
+
+    private val timeUnit = TimeUnit.SECONDS
 
     fun pressKeyBlocking(adbDevice: AdbDevice, key: Int): String =
             pressKey(adbDevice, key)
@@ -60,38 +64,83 @@ object Adb {
     private fun AdbDevice.dumpsysMap(type: String, pipe: String): Single<Map<String, String>> =
             dumpsys(this, type, pipe).processDumpsys("=")
 
+    private val DEFAULT_TIMEOUT_SECONDS: Long = 30
+
     fun dumpUiNodes(adbDevice: AdbDevice): Observable<AdbUiNode> =
-            dumpUiHierarchy(adbDevice)
+            dumpUiHierarchy(
+                    adbDevice,
+                    DEFAULT_TIMEOUT_SECONDS,
+                    TimeUnit.SECONDS
+            )
                     .map { AdbUiHierarchy(it, adbDevice).xmlString }
                     .compose { UiHierarchyHelper.uiXmlToNodes(it) }
                     .map { AdbUiNode(it) }
                     .filter { Objects.nonNull(it) }
 
-    fun dumpUiHierarchy(adbDevice: AdbDevice): Observable<String> =
-            primaryDumpUiHierarchy(adbDevice)
-                    .timeout(30, TimeUnit.SECONDS)
+    fun dumpUiHierarchy(
+            adbDevice: AdbDevice,
+            timeout: Long = DEFAULT_TIMEOUT_SECONDS,
+            timeUnit: TimeUnit = TimeUnit.SECONDS
+    ): Observable<String> = Observable.just(adbDevice)
+            .flatMap { compatDumpUiHierarchy(adbDevice) }
+//            .flatMap {
+//                when {
+//                    it.preferredUiAutomatorStrategy == 0 ->
+//                        compatDumpUiHierarchy(adbDevice)
+//                    it.preferredUiAutomatorStrategy == 1 ->
+//                        primaryDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS)
+//                    it.preferredUiAutomatorStrategy == 2 ->
+//                        fallbackDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS)
+//                    else ->
+//                        primaryDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS)
+//                }
+//            }
+            .onErrorResumeNext(fallbackDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS))
+            .timeout(timeout, timeUnit)
 
-    private fun primaryDumpUiHierarchy(adbDevice: AdbDevice): Observable<String> =
-            AdbProcesses.uiautomatorDumpExecOutObservable(adbDevice)
-                    .filter { "<?xml" in it }
-                    .timeout(5, TimeUnit.SECONDS)
+    private fun compatDumpUiHierarchy(
+            adbDevice: AdbDevice,
+            timeout: Long = DEFAULT_TIMEOUT_SECONDS,
+            timeUnit: TimeUnit = TimeUnit.SECONDS
+    ): Observable<String> =
+            uiautomatorDumpAndRead(adbDevice)
+                    .filter { it.isXmlOutput() }
+                    .doOnNext { adbDevice.run { preferredUiAutomatorStrategy = 0 } }
+                    .timeout(maxOf(5, timeout / 3), timeUnit)
                     .retry()
-                    .timeout(10, TimeUnit.SECONDS)
-                    .onErrorResumeNext(fallbackDumpUiHierarchy(adbDevice))
+                    .timeout(timeout, timeUnit)
 
-    private fun fallbackDumpUiHierarchy(adbDevice: AdbDevice): Observable<String> =
+    private fun primaryDumpUiHierarchy(
+            adbDevice: AdbDevice,
+            timeout: Long = DEFAULT_TIMEOUT_SECONDS,
+            timeUnit: TimeUnit = TimeUnit.SECONDS
+    ): Observable<String> =
+            uiautomatorDumpExecOut(adbDevice)
+                    .filter { it.isXmlOutput() }
+                    .doOnNext { adbDevice.run { preferredUiAutomatorStrategy = 1 } }
+                    .timeout(maxOf(5, timeout / 3), timeUnit)
+                    .retry()
+                    .timeout(timeout, timeUnit)
+
+    private fun fallbackDumpUiHierarchy(
+            adbDevice: AdbDevice,
+            timeout: Long = DEFAULT_TIMEOUT_SECONDS,
+            timeUnit: TimeUnit = TimeUnit.SECONDS
+    ): Observable<String> =
             uiautomatorDump(adbDevice)
                     .map { it.split(' ').last() }
                     .filter { ".xml" in it }
+                    .startWith("/sdcard/window_dump.xml")
                     .flatMap {
                         readDeviceFile(adbDevice, "shell cat $it")
+                                .doOnNext { adbDevice.run { preferredUiAutomatorStrategy = 2 } }
                                 .retry()
-                                .timeout(3, TimeUnit.SECONDS)
+                                .timeout(maxOf(5, timeout / 3), timeUnit)
                     }
-                    .filter { "<?xml" in it }
-                    .timeout(10, TimeUnit.SECONDS)
+                    .filter { it.isXmlOutput() }
+                    .timeout(timeout, timeUnit)
                     .retry()
-                    .timeout(30, TimeUnit.SECONDS)
+                    .timeout(DEFAULT_TIMEOUT_SECONDS, timeUnit)
 
     fun command(adbDevice: AdbDevice, command: String): Observable<String> =
             AdbProcesses.adb(adbDevice, command)
@@ -99,7 +148,10 @@ object Adb {
     internal fun now(device: AdbDevice, command: String) {
         command(device, command).blockingSubscribe()
     }
+
 }
+
+private fun String.isXmlOutput() = "<?xml" in this
 
 private fun Observable<String>.processDumpsys(c: String): Single<Map<String, String>> =
         this

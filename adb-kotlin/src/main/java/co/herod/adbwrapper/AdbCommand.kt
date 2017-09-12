@@ -2,34 +2,39 @@ package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
 import io.reactivex.Observable
-import java.util.*
 
 /**
  * Created by matthewherod on 23/04/2017.
  */
-internal class AdbCommand(
-        private val deviceIdentifier: String?,
-        private val command: String?
+
+@Suppress("MemberVisibilityCanPrivate")
+class AdbCommand(
+        val deviceIdentifier: String?,
+        val command: String = ""
 ) {
     init {
         System.out.println(toString())
     }
 
+    fun isShellCommand(): Boolean = command.startsWith("shell ")
+
+    fun shellInternalCommand(): String = command.substring(6).trim { it <= '\"' }
+
     fun toProcessBuilder(): ProcessBuilder = ProcessBuilder()
-            .command(createCommandStrings())
+            .command(createShellCommandStrings())
             .redirectErrorStream(true)
 
-    private fun createCommandStrings(): List<String> {
+    private fun buildAdbDeviceSerialCommand() =
+            ADB + (deviceIdentifier?.let { " -s $it " } ?: " ")
 
-        val command = getCommand()
+    private fun buildShellCommand(): String =
+            buildAdbDeviceSerialCommand() + " " + command
 
-        return Arrays.asList(*command.split(" ".toRegex())
-                .dropLastWhile { it.isEmpty() }
-                .toTypedArray())
-    }
-
-    private fun getCommand(): String =
-            ADB + (if (deviceIdentifier != null) " -s $deviceIdentifier" else "") + " " + command
+    private fun createShellCommandStrings(): List<String> =
+            buildShellCommand()
+                    .split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)".toRegex())
+                    .filter { it.isNotEmpty() }
+                    .map { it.trim() }
 
     override fun toString(): String {
         return "AdbCommand(deviceIdentifier=$deviceIdentifier, command=$command)"
@@ -47,7 +52,7 @@ internal class AdbCommand(
 
     override fun hashCode(): Int {
         var result = deviceIdentifier?.hashCode() ?: 0
-        result = 31 * result + (command?.hashCode() ?: 0)
+        result = 31 * result + (command.hashCode() ?: 0)
         return result
     }
 
@@ -66,7 +71,7 @@ internal class AdbCommand(
         }
 
         fun setDeviceIdentifier(deviceIdentifier: String?): Builder {
-            this.deviceIdentifier = deviceIdentifier
+            this.deviceIdentifier = deviceIdentifier ?: deviceIdentifier
             return this
         }
 
@@ -75,17 +80,17 @@ internal class AdbCommand(
             return this
         }
 
-        internal fun observable(): Observable<String> {
-            return processBuilder()?.toObservable() ?: Observable.error(IllegalStateException())
+        fun build(): AdbCommand? = AdbCommand(deviceIdentifier, command ?: "")
+
+        internal fun observable(): Observable<String> = with(build()) {
+            return if (this?.isShellCommand() == true) {
+                processFactory.observableShellProcess(this)
+            } else {
+                this?.toProcessBuilder()?.toObservable()
+            } ?: Observable.error(IllegalStateException())
         }
 
-        private fun build(): AdbCommand? {
-            return AdbCommand(deviceIdentifier, command)
-        }
-
-        private fun processBuilder(): ProcessBuilder? {
-            return build()?.toProcessBuilder()
-        }
+        fun buildProcess(): Process? = build()?.toProcessBuilder()?.start()
 
         private fun ProcessBuilder.toObservable(): Observable<String> {
             return processFactory.observableProcess(this)
