@@ -3,33 +3,33 @@ package co.herod.adbwrapper
 import co.herod.adbwrapper.model.AdbDevice
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.toObservable
+import java.io.BufferedReader
+import java.io.BufferedWriter
 import java.util.concurrent.TimeUnit
 
-internal class ProcessFactory : IProcessFactory {
+object ProcessFactory {
 
-    override fun observableShellProcess(adbCommand: AdbCommand): Observable<String> {
+    fun observableShellProcess(adbCommand: AdbCommand): Observable<String> {
         return shell(adbCommand.deviceIdentifier)?.run {
-            outputStream.bufferedWriter().run {
+            outputStream.bufferedWriter().use { bw: BufferedWriter ->
 
-                adbCommand.shellInternalCommand()
+                adbCommand
+                        .shellInternalCommand()
+                        .plus("; exit")
                         .split(";")
-                        .forEach {
-                            write("$it; \n")
-                        }
-                write("exit; \n")
-                flush()
+                        .map { "$it; \n" }
+                        .forEach(bw::write)
+                        .also { bw.flush() }
             }
-            inputStream.bufferedReader().run {
-
-                lineSequence()
+            inputStream.bufferedReader().use { br: BufferedReader ->
+                br.lineSequence()
                         .toObservable()
-                        // .doOnNext(System.out::println)
-                        .timeout(3, TimeUnit.SECONDS)
+                        .spotAdbError()
+                        .timeout(5, TimeUnit.SECONDS)
                         .doOnError { destroyForcibly() }
                         .doOnComplete { destroyForcibly() }
             }
-        }?.timeout(30, TimeUnit.SECONDS)
-                ?: Observable.error(IllegalStateException())
+        } ?: Observable.error(IllegalStateException())
     }
 
     private fun AdbDevice.shell(): Process? {
@@ -43,13 +43,16 @@ internal class ProcessFactory : IProcessFactory {
                 .buildProcess()
     }
 
-    override fun observableProcess(processBuilder: ProcessBuilder): Observable<String> =
+    fun observableProcess(processBuilder: ProcessBuilder): Observable<String> =
             Observable.just(processBuilder)
                     // .doOnNext { System.out.println(it.command()) }
                     .flatMap { it.start().stringsFromProcess() }
                     .map { it.trim() }
                     .flatMap { spotAdbError(it) }
                     .doOnEach(AdbBusManager.getAdbBus())
+
+    private fun Observable<String>.spotAdbError(): Observable<String> =
+            this.flatMap { spotAdbError(it) }
 
     private fun spotAdbError(it: String): Observable<String>? =
             when {

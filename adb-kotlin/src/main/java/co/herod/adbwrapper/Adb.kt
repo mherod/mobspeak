@@ -82,19 +82,18 @@ object Adb {
             timeout: Long = DEFAULT_TIMEOUT_SECONDS,
             timeUnit: TimeUnit = TimeUnit.SECONDS
     ): Observable<String> = Observable.just(adbDevice)
-            .flatMap { compatDumpUiHierarchy(adbDevice) }
-//            .flatMap {
-//                when {
-//                    it.preferredUiAutomatorStrategy == 0 ->
-//                        compatDumpUiHierarchy(adbDevice)
-//                    it.preferredUiAutomatorStrategy == 1 ->
-//                        primaryDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS)
-//                    it.preferredUiAutomatorStrategy == 2 ->
-//                        fallbackDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS)
-//                    else ->
-//                        primaryDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS)
-//                }
-//            }
+            .flatMap {
+                when {
+                    it.preferredUiAutomatorStrategy == 0 ->
+                        compatDumpUiHierarchy(adbDevice)
+                    it.preferredUiAutomatorStrategy == 1 ->
+                        primaryDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS)
+                    it.preferredUiAutomatorStrategy == 2 ->
+                        fallbackDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS)
+                    else ->
+                        compatDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS)
+                }
+            }
             .onErrorResumeNext(fallbackDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS))
             .timeout(timeout, timeUnit)
 

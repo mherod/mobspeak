@@ -12,25 +12,14 @@ class AdbCommand(
         val deviceIdentifier: String?,
         val command: String = ""
 ) {
-//    init {
-//        System.out.println(toString())
-//    }
-
-    fun isShellCommand(): Boolean = command.startsWith("shell ")
-
-    fun shellInternalCommand(): String = command.substring(6).trim { it <= '\"' }
-
-    fun toProcessBuilder(): ProcessBuilder = ProcessBuilder()
-            .command(createShellCommandStrings())
-            .redirectErrorStream(true)
 
     private fun buildAdbDeviceSerialCommand() =
-            ADB + (deviceIdentifier?.let { " -s $it " } ?: " ")
+            S.ADB + (deviceIdentifier?.let { " -s $it " } ?: " ")
 
     private fun buildShellCommand(): String =
             buildAdbDeviceSerialCommand() + " " + command
 
-    private fun createShellCommandStrings(): List<String> =
+    internal fun createShellCommandStrings(): List<String> =
             buildShellCommand()
                     .split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)".toRegex())
                     .filter { it.isNotEmpty() }
@@ -58,8 +47,6 @@ class AdbCommand(
 
     class Builder {
 
-        private val processFactory: IProcessFactory = ProcessFactory()
-
         private var deviceIdentifier: String? = null
         private var command: String? = null
 
@@ -82,28 +69,32 @@ class AdbCommand(
 
         fun build(): AdbCommand? = AdbCommand(deviceIdentifier, command ?: "")
 
-        internal fun observable(): Observable<String> = with(build()) {
-            return if (this?.isShellCommand() == true) {
-                processFactory.observableShellProcess(this)
-            } else {
-                this?.toProcessBuilder()?.toObservable()
-            } ?: Observable.error(IllegalStateException())
-        }
-
-        fun buildProcess(): Process? = build()?.toProcessBuilder()?.start()
-
-        private fun ProcessBuilder.toObservable(): Observable<String> {
-            return processFactory.observableProcess(this)
-        }
-
         override fun toString(): String {
-            return "Builder(processFactory=$processFactory, deviceIdentifier=$deviceIdentifier, command=$command)"
+            return "Builder(deviceIdentifier=$deviceIdentifier, command=$command)"
         }
-    }
-
-    companion object {
-
-        val ADB = "adb"
-        val SHELL = "shell"
     }
 }
+
+fun AdbCommand.Builder.buildObservable(): Observable<String>? = build()?.toProcessBuilder()?.toObservable()
+fun AdbCommand.Builder.buildProcess(): Process? = build()?.toProcessBuilder()?.start()
+
+internal fun AdbCommand.Builder.observable(): Observable<String> = with(build()) {
+    return when {
+        this?.isShellCommand() == true -> {
+            this.let { ProcessFactory.observableShellProcess(it) }
+        }
+        else -> {
+            this?.toProcessBuilder()?.toObservable() ?: Observable.error(IllegalStateException())
+        }
+    }
+}
+
+fun AdbCommand.isShellCommand(): Boolean = command.startsWith("shell ")
+fun AdbCommand.shellInternalCommand(): String = command.substring(6).trim { it <= '\"' }
+
+fun AdbCommand.toProcessBuilder(): ProcessBuilder = ProcessBuilder()
+        .command(createShellCommandStrings())
+        .redirectErrorStream(true)
+
+private fun ProcessBuilder.toObservable(): Observable<String> =
+        ProcessFactory.observableProcess(this)

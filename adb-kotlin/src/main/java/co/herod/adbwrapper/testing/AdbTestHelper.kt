@@ -309,7 +309,7 @@ object AdbTestHelper : AndroidTestHelper {
                     .compose(ResultChangeFixedDurationTransformer())
                     .filter { adbUiNodePredicate?.test(it) == true }
                     .timeout(8, timeUnit)
-                    .doOnNext(System.out::println)
+                    // .doOnNext(System.out::println)
                     .map { function(it).orEmpty() }
                     .retry()
                     .timeout(timeout.toLong(), timeUnit)

@@ -95,26 +95,26 @@ internal object AdbProcesses : AdbOps {
             .observable()
 
     override fun intentViewUrl(url: String): String =
-            "${AdbCommand.SHELL}  am start -a $INTENT_ACTION_VIEW -d '$url'"
+            "${S.SHELL}  am start -a $INTENT_ACTION_VIEW -d '$url'"
 
     override fun intentViewUrl(url: String, packageName: String): String =
-            "${AdbCommand.SHELL}  am start -a $INTENT_ACTION_VIEW -d '$url' $packageName"
+            "${S.SHELL}  am start -a $INTENT_ACTION_VIEW -d '$url' $packageName"
 
     override fun dumpsys(type: String): String =
-            "${AdbCommand.SHELL} dumpsys $type"
+            "${S.SHELL} dumpsys $type"
 
     override fun dumpsys(type: String, pipe: String): String =
-            "${AdbCommand.SHELL} \"dumpsys $type | $pipe\""
+            "${S.SHELL} \"dumpsys $type | $pipe\""
 
     override fun inputKeyEvent(key: Int): String =
-            "${AdbCommand.SHELL} input keyevent $key"
+            "${S.SHELL} input keyevent $key"
 
     override fun inputTap(x: Int, y: Int): String =
-            "${AdbCommand.SHELL} input tap $x $y"
+            "${S.SHELL} input tap $x $y"
 
     override fun inputSwipe(x: Int, y: Int, x2: Int, y2: Int, speed: Int) =
-            "${AdbCommand.SHELL} input swipe $x $y $x2 $y2 $speed"
+            "${S.SHELL} input swipe $x $y $x2 $y2 $speed"
 
     override fun inputText(inputText: String): String =
-            "${AdbCommand.SHELL} input text $inputText"
+            "${S.SHELL} input text $inputText"
 }
