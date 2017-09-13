@@ -3,29 +3,32 @@ package co.herod.adbwrapper
 import co.herod.adbwrapper.model.AdbDevice
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.toObservable
-import java.io.BufferedReader
-import java.io.BufferedWriter
 import java.util.concurrent.TimeUnit
 
 object ProcessFactory {
 
     fun observableShellProcess(adbCommand: AdbCommand): Observable<String> {
         return shell(adbCommand.deviceIdentifier)?.run {
-            outputStream.bufferedWriter().run { bw: BufferedWriter ->
+
+            outputStream.bufferedWriter().run { // bw: BufferedWriter ->
                 adbCommand
                         .shellInternalCommand()
                         .plus("; exit")
                         .split(";")
                         .map { "$it; \n" }
-                        .forEach(bw::write)
-                        .also { bw.flush() }
-                inputStream.bufferedReader().run { br: BufferedReader ->
-                    br.lineSequence()
-                            .toObservable()
-                            .spotAdbError()
-                            .timeout(5, TimeUnit.SECONDS)
-                }.doOnComplete { destroyForcibly() }
-            }.doOnComplete { destroyForcibly() }
+                        .forEach { write(it) }
+                        .also { flush() }
+            }
+
+            inputStream.bufferedReader().run { // br: BufferedReader ->
+                lineSequence()
+                        .toObservable()
+                        .spotAdbError()
+                        .timeout(5, TimeUnit.SECONDS)
+                        .doOnError { destroyForcibly() }
+                        .doOnComplete { destroyForcibly() }
+            }
+
         } ?: Observable.error(IllegalStateException())
     }
 
