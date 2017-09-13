@@ -11,8 +11,7 @@ object ProcessFactory {
 
     fun observableShellProcess(adbCommand: AdbCommand): Observable<String> {
         return shell(adbCommand.deviceIdentifier)?.run {
-            outputStream.bufferedWriter().use { bw: BufferedWriter ->
-
+            outputStream.bufferedWriter().run { bw: BufferedWriter ->
                 adbCommand
                         .shellInternalCommand()
                         .plus("; exit")
@@ -20,15 +19,13 @@ object ProcessFactory {
                         .map { "$it; \n" }
                         .forEach(bw::write)
                         .also { bw.flush() }
-            }
-            inputStream.bufferedReader().use { br: BufferedReader ->
-                br.lineSequence()
-                        .toObservable()
-                        .spotAdbError()
-                        .timeout(5, TimeUnit.SECONDS)
-                        .doOnError { destroyForcibly() }
-                        .doOnComplete { destroyForcibly() }
-            }
+                inputStream.bufferedReader().run { br: BufferedReader ->
+                    br.lineSequence()
+                            .toObservable()
+                            .spotAdbError()
+                            .timeout(5, TimeUnit.SECONDS)
+                }.doOnComplete { destroyForcibly() }
+            }.doOnComplete { destroyForcibly() }
         } ?: Observable.error(IllegalStateException())
     }
 
