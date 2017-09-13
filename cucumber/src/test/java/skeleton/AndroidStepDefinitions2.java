@@ -5,6 +5,7 @@ import junit.framework.AssertionFailedError;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import co.herod.adbwrapper.AdbProcesses;
 import co.herod.adbwrapper.model.AdbUiNode;
 import co.herod.adbwrapper.testing.AdbTestHelper;
 import cucumber.api.PendingException;
@@ -69,6 +70,11 @@ public class AndroidStepDefinitions2 {
         AdbTestHelper.INSTANCE.closeLeftDrawer();
     }
 
+    @When("^I dismiss the keyboard$")
+    public void iDismissTheKeyboard() throws Throwable {
+        AdbTestHelper.INSTANCE.dismissKeyboard();
+    }
+
     @Then("^I do not see any progress indicators$")
     public void iDoNotSeeAnyProgressIndicators() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
@@ -83,11 +89,15 @@ public class AndroidStepDefinitions2 {
 
     @Then("^I do not see the \"([^\"]*)\" text$")
     public void iDoNotSeeTheText(String text) throws Throwable {
+
+        AdbTestHelper.INSTANCE.waitSeconds(2);
         AdbTestHelper.INSTANCE.failOnText(text, 5, TimeUnit.SECONDS);
     }
 
     @Then("^I do not see the text \"([^\"]*)\"$")
     public void iDoNotSeeTheText2(String text) throws Throwable {
+
+        AdbTestHelper.INSTANCE.waitSeconds(2);
         AdbTestHelper.INSTANCE.failOnText(text, 5, TimeUnit.SECONDS);
     }
 
@@ -208,7 +218,7 @@ public class AndroidStepDefinitions2 {
     }
 
     @When("^I login with username \"([^\"]*)\" and password \"([^\"]*)\"$")
-    public void iLoginWithUsernameAndPassword(String arg0, String arg1) throws Throwable {
+    public void iLoginWithUsernameAndPassword(String username, String password) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
@@ -263,8 +273,8 @@ public class AndroidStepDefinitions2 {
 
     @Then("^I see a button$")
     public void iSeeAButton() throws Throwable {
-
-        AdbTestHelper.INSTANCE.waitForUiNode(adbUiNode -> adbUiNodeMatches(adbUiNode, "button"));
+        AdbTestHelper.INSTANCE.waitForUiNode(adbUiNode ->
+                adbUiNodeMatches(adbUiNode, "button"));
     }
 
     @Then("^I see a large image$")
@@ -275,13 +285,11 @@ public class AndroidStepDefinitions2 {
 
     @Then("^I see the \"([^\"]*)\" text$")
     public void iSeeTheText(String text) throws Throwable {
-
         AdbTestHelper.INSTANCE.waitForText(text, 30, TimeUnit.SECONDS);
     }
 
     @When("^I see the text \"([^\"]*)\"$")
     public void iSeeTheText2(String text) throws Throwable {
-
         AdbTestHelper.INSTANCE.waitForText(text, 30, TimeUnit.SECONDS);
     }
 
@@ -299,8 +307,8 @@ public class AndroidStepDefinitions2 {
 
     @Then("^I should see the lock screen$")
     public void iShouldSeeTheLockScreen() throws Throwable {
-
-        AdbTestHelper.INSTANCE.waitForUiNode(adbUiNode -> adbUiNodeMatches(adbUiNode, "com.android.systemui:id/keyguard_status_area"));
+        AdbTestHelper.INSTANCE.waitForUiNode(adbUiNode ->
+                adbUiNodeMatches(adbUiNode, "com.android.systemui:id/keyguard_status_area"));
     }
 
     @When("^I swipe down along the left side$")

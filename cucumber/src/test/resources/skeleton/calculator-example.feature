@@ -1,10 +1,12 @@
 Feature: Example
 
-  Scenario: I can use the calculator
+  Background:
     Given I have a connected device
+    When I close the app "com.android.calculator2"
     When I launch the app "com.android.calculator2"
     Then I am on the "Calculator" activity
-    And I see the "DEL" text
+    When I dismiss the keyboard
+    Then I see the "DEL" text
     And I see the "1" text
     And I see the "2" text
     And I see the "3" text
@@ -15,6 +17,8 @@ Feature: Example
     And I see the "8" text
     And I see the "9" text
     And I see the "0" text
+
+  Scenario: I can use the calculator
     When I touch the "5" text
     And I touch the "2" text
     And I touch the "4" text
@@ -29,10 +33,6 @@ Feature: Example
     Then I am not on the "Calculator" activity
 
   Scenario: I can use the calculator with keyboard
-    Given I have a connected device
-    When I launch the app "com.android.calculator2"
-    Then I am on the "Calculator" activity
-    And I see the "DEL" text
     When I type the "524" text
     Then I see the "524" text
     When I touch the "DEL" text

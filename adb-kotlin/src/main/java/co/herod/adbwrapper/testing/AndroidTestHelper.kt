@@ -27,6 +27,8 @@ public interface AndroidTestHelper {
 
     fun dismissDialog()
 
+    fun dismissKeyboard()
+
     fun dragDown(widthFunction: Function1<Int, Int>, edgeOffset: Double = 0.2)
 
     fun dragUp(widthFunction: Function1<Int, Int>, edgeOffset: Double = 0.2)

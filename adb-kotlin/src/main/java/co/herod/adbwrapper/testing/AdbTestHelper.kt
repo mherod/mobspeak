@@ -25,6 +25,17 @@ object AdbTestHelper : AndroidTestHelper {
             _adbDevice = value
         }
 
+    override fun dismissKeyboard() = withAdbDevice {
+
+        Adb.getInputMethodDumpsys(this)
+                .map { it["mShowRequested"] }
+                .blockingForEach {
+                    if (it?.startsWith("true") == true) {
+                        Adb.pressKeyBlocking(this, 111)
+                    }
+                }
+    }
+
     override fun assertScreenOn() {
         turnScreenOn()
     }
