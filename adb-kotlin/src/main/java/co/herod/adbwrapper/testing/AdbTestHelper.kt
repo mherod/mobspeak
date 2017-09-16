@@ -8,7 +8,7 @@ import co.herod.adbwrapper.ext.turnOn
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
-import co.herod.adbwrapper.ext.containsIgnoreCase
+import co.herod.kotlin.ext.containsIgnoreCase
 import io.reactivex.Observable
 import java.io.File
 import java.lang.*

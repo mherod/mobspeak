@@ -3,10 +3,6 @@ package co.herod.adbwrapper
 import co.herod.adbwrapper.model.AdbDevice
 import io.reactivex.Observable
 
-/**
- * Created by matthewherod turnOn 23/04/2017.
- */
-
 @Suppress("MemberVisibilityCanPrivate")
 class AdbCommand(
         val deviceIdentifier: String?,

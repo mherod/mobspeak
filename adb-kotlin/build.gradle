@@ -32,7 +32,7 @@ compileTestKotlin {
 }
 
 task runDemo(type: JavaExec) {
-    main = 'co.herod.adbwrapper.DemoDemoDemo'
+    main = 'co.herod.adbwrapper.examples.DemoDemoDemo'
     classpath = sourceSets.main.runtimeClasspath
 }
 

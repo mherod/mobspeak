@@ -5,9 +5,6 @@ import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.util.Utils
 import io.reactivex.Observable
 
-/**
- * Created by matthewherod turnOn 23/04/2017.
- */
 object AdbBusManager : IAdbBusManager {
 
     private val _adbBus: BusSubject<String> = MainBusSubject()

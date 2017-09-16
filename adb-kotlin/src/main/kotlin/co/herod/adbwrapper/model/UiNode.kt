@@ -1,6 +1,5 @@
 package co.herod.adbwrapper.model
 
-import co.herod.adbwrapper.model.UiBounds
 import co.herod.adbwrapper.util.UiHierarchyHelper
 
 @Suppress("MemberVisibilityCanPrivate")
@@ -21,4 +20,9 @@ class UiNode(private val nodeString: String) {
     override fun toString(): String {
         return "UiNode(nodeString='$nodeString')"
     }
+
+    fun adbUiNodeMatches(charSequence: String): Boolean = this
+            .toString()
+            .toLowerCase()
+            .contains(charSequence)
 }

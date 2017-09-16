@@ -30,49 +30,56 @@ fun AdbDevice.screenshot(ignoreCache: Boolean): File {
     return file
 }
 
-internal fun AdbDevice.screenshotUiNode(uiNode: UiNode) =
-        screenshotCoordinates(uiNode.bounds)
+internal fun AdbDevice.screenshot(nodeString: String) =
+        ScreenshotHelper.screenshot(this, UiNode(nodeString).bounds)
 
-internal fun AdbDevice.screenshotUiNode(nodeString: String) =
-        screenshotCoordinates(UiNode(nodeString).bounds)
+internal fun AdbDevice.screenshot(uiNode: UiNode) =
+        ScreenshotHelper.screenshot(this, uiNode.bounds)
 
-private fun AdbDevice.screenshotCoordinates(uiBounds: UiBounds) {
+object ScreenshotHelper {
 
-    val width = uiBounds.width
-    val height = uiBounds.height
+    fun screenshot(adbDevice: AdbDevice, uiBounds: UiBounds) {
 
-    if (width >= 10 && height >= 10) {
-        uiBounds.coordinates?.let {
-            this.getBufferedImageObservable(it, width, height)
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(Schedulers.io())
-                    .doOnNext { bufferedImage -> ImageUtil.saveBufferedImage(bufferedImage, pathForCropImage(it)) }
-                    .subscribe({ }) { _ -> }
+        val width = uiBounds.width
+        val height = uiBounds.height
+
+        if (width >= 10 && height >= 10) {
+            uiBounds.coordinates?.let {
+
+                Observable.fromCallable {
+                    getBufferedImage(
+                            adbDevice,
+                            it,
+                            width,
+                            height
+                    )
+                }
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(Schedulers.io())
+                        .doOnNext { bufferedImage -> ImageUtil.saveBufferedImage(bufferedImage, pathForCropImage(it)) }
+                        .subscribe({ }) { _ -> }
+            }
+        }
+    }
+
+    private fun getBufferedImage(
+            adbDevice: AdbDevice,
+            coordinates: Array<Int>,
+            width: Int,
+            height: Int
+    ): BufferedImage? {
+
+        val screenshot = adbDevice.screenshot(false)
+        try {
+            return ImageUtil.cropImage(screenshot, coordinates[0], coordinates[1], width, height)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            throw RuntimeException(e)
         }
     }
 }
 
-private fun AdbDevice.getBufferedImageObservable(
-        coordinates: Array<Int>,
-        width: Int,
-        height: Int
-) = Observable.fromCallable { getBufferedImage(coordinates, width, height) }
 
-private fun AdbDevice.getBufferedImage(
-        coordinates: Array<Int>,
-        width: Int,
-        height: Int
-): BufferedImage? {
-
-    val screenshot = this.screenshot(false)
-    try {
-        return ImageUtil.cropImage(screenshot, coordinates[0], coordinates[1], width, height)
-    } catch (e: IOException) {
-        e.printStackTrace()
-        throw RuntimeException(e)
-    }
-
-}
 
 private fun pathForCropImage(coordinates: Array<Int>): String =
         String.format("imgs/screen_sub_%d.png", Utils.intArrayHashcode(coordinates))

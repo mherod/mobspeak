@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
 
         println("$uiNode")
 
-        if ("View" in uiNode.text) {
+        if ("Google" in uiNode.text) {
             device.tap(uiNode)
         }
     }.blockingSubscribe()
