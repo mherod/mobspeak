@@ -1,21 +1,18 @@
 package co.herod.adbwrapper.model
 
-import co.herod.adbwrapper.DEVICE_CONNECTED_DEVICE
-import co.herod.adbwrapper.DEVICE_EMULATOR
+import co.herod.adbwrapper.S
 
-class AdbDevice {
-
-    var deviceIdentifier: String? = null
-        private set
-    var type: String? = null
-        private set
+class AdbDevice(
+        var deviceIdentifier: String? = null,
+        var type: String? = null
+) {
 
     var preferredUiAutomatorStrategy = 0
 
     override fun toString() = "AdbDevice{deviceIdentifier='$deviceIdentifier', type='$type'}"
 
-    fun isConnectedDevice(): Boolean = type == DEVICE_CONNECTED_DEVICE
-    fun isEmulator(): Boolean = type == DEVICE_EMULATOR
+    fun isConnectedDevice(): Boolean = type == S.DEVICE_CONNECTED_DEVICE
+    fun isEmulator(): Boolean = type == S.DEVICE_EMULATOR
 
     companion object {
 
@@ -31,5 +28,4 @@ class AdbDevice {
             return adbDevice
         }
     }
-
 }

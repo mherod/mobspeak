@@ -1,6 +1,7 @@
 package co.herod.adbwrapper.testing
 
-import co.herod.adbwrapper.model.AdbUiNode
+import co.herod.adbwrapper.model.UiNode
+import java.io.File
 import java.util.concurrent.TimeUnit
 import java.util.function.Predicate
 
@@ -17,7 +18,7 @@ public interface AndroidTestHelper {
 
     fun assertPower(minPower: Int)
 
-    fun assertValidApk(apkPath: String?)
+    fun File.assertExists()
 
     fun backButton()
 
@@ -29,13 +30,13 @@ public interface AndroidTestHelper {
 
     fun dismissKeyboard()
 
-    fun dragDown(widthFunction: Function1<Int, Int>, edgeOffset: Double = 0.2)
+    fun dragDown(widthFunction: Function1<Int, Int>, edgeOffset: Double = 0.2): String
 
-    fun dragUp(widthFunction: Function1<Int, Int>, edgeOffset: Double = 0.2)
+    fun dragUp(widthFunction: Function1<Int, Int>, edgeOffset: Double = 0.2): String
 
-    fun dragLeft(heightFunction: Function1<Int, Int>, edgeOffset: Double = 0.2)
+    fun dragLeft(heightFunction: Function1<Int, Int>, edgeOffset: Double = 0.2): String
 
-    fun dragRight(heightFunction: Function1<Int, Int>, edgeOffset: Double = 0.2)
+    fun dragRight(heightFunction: Function1<Int, Int>, edgeOffset: Double = 0.2): String
 
     fun failOnText(text: String)
 
@@ -61,7 +62,7 @@ public interface AndroidTestHelper {
 
     fun touchText(text: String)
 
-    fun typeText(text: String)
+    fun typeText(text: String): String
 
     fun assertScreenOn()
 
@@ -81,8 +82,9 @@ public interface AndroidTestHelper {
 
     fun waitForText(text: String, timeout: Int = 30, timeUnit: TimeUnit = TimeUnit.SECONDS)
 
-    fun waitForUiNode(adbUiNodePredicate: Predicate<AdbUiNode>)
+    fun waitForUiNode(uiNodePredicate: Predicate<UiNode>)
+
     fun waitSeconds(waitSeconds: Int = 3)
 
-    fun touchUiNode(adbUiNodePredicate: Predicate<AdbUiNode>)
+    fun touchUiNode(uiNodePredicate: Predicate<UiNode>)
 }

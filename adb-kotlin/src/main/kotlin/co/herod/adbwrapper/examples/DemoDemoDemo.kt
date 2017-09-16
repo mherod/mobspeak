@@ -1,6 +1,10 @@
 @file:JvmName("DemoDemoDemo")
 
-package co.herod.adbwrapper;
+package co.herod.adbwrapper.examples;
+
+import co.herod.adbwrapper.AdbDeviceManager
+import co.herod.adbwrapper.subscribeUiNodes
+import co.herod.adbwrapper.tap
 
 fun main(args: Array<String>) {
 
@@ -13,7 +17,7 @@ fun main(args: Array<String>) {
         println("$uiNode")
 
         if ("View" in uiNode.text) {
-            device.touchUiNode(uiNode)
+            device.tap(uiNode)
         }
     }.blockingSubscribe()
 }

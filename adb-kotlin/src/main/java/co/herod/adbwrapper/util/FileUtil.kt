@@ -4,10 +4,6 @@ import java.io.File
 
 object FileUtil {
 
-    fun getAgeMillis(file: File): Long {
-        return System.currentTimeMillis() - if (file.exists()) file.lastModified() else 0
-    }
-
     fun getFile(pathname: String): File {
 
         val file = File(pathname)

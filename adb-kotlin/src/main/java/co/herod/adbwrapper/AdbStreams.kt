@@ -1,6 +1,6 @@
 package co.herod.adbwrapper
 
-import co.herod.adbwrapper.model.AdbUiNode
+import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.rx.FixedDurationTransformer
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
 import co.herod.adbwrapper.util.UiHierarchyHelper
@@ -16,7 +16,7 @@ object AdbStreams {
 
     fun streamAdbCommands() = adbBus()?.filter { it.isAdbInput() }
 
-    fun streamUiNodeChanges(): Observable<AdbUiNode>? = streamUiHierarchyUpdates()?.let { observable ->
+    fun streamUiNodeChanges(): Observable<UiNode>? = streamUiHierarchyUpdates()?.let { observable ->
         observable
                 .map { it.parseNode() }
                 .compose(ResultChangeFixedDurationTransformer())
@@ -24,7 +24,7 @@ object AdbStreams {
                 .onErrorReturn { "" }
                 .filter { it.hasValue() }
                 .compose(FixedDurationTransformer(1, TimeUnit.DAYS))
-                .map { AdbUiNode(it) }
+                .map { UiNode(it) }
     }
 
     private fun String.hasValue(): Boolean = !trim().isEmpty()
