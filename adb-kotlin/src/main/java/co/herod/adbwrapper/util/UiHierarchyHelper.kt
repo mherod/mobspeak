@@ -2,8 +2,10 @@ package co.herod.adbwrapper.util
 
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiHierarchy
-import co.herod.adbwrapper.model.AdbUiNode
+import co.herod.adbwrapper.model.UiBounds
+import co.herod.adbwrapper.model.UiNode
 import io.reactivex.Observable
+import io.reactivex.Single
 import java.util.*
 
 object UiHierarchyHelper {
@@ -41,13 +43,15 @@ object UiHierarchyHelper {
     fun nodeTextContains(s: String?, s1: String?): Boolean =
             s1 == null || s1.isEmpty() || s != null && !s.isEmpty() && s1 in extractText(s)
 
-    fun extractBoundsInts(s: AdbUiNode): Observable<Array<Int>>? = s.toString().to(extractBoundsInts(s)).second
+    fun extractBoundsInts(s: UiNode): Observable<Array<Int>>? = s.toString().to(extractBoundsInts(s)).second
 
-    fun extractBoundsInts(s: String): Observable<Array<Int>>? = Observable.just(s)
+    fun extractBoundsInts(s: String): Single<UiBounds> = Observable.just(s)
             .map { it.extractBounds() }
             .map { it.split(",".toRegex()).dropLastWhile { it.isEmpty() } }
             .map { it.map { Integer.parseInt(it) } }
             .map { it.toTypedArray() }
+            .map { UiBounds(it) }
+            .singleOrError()
 
     fun uiXmlToNodes(upstream: Observable<String>): Observable<String> = upstream
             .flatMapIterable { it.split(">".toRegex()).dropLastWhile { it.isEmpty() } }
@@ -56,12 +60,12 @@ object UiHierarchyHelper {
             .filter { "=" in it }
             .filter { KEY_BOUNDS_DELIM in it }
 
-    fun rawDumpToNodes(upstream: Observable<String>, adbDevice: AdbDevice?): Observable<AdbUiNode>? = upstream
+    fun rawDumpToNodes(upstream: Observable<String>, adbDevice: AdbDevice?): Observable<UiNode>? = upstream
             .filter { Objects.nonNull(it) }
             .map { AdbUiHierarchy(it, adbDevice) }
             .map { it.xmlString }
             .compose { UiHierarchyHelper.uiXmlToNodes(it) }
-            .map { AdbUiNode(it) }
+            .map { UiNode(it) }
             .filter { Objects.nonNull(it) }
 
     fun isPackage(packageIdentifier: String, s: String) = "package=\"$packageIdentifier\"" in s

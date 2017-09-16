@@ -3,10 +3,6 @@ package co.herod.adbwrapper
 import co.herod.adbwrapper.model.AdbDevice
 import java.util.*
 
-/**
- * Created by matthewherod on 04/09/2017.
- */
-
 object AdbPackageManager {
 
     fun launchApp(adbDevice: AdbDevice, packageName: String) {
@@ -15,18 +11,6 @@ object AdbPackageManager {
 
     fun forceStop(adbDevice: AdbDevice, packageName: String) {
         Adb.now(adbDevice, "shell am force-stop $packageName")
-    }
-
-    fun installPackage(adbDevice: AdbDevice, apkPath: String) {
-        Adb.now(adbDevice, "install $apkPath")
-    }
-
-    fun updatePackage(adbDevice: AdbDevice, apkPath: String) {
-        Adb.now(adbDevice, "install -r $apkPath")
-    }
-
-    fun uninstallPackage(adbDevice: AdbDevice, packageName: String) {
-        Adb.now(adbDevice, "uninstall $packageName")
     }
 
     fun listPackages(adbDevice: AdbDevice): MutableList<String> =
@@ -41,4 +25,16 @@ object AdbPackageManager {
             Adb.getPackageDumpsys(adbDevice, packageName)
                     .map { it["versionName"] }
                     .blockingFirst()
+}
+
+fun AdbDevice.installPackage(apkPath: String) {
+    Adb.now(this, "install $apkPath")
+}
+
+fun AdbDevice.updatePackage(apkPath: String) {
+    Adb.now(this, "install -r $apkPath")
+}
+
+fun AdbDevice.uninstallPackage(packageName: String) {
+    Adb.now(this, "uninstall $packageName")
 }

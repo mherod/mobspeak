@@ -4,7 +4,7 @@ import co.herod.adbwrapper.model.AdbDevice
 import io.reactivex.Observable
 
 /**
- * Created by matthewherod on 23/04/2017.
+ * Created by matthewherod turnOn 23/04/2017.
  */
 
 @Suppress("MemberVisibilityCanPrivate")

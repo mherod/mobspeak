@@ -2,6 +2,7 @@ package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.annotations.CheckReturnValue
 
 interface AdbOps {
@@ -10,10 +11,10 @@ interface AdbOps {
     fun readDeviceFile(adbDevice: AdbDevice, filePath: String): Observable<String>
     fun uiautomatorDumpExecOut(adbDevice: AdbDevice): Observable<String>
     fun uiautomatorDump(adbDevice: AdbDevice): Observable<String>
-    fun pressKey(adbDevice: AdbDevice, key: Int): Observable<String>
+    fun pressKey(adbDevice: AdbDevice, key: Int): Single<String>?
     fun tap(adbDevice: AdbDevice, x: Int, y: Int): Observable<String>
-    fun swipe(adbDevice: AdbDevice, x: Int, y: Int, x2: Int, y2: Int, speed: Int = 1000): Observable<String>
-    fun inputText(adbDevice: AdbDevice, inputText: String): Observable<String>
+    fun swipe(adbDevice: AdbDevice, x: Int, y: Int, x2: Int, y2: Int, speed: Int = 1000): Single<String>
+    fun inputText(adbDevice: AdbDevice, inputText: String): Single<String>
     fun inputKeyEvent(key: Int): String
     fun inputTap(x: Int, y: Int): String
     fun inputSwipe(x: Int, y: Int, x2: Int, y2: Int, speed: Int = 500): String
@@ -31,18 +32,18 @@ interface AdbOps {
 
 internal object AdbProcesses : AdbOps {
 
-    private val INTENT_ACTION_VIEW = "android.intent.action.VIEW"
-
-    private val UI_DUMP_XML_PATH = "/sdcard/window_dump.xml"
-
     @CheckReturnValue
     override fun devices(): Observable<String> = AdbCommand.Builder()
-            .setCommand(Adb.DEVICES)
+            .setCommand(S.DEVICES)
             .observable()
 
     @CheckReturnValue
     override fun uiautomatorDumpAndRead(adbDevice: AdbDevice): Observable<String> =
-            adb(adbDevice, "shell \"uiautomator dump $UI_DUMP_XML_PATH; cat $UI_DUMP_XML_PATH; echo\"")
+            adb(adbDevice, "shell \"" +
+                    "uiautomator dump ${S.UI_DUMP_XML_PATH}; " +
+                    "cat ${S.UI_DUMP_XML_PATH}; " +
+                    "echo" +
+                    "\"")
 
     @CheckReturnValue
     override fun uiautomatorDumpExecOut(adbDevice: AdbDevice): Observable<String> =
@@ -50,7 +51,7 @@ internal object AdbProcesses : AdbOps {
 
     @CheckReturnValue
     override fun uiautomatorDump(adbDevice: AdbDevice): Observable<String> =
-            adb(adbDevice, "shell uiautomator dump $UI_DUMP_XML_PATH")
+            adb(adbDevice, "shell uiautomator dump ${S.UI_DUMP_XML_PATH}")
 
     @CheckReturnValue
     override fun readDeviceFile(adbDevice: AdbDevice, filePath: String): Observable<String> =
@@ -65,20 +66,20 @@ internal object AdbProcesses : AdbOps {
             adb(adbDevice, dumpsys(type, pipe))
 
     @CheckReturnValue
-    override fun pressKey(adbDevice: AdbDevice, key: Int): Observable<String> =
-            adb(adbDevice, inputKeyEvent(key))
+    override fun pressKey(adbDevice: AdbDevice, key: Int): Single<String>? =
+            adb(adbDevice, inputKeyEvent(key)).lastOrError()
 
     @CheckReturnValue
-    override fun inputText(adbDevice: AdbDevice, inputText: String): Observable<String> =
-            adb(adbDevice, inputText(inputText))
+    override fun inputText(adbDevice: AdbDevice, inputText: String): Single<String> =
+            adb(adbDevice, inputText(inputText)).lastOrError()
 
     @CheckReturnValue
     override fun tap(adbDevice: AdbDevice, x: Int, y: Int): Observable<String> =
             adb(adbDevice, inputTap(x, y))
 
     @CheckReturnValue
-    override fun swipe(adbDevice: AdbDevice, x: Int, y: Int, x2: Int, y2: Int, speed: Int): Observable<String> =
-            adb(adbDevice, inputSwipe(x, y, x2, y2, speed))
+    override fun swipe(adbDevice: AdbDevice, x: Int, y: Int, x2: Int, y2: Int, speed: Int): Single<String> =
+            adb(adbDevice, inputSwipe(x, y, x2, y2, speed)).lastOrError()
 
     @CheckReturnValue
     override fun launchUrl(adbDevice: AdbDevice, url: String): Observable<String> =
@@ -95,10 +96,14 @@ internal object AdbProcesses : AdbOps {
             .observable()
 
     override fun intentViewUrl(url: String): String =
-            "${S.SHELL}  am start -a $INTENT_ACTION_VIEW -d '$url'"
+            "${S.SHELL} am start " +
+                    "-a ${S.INTENT_ACTION_VIEW} " +
+                    "-d '$url'"
 
     override fun intentViewUrl(url: String, packageName: String): String =
-            "${S.SHELL}  am start -a $INTENT_ACTION_VIEW -d '$url' $packageName"
+            "${S.SHELL} am start " +
+                    "-a ${S.INTENT_ACTION_VIEW} " +
+                    "-d '$url' $packageName"
 
     override fun dumpsys(type: String): String =
             "${S.SHELL} dumpsys $type"

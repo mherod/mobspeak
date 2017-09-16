@@ -1,9 +1,14 @@
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.*
+import co.herod.adbwrapper.ext.pressButton
+import co.herod.adbwrapper.ext.screen
+import co.herod.adbwrapper.ext.turnOff
+import co.herod.adbwrapper.ext.turnOn
 import co.herod.adbwrapper.model.AdbDevice
-import co.herod.adbwrapper.model.AdbUiNode
+import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
+import co.herod.adbwrapper.ext.containsIgnoreCase
 import io.reactivex.Observable
 import java.io.File
 import java.lang.*
@@ -17,21 +22,17 @@ import kotlin.AssertionError
 
 object AdbTestHelper : AndroidTestHelper {
 
-    private var _adbDevice: AdbDevice? = null
+    var adbDevice: AdbDevice? = null
 
-    var adbDevice: AdbDevice?
-        get() = _adbDevice
-        set(value) {
-            _adbDevice = value
-        }
-
-    override fun dismissKeyboard() = withAdbDevice {
+    override fun dismissKeyboard() = device {
 
         Adb.getInputMethodDumpsys(this)
                 .map { it["mShowRequested"] }
                 .blockingForEach {
                     if (it?.startsWith("true") == true) {
                         Adb.pressKeyBlocking(this, 111)
+
+                        pressButton().escape()
                     }
                 }
     }
@@ -39,15 +40,16 @@ object AdbTestHelper : AndroidTestHelper {
     override fun assertScreenOn() {
         turnScreenOn()
     }
+
     override fun assertScreenOff() {
         turnScreenOff()
     }
 
-    override fun turnScreenOff() = withAdbDevice {
-        AdbDeviceActions.turnDeviceScreenOff(this)
+    override fun turnScreenOff() = device {
+        screen().turnOff()
     }
 
-    override fun assertActivityName(activityName: String) = withAdbDevice {
+    override fun assertActivityName(activityName: String) = device {
         Adb.getWindowFocusDumpsys(this)
                 .flatMapIterable { it.values }
                 .filter { activityName.toLowerCase() in it.toLowerCase() }
@@ -58,7 +60,7 @@ object AdbTestHelper : AndroidTestHelper {
                 .blockingGet().forEach { }
     }
 
-    override fun assertNotActivityName(activityName: String) = withAdbDevice {
+    override fun assertNotActivityName(activityName: String) = device {
         Adb.getWindowFocusDumpsys(this)
                 .flatMapIterable { it.values }
                 .doOnNext(System.out::println)
@@ -74,8 +76,8 @@ object AdbTestHelper : AndroidTestHelper {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun backButton() = withAdbDevice {
-        AdbDeviceActions.pressBackButton(this)
+    override fun backButton() = device {
+        pressButton().back()
     }
 
     override fun closeLeftDrawer() {
@@ -90,7 +92,7 @@ object AdbTestHelper : AndroidTestHelper {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun dragDown(widthFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
+    override fun dragDown(widthFunction: ((Int) -> Int), edgeOffset: Double) = device {
 
         val windowBounds = Adb.getWindowDumpsys(this)
                 .map { it["mBounds"] }
@@ -102,8 +104,7 @@ object AdbTestHelper : AndroidTestHelper {
 
         val x = widthFunction(width);
 
-        AdbDeviceActions.swipe(
-                this,
+        swipe(
                 x,
                 (height * edgeOffset).toInt(),
                 x,
@@ -111,7 +112,7 @@ object AdbTestHelper : AndroidTestHelper {
         )
     }
 
-    override fun dragUp(widthFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
+    override fun dragUp(widthFunction: ((Int) -> Int), edgeOffset: Double) = device {
 
         val windowBounds = Adb.getWindowDumpsys(this)
                 .map { it["mBounds"] }
@@ -123,8 +124,7 @@ object AdbTestHelper : AndroidTestHelper {
 
         val x = widthFunction(width);
 
-        AdbDeviceActions.swipe(
-                this,
+        swipe(
                 x,
                 (height * (1.0 - edgeOffset)).toInt(),
                 x,
@@ -132,7 +132,7 @@ object AdbTestHelper : AndroidTestHelper {
         )
     }
 
-    override fun dragRight(heightFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
+    override fun dragRight(heightFunction: ((Int) -> Int), edgeOffset: Double) = device {
 
         val windowBounds = Adb.getWindowDumpsys(this)
                 .map { it["mBounds"] }
@@ -144,8 +144,7 @@ object AdbTestHelper : AndroidTestHelper {
 
         val y = heightFunction(height);
 
-        AdbDeviceActions.swipe(
-                this,
+        swipe(
                 (width * edgeOffset).toInt(),
                 y,
                 (width * (1.0 - edgeOffset)).toInt(),
@@ -153,7 +152,7 @@ object AdbTestHelper : AndroidTestHelper {
         )
     }
 
-    override fun dragLeft(heightFunction: ((Int) -> Int), edgeOffset: Double) = withAdbDevice {
+    override fun dragLeft(heightFunction: ((Int) -> Int), edgeOffset: Double) = device {
 
         val windowBounds = Adb.getWindowDumpsys(this)
                 .map { it["mBounds"] }
@@ -165,8 +164,7 @@ object AdbTestHelper : AndroidTestHelper {
 
         val y = heightFunction(height);
 
-        AdbDeviceActions.swipe(
-                this,
+        swipe(
                 (width * (1.0 - edgeOffset)).toInt(),
                 y,
                 (width * edgeOffset).toInt(),
@@ -174,104 +172,104 @@ object AdbTestHelper : AndroidTestHelper {
         )
     }
 
-    override fun failOnText(text: String) = withAdbDevice {
+    override fun failOnText(text: String) = device {
         failOnText(text)
     }
 
-    override fun failOnText(text: String, timeout: Int, timeUnit: TimeUnit) = withAdbDevice {
+    override fun failOnText(text: String, timeout: Int, timeUnit: TimeUnit) = device {
         failOnText(text, timeout, timeUnit)
     }
 
-    override fun getInstalledPackages(): MutableList<String> = withAdbDevice {
+    override fun getInstalledPackages(): MutableList<String> = device {
         AdbPackageManager.listPackages(this)
     }
 
-    override fun getPackageVersionName(packageName: String): String? = withAdbDevice {
+    override fun getPackageVersionName(packageName: String): String? = device {
         AdbPackageManager.getPackageVersionName(this, packageName)
     }
 
-    override fun installApk(apkPath: String) = withAdbDevice {
+    override fun installApk(apkPath: String) = device {
 
-        assertValidApk(apkPath)
+        File(apkPath).assertExists()
 
-        AdbPackageManager.installPackage(this, apkPath)
+        installPackage(apkPath)
     }
 
     override fun installedPackageIsVersion(packageName: String, versionName: String): Boolean =
             getPackageVersionName(packageName) == versionName
 
-    override fun launchApp(packageName: String) = withAdbDevice {
+    override fun launchApp(packageName: String) = device {
         AdbPackageManager.launchApp(this, packageName)
     }
 
-    override fun launchUrl(url: String) = withAdbDevice {
+    override fun launchUrl(url: String) = device {
         AdbProcesses.launchUrl(this, url).blockingSubscribe()
     }
 
-    override fun launchUrl(url: String, packageName: String) = withAdbDevice {
+    override fun launchUrl(url: String, packageName: String) = device {
         AdbProcesses.launchUrl(this, url, packageName).blockingSubscribe()}
 
-    override fun takeScreenshot(): Unit = withAdbDevice {
-        ScreenshotHelper.screenshot(this, false)
+    override fun takeScreenshot(): Unit = device {
+        screenshot(false)
     }
 
-    override fun typeText(text: String) = withAdbDevice {
-        AdbProcesses.inputText(this, text).blockingSubscribe()
+    override fun typeText(text: String) = device {
+        typeText(text)
     }
 
-    override fun touchUiNode(adbUiNodePredicate: Predicate<AdbUiNode>) = withAdbDevice {
+    override fun touchUiNode(uiNodePredicate: Predicate<UiNode>) = device {
         waitForUiNodeForFunc(
-                adbUiNodePredicate = Predicate {
-                    adbUiNodePredicate.test(it)
+                uiNodePredicate = Predicate {
+                    uiNodePredicate.test(it)
                 },
                 function = {
-                    AdbDeviceActions.tapCentre(this, it)
+                    tap(it)
                 },
                 timeout = 20,
                 timeUnit = TimeUnit.SECONDS
         )
     }
 
-    override fun touchText(text: String) = withAdbDevice {
+    override fun touchText(text: String) = device {
         waitForUiNodeForFunc(
-                adbUiNodePredicate = Predicate {
-                    text.toLowerCase() in it.text.toLowerCase()
+                uiNodePredicate = Predicate {
+                    it.text.containsIgnoreCase(text)
                 },
                 function = {
-                    AdbDeviceActions.tapCentre(this, it)
+                    tap(it)
                 },
                 timeout = 20,
                 timeUnit = TimeUnit.SECONDS
         )
     }
 
-    override fun turnScreenOn() = withAdbDevice {
-        AdbDeviceActions.turnDeviceScreenOn(this)
+    override fun turnScreenOn() = device {
+        screen().turnOn()
     }
 
-    override fun uninstallPackage(packageName: String) = withAdbDevice {
-        AdbPackageManager.uninstallPackage(this, packageName)
+    override fun uninstallPackage(packageName: String) = device {
+        uninstallPackage(packageName)
     }
 
-    override fun updateApk(apkPath: String) = withAdbDevice {
+    override fun updateApk(apkPath: String) = device {
 
-        assertValidApk(apkPath)
+        File(apkPath).assertExists()
 
-        AdbPackageManager.updatePackage(this, apkPath)
+        updatePackage(apkPath)
     }
 
-    override fun assertValidApk(apkPath: String?) {
-        assert(!File(apkPath).exists().not()) { "Apk does not exist at $apkPath" }
+    override fun File.assertExists() {
+        assert(exists()) { "File does not exist at ${toPath()}" }
     }
 
     override fun waitForTextToFailToDisappear(text: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun waitForText(text: String, timeout: Int, timeUnit: TimeUnit) = withAdbDevice {
+    override fun waitForText(text: String, timeout: Int, timeUnit: TimeUnit) = device {
         waitForUiNodeForFunc(
-                adbUiNodePredicate = Predicate {
-                    text.toLowerCase() in it.text.toLowerCase()
+                uiNodePredicate = Predicate {
+                    it.text.containsIgnoreCase(text)
                 },
                 function = { "Found" },
                 timeout = timeout,
@@ -279,13 +277,13 @@ object AdbTestHelper : AndroidTestHelper {
         )
     }
 
-    override fun forceStopApp(packageName: String) = withAdbDevice {
+    override fun forceStopApp(packageName: String) = device {
         AdbPackageManager.forceStop(this, packageName)
     }
 
-    override fun waitForUiNode(adbUiNodePredicate: Predicate<AdbUiNode>) = withAdbDevice {
+    override fun waitForUiNode(uiNodePredicate: Predicate<UiNode>) = device {
         waitForUiNodeForFunc(
-                adbUiNodePredicate = adbUiNodePredicate,
+                uiNodePredicate = uiNodePredicate,
                 function = { "Found" },
                 timeout = 20,
                 timeUnit = TimeUnit.SECONDS
@@ -302,23 +300,23 @@ object AdbTestHelper : AndroidTestHelper {
         Observable.timer(1, TimeUnit.SECONDS)
                 .flatMap { Adb.dumpUiNodes(this) }
                 .timeout(timeout.toLong(), timeUnit)
-                .blockingForEach { adbUiNode: AdbUiNode ->
-                    if (text.toLowerCase() in adbUiNode.text.toLowerCase()) {
+                .blockingForEach { uiNode: UiNode ->
+                    if (text.toLowerCase() in uiNode.text.toLowerCase()) {
                         throw AssertionError("Text was visible")
                     }
                 }
     }
 
     private fun waitForUiNodeForFunc(
-            adbUiNodePredicate: Predicate<AdbUiNode>?,
-            function: (AdbUiNode) -> String? = { "No Action" },
+            uiNodePredicate: Predicate<UiNode>?,
+            function: (UiNode) -> String? = { "No Action" },
             timeout: Int = 30,
             timeUnit: TimeUnit = TimeUnit.SECONDS
     ) {
-        withAdbDevice {
+        device {
             Adb.dumpUiNodes(this)
                     .compose(ResultChangeFixedDurationTransformer())
-                    .filter { adbUiNodePredicate?.test(it) == true }
+                    .filter { uiNodePredicate?.test(it) == true }
                     .timeout(8, timeUnit)
                     // .doOnNext(System.out::println)
                     .map { function(it).orEmpty() }
@@ -339,9 +337,8 @@ object AdbTestHelper : AndroidTestHelper {
         failOnText(text)
     }
 
-    private inline fun <R> withAdbDevice(block: AdbDevice.() -> R): R {
-        return adbDevice?.block() ?: throw NoConnectedAdbDeviceException()
-    }
+    inline fun <R> device(block: AdbDevice.() -> R): R =
+            adbDevice?.block() ?: throw NoConnectedAdbDeviceException()
 }
 
 class NoConnectedAdbDeviceException : AssertionError("No connected device!")

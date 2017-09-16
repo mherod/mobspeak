@@ -8,7 +8,7 @@ import co.herod.adbwrapper.AdbProcesses.uiautomatorDumpAndRead
 import co.herod.adbwrapper.AdbProcesses.uiautomatorDumpExecOut
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiHierarchy
-import co.herod.adbwrapper.model.AdbUiNode
+import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.util.UiHierarchyHelper
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -16,27 +16,21 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
- * Created by matthewherod on 23/04/2017.
+ * Created by matthewherod turnOn 23/04/2017.
  */
 object Adb {
-
-    const val DEVICES = "devices"
-
-    fun typeText(adbDevice: AdbDevice, inputText: String) =
-            AdbProcesses.inputText(adbDevice, inputText)
 
     private val timeUnit = TimeUnit.SECONDS
 
     fun pressKeyBlocking(adbDevice: AdbDevice, key: Int): String =
             pressKey(adbDevice, key)
-                    .timeout(10, TimeUnit.SECONDS)
-                    .blockingLast("")
+                    ?.timeout(10, TimeUnit.SECONDS)?.blockingGet() ?: ""
 
     fun getDisplayDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap(AdbDeviceProperties.PROPS_DISPLAY).toObservable()
+            adbDevice.dumpsysMap(S.PROPS_DISPLAY).toObservable()
 
     fun getInputMethodDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap(AdbDeviceProperties.PROPS_INPUT_METHOD).toObservable()
+            adbDevice.dumpsysMap(S.PROPS_INPUT_METHOD).toObservable()
 
     fun getPackageDumpsys(adbDevice: AdbDevice, packageName: String): Observable<Map<String, String>> =
             adbDevice.dumpsysMap("package $packageName").toObservable()
@@ -66,7 +60,7 @@ object Adb {
 
     private val DEFAULT_TIMEOUT_SECONDS: Long = 30
 
-    fun dumpUiNodes(adbDevice: AdbDevice): Observable<AdbUiNode> =
+    fun dumpUiNodes(adbDevice: AdbDevice): Observable<UiNode> =
             dumpUiHierarchy(
                     adbDevice,
                     DEFAULT_TIMEOUT_SECONDS,
@@ -74,7 +68,7 @@ object Adb {
             )
                     .map { AdbUiHierarchy(it, adbDevice).xmlString }
                     .compose { UiHierarchyHelper.uiXmlToNodes(it) }
-                    .map { AdbUiNode(it) }
+                    .map { UiNode(it) }
                     .filter { Objects.nonNull(it) }
 
     fun dumpUiHierarchy(
