@@ -10,6 +10,7 @@ import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.util.UiHierarchyHelper
+import co.herod.kotlin.ext.blocking
 import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.*
@@ -19,8 +20,6 @@ import java.util.concurrent.TimeUnit
  * Created by matthewherod turnOn 23/04/2017.
  */
 object Adb {
-
-    private val timeUnit = TimeUnit.SECONDS
 
     fun pressKeyBlocking(adbDevice: AdbDevice, key: Int): String =
             pressKey(adbDevice, key)
@@ -32,8 +31,8 @@ object Adb {
     fun getInputMethodDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
             adbDevice.dumpsysMap(S.PROPS_INPUT_METHOD).toObservable()
 
-    fun getPackageDumpsys(adbDevice: AdbDevice, packageName: String): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap("package $packageName").toObservable()
+    fun getPackageDumpsys(adbDevice: AdbDevice, packageName: String = ""): Observable<Map<String, String>> =
+            adbDevice.dumpsysMap("package $packageName".trim()).toObservable()
 
     fun getActivityDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
             adbDevice.dumpsysMap("activity").toObservable()
@@ -41,14 +40,11 @@ object Adb {
     fun getActivitiesDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
             adbDevice.dumpsysMap("activity activities").toObservable()
 
-    fun getWindowDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap("window").toObservable()
-
-    fun getWindowsDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap("window windows").toObservable()
+    fun getWindowDumpsys(adbDevice: AdbDevice, args: String = ""): Observable<Map<String, String>> =
+            adbDevice.dumpsysMap("window $args".trim()).toObservable()
 
     fun getWindowFocusDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
-            getWindowsDumpsys(adbDevice).map {
+            getWindowDumpsys(adbDevice, "windows").map {
                 it.filterKeys { it == "mCurrentFocus" || it == "mFocusedApp" }
             }
 
@@ -135,13 +131,13 @@ object Adb {
                     .retry()
                     .timeout(DEFAULT_TIMEOUT_SECONDS, timeUnit)
 
-    fun command(adbDevice: AdbDevice, command: String): Observable<String> =
-            AdbProcesses.adb(adbDevice, command)
+}
 
-    internal fun now(device: AdbDevice, command: String) {
-        command(device, command).blockingSubscribe()
-    }
+fun AdbDevice.command(command: String): Observable<String> =
+        AdbProcesses.adb(this, command)
 
+fun AdbDevice.execute(command: String) {
+    command(command).blocking()
 }
 
 private fun String.isXmlOutput() = "<?xml" in this

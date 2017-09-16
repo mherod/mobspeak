@@ -50,9 +50,9 @@ object AdbUi {
 }
 
 fun AdbDevice.pullNewScreenCapture() = with(Adb) {
-    now(this@pullNewScreenCapture, "shell screencap -p /sdcard/screen.png")
-    now(this@pullNewScreenCapture, "pull /sdcard/screen.png")
-    now(this@pullNewScreenCapture, "shell rm /sdcard/screen.png")
+    this@pullNewScreenCapture.execute("shell screencap -p /sdcard/screen.png")
+    this@pullNewScreenCapture.execute("pull /sdcard/screen.png")
+    this@pullNewScreenCapture.execute("shell rm /sdcard/screen.png")
 }
 
 fun AdbDevice.subscribeUiNodes(): Observable<UiNode> = Adb.dumpUiNodes(this)

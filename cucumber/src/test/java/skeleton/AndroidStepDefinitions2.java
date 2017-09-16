@@ -57,7 +57,6 @@ public class AndroidStepDefinitions2 {
 
     @When("^I close the app \"([^\"]*)\"$")
     public void iCloseTheApp(String packageName) throws Throwable {
-
         AdbTestHelper.INSTANCE.forceStopApp(packageName);
     }
 

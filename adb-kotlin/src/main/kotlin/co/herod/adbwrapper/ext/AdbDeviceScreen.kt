@@ -12,11 +12,11 @@ class AdbDeviceScreen(val adbDevice: AdbDevice)
 fun AdbDevice.screen() = AdbDeviceScreen(this)
 
 fun AdbDeviceScreen.turnOn() = with(adbDevice) {
-    if (isOn().not()) pressButton().power()
+    if (isOn().not()) pressKey().power()
 }
 
 fun AdbDeviceScreen.turnOff() = with(adbDevice) {
-    if (isOn()) pressButton().power()
+    if (isOn()) pressKey().power()
 }
 
 fun AdbDeviceScreen.isOn() = with(adbDevice) {

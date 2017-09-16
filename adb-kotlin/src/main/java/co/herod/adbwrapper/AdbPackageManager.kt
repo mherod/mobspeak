@@ -5,13 +5,8 @@ import java.util.*
 
 object AdbPackageManager {
 
-    fun launchApp(adbDevice: AdbDevice, packageName: String) {
-        Adb.now(adbDevice, "shell monkey -p $packageName 1")
-    }
-
-    fun forceStop(adbDevice: AdbDevice, packageName: String) {
-        Adb.now(adbDevice, "shell am force-stop $packageName")
-    }
+    fun launchApp(adbDevice: AdbDevice, packageName: String) =
+            Adb.now(adbDevice, "shell monkey -p $packageName 1")
 
     fun listPackages(adbDevice: AdbDevice): MutableList<String> =
             Adb.command(adbDevice, "shell pm list packages")
@@ -27,14 +22,3 @@ object AdbPackageManager {
                     .blockingFirst()
 }
 
-fun AdbDevice.installPackage(apkPath: String) {
-    Adb.now(this, "install $apkPath")
-}
-
-fun AdbDevice.updatePackage(apkPath: String) {
-    Adb.now(this, "install -r $apkPath")
-}
-
-fun AdbDevice.uninstallPackage(packageName: String) {
-    Adb.now(this, "uninstall $packageName")
-}
