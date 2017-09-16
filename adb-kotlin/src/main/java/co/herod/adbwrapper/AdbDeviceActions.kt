@@ -4,15 +4,21 @@ import co.herod.adbwrapper.AdbProcesses.tap
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiBounds
 import co.herod.adbwrapper.model.UiNode
+import io.reactivex.Observable
+import io.reactivex.Single
 
 fun AdbDevice.tap(uiNode: UiNode): String =
         uiNode.bounds.let { bounds -> tap(bounds) }.toString()
 
 fun AdbDevice.tap(c: UiBounds): String =
-        tap(this, c.centreX, c.centreY).firstOrError().blockingGet()
+        tap(this, c.centreX, c.centreY).blocking()
 
 fun AdbDevice.swipe(x1: Int, y1: Int, x2: Int, y2: Int, speed: Int = 500): String =
         AdbProcesses.swipe(this, x1, y1, x2, y2, speed).blockingGet()
 
 fun AdbDevice.typeText(inputText: String): String =
-        AdbProcesses.inputText(this, inputText).blockingGet()
+        AdbProcesses.inputText(this, inputText).blocking()
+
+
+fun Single<String>.blocking(): String = onErrorReturn { "" }.blockingGet()
+fun Observable<String>.blocking(): String = last("").blockingGet()

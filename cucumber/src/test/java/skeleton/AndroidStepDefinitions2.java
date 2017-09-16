@@ -1,17 +1,14 @@
 package skeleton;
 
-import junit.framework.AssertionFailedError;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import co.herod.adbwrapper.AdbProcesses;
-import co.herod.adbwrapper.model.AdbUiNode;
 import co.herod.adbwrapper.testing.AdbTestHelper;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import junit.framework.AssertionFailedError;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class AndroidStepDefinitions2 {
 
@@ -66,7 +63,6 @@ public class AndroidStepDefinitions2 {
 
     @When("^I close the navigation drawer$")
     public void iCloseTheNavigationDrawer() throws Throwable {
-
         AdbTestHelper.INSTANCE.closeLeftDrawer();
     }
 
@@ -273,8 +269,8 @@ public class AndroidStepDefinitions2 {
 
     @Then("^I see a button$")
     public void iSeeAButton() throws Throwable {
-        AdbTestHelper.INSTANCE.waitForUiNode(adbUiNode ->
-                adbUiNodeMatches(adbUiNode, "button"));
+        AdbTestHelper.INSTANCE.waitForUiNode(uiNode ->
+                uiNode.adbUiNodeMatches("button"));
     }
 
     @Then("^I see a large image$")
@@ -307,8 +303,8 @@ public class AndroidStepDefinitions2 {
 
     @Then("^I should see the lock screen$")
     public void iShouldSeeTheLockScreen() throws Throwable {
-        AdbTestHelper.INSTANCE.waitForUiNode(adbUiNode ->
-                adbUiNodeMatches(adbUiNode, "com.android.systemui:id/keyguard_status_area"));
+        AdbTestHelper.INSTANCE.waitForUiNode(uiNode ->
+                uiNode.adbUiNodeMatches("com.android.systemui:id/keyguard_status_area"));
     }
 
     @When("^I swipe down along the left side$")
@@ -455,8 +451,8 @@ public class AndroidStepDefinitions2 {
 
     @When("^I click the floating action button$")
     public void tapFloatingActionButton() throws Throwable {
-        AdbTestHelper.INSTANCE.touchUiNode((AdbUiNode adbUiNode) ->
-                adbUiNodeMatches(adbUiNode, "floatingaction"));
+        AdbTestHelper.INSTANCE.touchUiNode(uiNode ->
+                uiNode.adbUiNodeMatches("floatingaction"));
     }
 
     @When("^I turn the screen on$")
@@ -478,13 +474,4 @@ public class AndroidStepDefinitions2 {
     public void waitSeconds(int waitSeconds) throws Throwable {
         AdbTestHelper.INSTANCE.waitSeconds(waitSeconds);
     }
-
-    private boolean adbUiNodeMatches(AdbUiNode adbUiNode, String charSequence) {
-
-        return adbUiNode
-                .toString()
-                .toLowerCase()
-                .contains(charSequence);
-    }
-
 }
