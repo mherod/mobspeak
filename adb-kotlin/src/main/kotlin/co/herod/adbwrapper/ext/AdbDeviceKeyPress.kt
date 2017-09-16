@@ -4,7 +4,7 @@ import co.herod.adbwrapper.Adb
 import co.herod.adbwrapper.S
 import co.herod.adbwrapper.model.AdbDevice
 
-fun AdbDevice.pressButton() = AdbDeviceKeyPress(this)
+fun AdbDevice.pressKey() = AdbDeviceKeyPress(this)
 
 class AdbDeviceKeyPress(val adbDevice: AdbDevice) {
 

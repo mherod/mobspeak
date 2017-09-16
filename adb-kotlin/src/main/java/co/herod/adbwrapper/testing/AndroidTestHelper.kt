@@ -1,7 +1,6 @@
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.model.UiNode
-import java.io.File
 import java.util.concurrent.TimeUnit
 import java.util.function.Predicate
 
@@ -12,13 +11,11 @@ import java.util.function.Predicate
 @Suppress("RedundantVisibilityModifier")
 public interface AndroidTestHelper {
 
-    fun assertActivityName(activityName: String)
+    fun assertActivityName(activityName: String): String
 
-    fun assertNotActivityName(activityName: String)
+    fun assertNotActivityName(activityName: String): String
 
     fun assertPower(minPower: Int)
-
-    fun File.assertExists()
 
     fun backButton()
 
@@ -60,7 +57,7 @@ public interface AndroidTestHelper {
 
     fun takeScreenshot()
 
-    fun touchText(text: String)
+    fun touchText(text: String): String
 
     fun typeText(text: String): String
 
@@ -80,11 +77,11 @@ public interface AndroidTestHelper {
 
     fun waitForTextToFailToDisappear(text: String)
 
-    fun waitForText(text: String, timeout: Int = 30, timeUnit: TimeUnit = TimeUnit.SECONDS)
+    fun waitForText(text: String, timeout: Int = 30, timeUnit: TimeUnit = TimeUnit.SECONDS): String
 
-    fun waitForUiNode(uiNodePredicate: Predicate<UiNode>)
+    fun waitForUiNode(uiNodePredicate: Predicate<UiNode>): String
 
     fun waitSeconds(waitSeconds: Int = 3)
 
-    fun touchUiNode(uiNodePredicate: Predicate<UiNode>)
+    fun touchUiNode(uiNodePredicate: Predicate<UiNode>): String
 }

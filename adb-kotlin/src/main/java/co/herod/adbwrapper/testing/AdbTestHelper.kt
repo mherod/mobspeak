@@ -1,14 +1,13 @@
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.*
-import co.herod.adbwrapper.ext.pressButton
-import co.herod.adbwrapper.ext.screen
-import co.herod.adbwrapper.ext.turnOff
-import co.herod.adbwrapper.ext.turnOn
+import co.herod.adbwrapper.ext.*
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiNode
-import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
+import co.herod.kotlin.ext.assertExists
+import co.herod.kotlin.ext.blocking
 import co.herod.kotlin.ext.containsIgnoreCase
+import co.herod.kotlin.ext.timeout
 import io.reactivex.Observable
 import java.io.File
 import java.lang.*
@@ -30,9 +29,7 @@ object AdbTestHelper : AndroidTestHelper {
                 .map { it["mShowRequested"] }
                 .blockingForEach {
                     if (it?.startsWith("true") == true) {
-                        Adb.pressKeyBlocking(this, 111)
-
-                        pressButton().escape()
+                        pressKey().escape()
                     }
                 }
     }
@@ -50,26 +47,21 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun assertActivityName(activityName: String) = device {
-        Adb.getWindowFocusDumpsys(this)
+
+        dumpsys().windows()
                 .flatMapIterable { it.values }
-                .filter { activityName.toLowerCase() in it.toLowerCase() }
+                .filter { it.containsIgnoreCase(activityName) }
                 .firstOrError()
-                .timeout(5, TimeUnit.SECONDS)
-                .retry()
-                .timeout(10, TimeUnit.SECONDS)
-                .blockingGet().forEach { }
+                .blocking(10, TimeUnit.SECONDS)
     }
 
     override fun assertNotActivityName(activityName: String) = device {
-        Adb.getWindowFocusDumpsys(this)
+
+        dumpsys().windows()
                 .flatMapIterable { it.values }
-                .doOnNext(System.out::println)
-                .filter { (activityName.toLowerCase() in it.toLowerCase()).not() }
+                .filter { (it.containsIgnoreCase(activityName)).not() }
                 .firstOrError()
-                .timeout(5, TimeUnit.SECONDS)
-                .retry()
-                .timeout(10, TimeUnit.SECONDS)
-                .blockingGet().forEach {  }
+                .blocking(10, TimeUnit.SECONDS)
     }
 
     override fun assertPower(minPower: Int) {
@@ -77,7 +69,7 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun backButton() = device {
-        pressButton().back()
+        pressKey().back()
     }
 
     override fun closeLeftDrawer() {
@@ -191,8 +183,7 @@ object AdbTestHelper : AndroidTestHelper {
     override fun installApk(apkPath: String) = device {
 
         File(apkPath).assertExists()
-
-        installPackage(apkPath)
+        pm().installPackage(apkPath)
     }
 
     override fun installedPackageIsVersion(packageName: String, versionName: String): Boolean =
@@ -248,18 +239,14 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun uninstallPackage(packageName: String) = device {
-        uninstallPackage(packageName)
+        pm().uninstallPackage(packageName)
     }
 
     override fun updateApk(apkPath: String) = device {
 
         File(apkPath).assertExists()
 
-        updatePackage(apkPath)
-    }
-
-    override fun File.assertExists() {
-        assert(exists()) { "File does not exist at ${toPath()}" }
+        pm().updatePackage(apkPath)
     }
 
     override fun waitForTextToFailToDisappear(text: String) {
@@ -278,7 +265,7 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun forceStopApp(packageName: String) = device {
-        AdbPackageManager.forceStop(this, packageName)
+        pm().forceStop(packageName)
     }
 
     override fun waitForUiNode(uiNodePredicate: Predicate<UiNode>) = device {
@@ -312,18 +299,12 @@ object AdbTestHelper : AndroidTestHelper {
             function: (UiNode) -> String? = { "No Action" },
             timeout: Int = 30,
             timeUnit: TimeUnit = TimeUnit.SECONDS
-    ) {
-        device {
-            Adb.dumpUiNodes(this)
-                    .compose(ResultChangeFixedDurationTransformer())
-                    .filter { uiNodePredicate?.test(it) == true }
-                    .timeout(8, timeUnit)
-                    // .doOnNext(System.out::println)
-                    .map { function(it).orEmpty() }
-                    .retry()
-                    .timeout(timeout.toLong(), timeUnit)
-                    .blockingFirst()
-        }
+    ) = device {
+        subscribeUiNodes()
+                .filter { uiNodePredicate?.test(it) == true }
+                .timeout(timeout, timeUnit)
+                .map { function(it).orEmpty() }
+                .blocking(timeout, timeUnit)
     }
 
     override fun waitForTextToDisappear(text: String) {
