@@ -17,7 +17,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
- * Created by matthewherod turnOn 23/04/2017.
+ * Created by matthewherod on 23/04/2017.
  */
 object Adb {
 

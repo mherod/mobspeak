@@ -11,7 +11,7 @@ object AdbDeviceManager {
     fun getConnectedDevice(): AdbDevice? = allDevices()
             .filter(AdbDevice::isConnectedDevice)
             .firstOrError()
-            .retryWhen { handler -> handler.delay(1, TimeUnit.SECONDS) }
+            .retryWhen { it.delay(1, TimeUnit.SECONDS) }
             .timeout(10, TimeUnit.SECONDS)
             .blockingGet()
 

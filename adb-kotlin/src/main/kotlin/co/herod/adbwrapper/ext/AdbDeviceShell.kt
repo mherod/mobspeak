@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper.ext
 
 import co.herod.adbwrapper.AdbCommand
