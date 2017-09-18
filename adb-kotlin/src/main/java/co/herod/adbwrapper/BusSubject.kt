@@ -5,6 +5,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
+
 abstract class BusSubject<T> : Subject<T>(), Observer<T> {
 
     private val processSubject = PublishSubject.create<T>()

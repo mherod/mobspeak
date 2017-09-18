@@ -11,9 +11,7 @@ import java.util.*
 object UiHierarchyHelper {
 
     private const val KEY_DELIMITER = "=\""
-
     private const val KEY_BOUNDS = "bounds"
-
     private const val KEY_TEXT = "text"
 
     private val KEY_BOUNDS_DELIM = KEY_BOUNDS + KEY_DELIMITER

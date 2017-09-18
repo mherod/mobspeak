@@ -94,7 +94,7 @@ object AdbTestHelper : AndroidTestHelper {
         val width = Integer.parseInt(windowBounds[0])
         val height = Integer.parseInt(windowBounds[1])
 
-        val x = widthFunction(width);
+        val x = widthFunction(width)
 
         swipe(
                 x,
@@ -114,7 +114,7 @@ object AdbTestHelper : AndroidTestHelper {
         val width = Integer.parseInt(windowBounds[0])
         val height = Integer.parseInt(windowBounds[1])
 
-        val x = widthFunction(width);
+        val x = widthFunction(width)
 
         swipe(
                 x,
@@ -134,7 +134,7 @@ object AdbTestHelper : AndroidTestHelper {
         val width = Integer.parseInt(windowBounds[0])
         val height = Integer.parseInt(windowBounds[1])
 
-        val y = heightFunction(height);
+        val y = heightFunction(height)
 
         swipe(
                 (width * edgeOffset).toInt(),
@@ -154,7 +154,7 @@ object AdbTestHelper : AndroidTestHelper {
         val width = Integer.parseInt(windowBounds[0])
         val height = Integer.parseInt(windowBounds[1])
 
-        val y = heightFunction(height);
+        val y = heightFunction(height)
 
         swipe(
                 (width * (1.0 - edgeOffset)).toInt(),

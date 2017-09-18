@@ -8,7 +8,7 @@ import javax.imageio.ImageIO
 object ImageUtil {
 
     @Throws(IOException::class)
-    fun saveBufferedImage(bufferedImage: BufferedImage?, pathname: String) {
+    fun saveBufferedImage(bufferedImage: BufferedImage, pathname: String) {
         ImageIO.write(bufferedImage, "PNG", FileUtil.getFile(pathname))
     }
 

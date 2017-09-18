@@ -1,17 +1,18 @@
 package co.herod.adbwrapper
 
+import co.herod.adbwrapper.ext.pullCapture
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiBounds
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.util.FileUtil
 import co.herod.adbwrapper.util.ImageUtil
-import co.herod.adbwrapper.util.Utils
 import co.herod.kotlin.ext.ageMillis
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
+import java.util.*
 
 private const val SCREENSHOT_EXPIRY_MILLIS = 10000
 
@@ -26,7 +27,7 @@ fun AdbDevice.screenshot(ignoreCache: Boolean): File {
         return file
     }
 
-    pullNewScreenCapture()
+    pullCapture()
     return file
 }
 
@@ -44,19 +45,19 @@ object ScreenshotHelper {
         val height = uiBounds.height
 
         if (width >= 10 && height >= 10) {
-            uiBounds.coordinates?.let {
+            uiBounds.coordinates?.let { bounds: Array<Int> ->
 
                 Observable.fromCallable {
                     getBufferedImage(
                             adbDevice,
-                            it,
+                            bounds,
                             width,
                             height
                     )
                 }
                         .subscribeOn(Schedulers.computation())
                         .observeOn(Schedulers.io())
-                        .doOnNext { bufferedImage -> ImageUtil.saveBufferedImage(bufferedImage, pathForCropImage(it)) }
+                        .doOnNext { bufferedImage -> bufferedImage?.let { it1: BufferedImage -> ImageUtil.saveBufferedImage(it1, pathForCropImage(bounds)) } }
                         .subscribe({ }) { _ -> }
             }
         }
@@ -79,7 +80,5 @@ object ScreenshotHelper {
     }
 }
 
-
-
 private fun pathForCropImage(coordinates: Array<Int>): String =
-        String.format("imgs/screen_sub_%d.png", Utils.intArrayHashcode(coordinates))
+        String.format("imgs/screen_sub_%d.png", Arrays.toString(coordinates).hashCode())

@@ -21,8 +21,15 @@ dependencies {
 
 test {
     testLogging.showStandardStreams = true
-    systemProperties System.getProperties()
+    systemProperties System.properties
 }
+
+//tasks.test.doFirst {
+//    exec { commandLine 'sh', rootDir.toString() + "/shell-scripts/emulator-start.sh" }
+//}
+//tasks.test.doLast {
+//    exec { commandLine 'sh', rootDir.toString() + "/shell-scripts/emulator-stop.sh" }
+//}
 
 compileKotlin {
     sourceCompatibility = JavaVersion.VERSION_1_8

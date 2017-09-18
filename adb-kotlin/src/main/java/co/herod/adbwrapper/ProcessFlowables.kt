@@ -1,5 +1,7 @@
 package co.herod.adbwrapper
 
+import co.herod.adbwrapper.AdbBusManager.outputBus
+import co.herod.adbwrapper.exceptions.AdbError
 import co.herod.adbwrapper.model.AdbDevice
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.toObservable
@@ -49,7 +51,7 @@ object ProcessFactory {
                     .flatMap { it.start().stringsFromProcess() }
                     .map { it.trim() }
                     .flatMap { spotAdbError(it) }
-                    .doOnEach(AdbBusManager.getAdbBus())
+                    .doOnEach(outputBus)
 
     private fun Observable<String>.spotAdbError(): Observable<String> =
             this.flatMap { spotAdbError(it) }

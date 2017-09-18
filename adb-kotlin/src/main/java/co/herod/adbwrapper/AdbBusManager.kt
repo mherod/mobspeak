@@ -1,21 +1,22 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.UiNode
-import co.herod.adbwrapper.util.Utils
 import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
-object AdbBusManager : IAdbBusManager {
+object AdbBusManager {
 
-    private val _adbBus: BusSubject<String> = MainBusSubject()
-    private val _adbUiHierarchyBus: BusSubject<AdbUiHierarchy> = AdbUiHierarchyBus()
-    private val __UI_NODE_BUS: BusSubject<UiNode> = AdbUiNodeBus()
+    val outputBus: BusSubject<String> = MainBusSubject()
+    val uiHierarchyBus: BusSubject<AdbUiHierarchy> = AdbUiHierarchyBus()
+    val uiNodeBus: BusSubject<UiNode> = AdbUiNodeBus()
 
-    override fun getAdbBus(): BusSubject<String> = _adbBus
-    override fun getAdbUiHierarchyBus(): BusSubject<AdbUiHierarchy> = _adbUiHierarchyBus
-    override fun getAdbUiNodeBus(): BusSubject<UiNode> = __UI_NODE_BUS
-
-    internal fun throttledBus(): Observable<String>? = getAdbBus().concatMap { Utils.throttleOutput(it) }
+    internal fun throttledBus(): Observable<String>? = outputBus.concatMap {
+        Observable.timer(10, TimeUnit.MILLISECONDS)
+                .flatMap { _ -> Observable.just(it) }
+    }
 }
 
 class MainBusSubject : BusSubject<String>()

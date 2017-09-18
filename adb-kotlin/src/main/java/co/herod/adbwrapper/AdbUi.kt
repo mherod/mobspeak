@@ -1,5 +1,6 @@
 package co.herod.adbwrapper
 
+import co.herod.adbwrapper.AdbBusManager.uiNodeBus
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.rx.FixedDurationTransformer
@@ -40,19 +41,13 @@ object AdbUi {
     private fun streamUiNodeStrings(packageIdentifier: String) =
             streamUiNodeStringsInternal().filter { s -> UiHierarchyHelper.isPackage(packageIdentifier, s) }
 
-    private fun streamUiNodeStringsInternal() = AdbBusManager.getAdbUiNodeBus()
+    private fun streamUiNodeStringsInternal() = uiNodeBus
             .map { it.toString() }
             .compose(FixedDurationTransformer(1, TimeUnit.DAYS))
             .onErrorReturn { throwable -> throwable.printStackTrace(); "" }
             .repeat()
             .filter { !it.trim { it <= ' ' }.isEmpty() }
 
-}
-
-fun AdbDevice.pullNewScreenCapture() = with(Adb) {
-    this@pullNewScreenCapture.execute("shell screencap -p /sdcard/screen.png")
-    this@pullNewScreenCapture.execute("pull /sdcard/screen.png")
-    this@pullNewScreenCapture.execute("shell rm /sdcard/screen.png")
 }
 
 fun AdbDevice.subscribeUiNodes(): Observable<UiNode> = Adb.dumpUiNodes(this)

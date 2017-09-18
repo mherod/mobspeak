@@ -23,7 +23,7 @@ object Adb {
 
     fun pressKeyBlocking(adbDevice: AdbDevice, key: Int): String =
             pressKey(adbDevice, key)
-                    ?.timeout(10, TimeUnit.SECONDS)?.blockingGet() ?: ""
+                    .blocking(10, TimeUnit.SECONDS)
 
     fun getDisplayDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
             adbDevice.dumpsysMap(S.PROPS_DISPLAY).toObservable()

@@ -14,7 +14,7 @@ class UiNode(private val nodeString: String) {
     }
 
     val visible: Boolean by lazy {
-        bounds.let { it.width > 0 && it.height > 0 } ?: false
+        bounds.let { it.width > 0 && it.height > 0 }
     }
 
     override fun toString(): String {

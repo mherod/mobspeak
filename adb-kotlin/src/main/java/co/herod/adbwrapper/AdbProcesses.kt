@@ -66,7 +66,7 @@ internal object AdbProcesses : AdbOps {
             adb(adbDevice, dumpsys(type, pipe))
 
     @CheckReturnValue
-    override fun pressKey(adbDevice: AdbDevice, key: Int): Single<String>? =
+    override fun pressKey(adbDevice: AdbDevice, key: Int): Single<String> =
             adb(adbDevice, inputKeyEvent(key)).lastOrError()
 
     @CheckReturnValue

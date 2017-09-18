@@ -6,10 +6,10 @@ import java.util.*
 object AdbPackageManager {
 
     fun launchApp(adbDevice: AdbDevice, packageName: String) =
-            Adb.now(adbDevice, "shell monkey -p $packageName 1")
+            adbDevice.execute("shell monkey -p $packageName 1")
 
     fun listPackages(adbDevice: AdbDevice): MutableList<String> =
-            Adb.command(adbDevice, "shell pm list packages")
+            adbDevice.command("shell pm list packages")
                     .filter { ":" in it }
                     .map { it.split(":").last() }
                     .toSortedList()
