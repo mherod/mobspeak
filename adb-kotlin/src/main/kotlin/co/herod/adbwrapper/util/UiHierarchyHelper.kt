@@ -53,7 +53,7 @@ object UiHierarchyHelper {
 
     fun uiXmlToNodes(upstream: Observable<String>): Observable<String> = upstream
             .flatMapIterable { it.split(">".toRegex()).dropLastWhile { it.isEmpty() } }
-            .map { it.trim { it <= ' ' } }
+            .map { it.trim() }
             .map { s -> if (s.endsWith(">").not()) s + ">"; s }
             .filter { "=" in it }
             .filter { KEY_BOUNDS_DELIM in it }

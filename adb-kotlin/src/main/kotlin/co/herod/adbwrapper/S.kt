@@ -7,7 +7,6 @@ object S {
     const val ENABLE = "enable"
     const val SERVICE = "svc"
     const val DEVICES = "devices"
-    const val SPACE = " "
     const val PROPS_DISPLAY = "display"
     const val PROPS_INPUT_METHOD = "input_method"
     const val KEY_SCREEN_STATE = "mScreenState"

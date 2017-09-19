@@ -3,7 +3,7 @@
 package co.herod.adbwrapper.examples;
 
 import co.herod.adbwrapper.AdbDeviceManager
-import co.herod.adbwrapper.subscribeUiNodes
+import co.herod.adbwrapper.subscribeUiNodesSource
 import co.herod.adbwrapper.tap
 
 fun main(args: Array<String>) {
@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
 
     println("connected this device $device")
 
-    device.subscribeUiNodes().doOnNext { uiNode ->
+    device.subscribeUiNodesSource().doOnNext { uiNode ->
 
         println("$uiNode")
 

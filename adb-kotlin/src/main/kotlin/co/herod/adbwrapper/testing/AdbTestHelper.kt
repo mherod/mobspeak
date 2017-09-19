@@ -300,7 +300,7 @@ object AdbTestHelper : AndroidTestHelper {
             timeout: Int = 30,
             timeUnit: TimeUnit = TimeUnit.SECONDS
     ) = device {
-        subscribeUiNodes()
+        subscribeUiNodesSource()
                 .filter { uiNodePredicate?.test(it) == true }
                 .timeout(timeout, timeUnit)
                 .map { function(it).orEmpty() }
