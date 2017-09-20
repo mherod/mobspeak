@@ -2,7 +2,6 @@ package co.herod.adbwrapper
 
 import co.herod.adbwrapper.AdbBusManager.uiNodeBus
 import co.herod.adbwrapper.model.AdbDevice
-import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.rx.FixedDurationTransformer
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
@@ -25,13 +24,13 @@ object AdbUi {
 //            .observeOn(Schedulers.newThread())
 //            .subscribeOn(Schedulers.newThread())
 
-    fun fetchUiHierarchy(adbDevice: AdbDevice): Observable<UiNode> = Adb.dumpUiHierarchy(adbDevice, 30, TimeUnit.SECONDS)
-            .map { it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1) }
-            .map { AdbUiHierarchy(it, adbDevice) }
-            .map { it.xmlString }
-            .compose { UiHierarchyHelper.uiXmlToNodes(it) }
-            .map { UiNode(it) }
-            .doOnEach(AdbBusManager.getAdbUiNodeBus())
+//    fun fetchUiHierarchy(adbDevice: AdbDevice): Observable<UiNode> = Adb.dumpUiHierarchy(adbDevice, 30, TimeUnit.SECONDS)
+//            .map { it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1) }
+//            .map { AdbUiHierarchy(it, adbDevice) }
+//            .map { it.xmlString }
+//            .compose { UiHierarchyHelper.uiXmlToNodes(it) }
+//            .map { UiNode(it) }
+//            .doOnEach(AdbBusManager.uiNodeBus)
 
     private fun streamUiNodes() = streamUiNodeStringsInternal().map { UiNode(it) }
 

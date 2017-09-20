@@ -3,8 +3,8 @@
 package co.herod.adbwrapper.examples;
 
 import co.herod.adbwrapper.AdbDeviceManager
+import co.herod.adbwrapper.device.tap
 import co.herod.adbwrapper.subscribeUiNodesSource
-import co.herod.adbwrapper.tap
 
 fun main(args: Array<String>) {
 

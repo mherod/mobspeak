@@ -1,7 +1,7 @@
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.*
-import co.herod.adbwrapper.ext.*
+import co.herod.adbwrapper.device.*
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiNode
 import co.herod.kotlin.ext.assertExists
@@ -198,7 +198,8 @@ object AdbTestHelper : AndroidTestHelper {
     }
 
     override fun launchUrl(url: String, packageName: String) = device {
-        AdbProcesses.launchUrl(this, url, packageName).blockingSubscribe()}
+        AdbProcesses.launchUrl(this, url, packageName).blockingSubscribe()
+    }
 
     override fun takeScreenshot(): Unit = device {
         screenshot(false)

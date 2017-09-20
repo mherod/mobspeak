@@ -1,6 +1,6 @@
 package co.herod.adbwrapper
 
-import co.herod.adbwrapper.ext.pullCapture
+import co.herod.adbwrapper.device.pullCapture
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiBounds
 import co.herod.adbwrapper.model.UiNode

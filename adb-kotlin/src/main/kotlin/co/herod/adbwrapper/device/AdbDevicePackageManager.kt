@@ -1,4 +1,4 @@
-package co.herod.adbwrapper.ext
+package co.herod.adbwrapper.device
 
 import co.herod.adbwrapper.execute
 import co.herod.adbwrapper.model.AdbDevice
@@ -20,5 +20,5 @@ fun AdbDevicePackageManager.updatePackage(apkPath: String) = with(adbDevice) {
 }
 
 fun AdbDevicePackageManager.uninstallPackage(packageName: String) = with(adbDevice) {
-    execute( "uninstall $packageName")
+    execute("uninstall $packageName")
 }

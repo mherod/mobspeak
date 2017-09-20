@@ -143,3 +143,4 @@ cucumber/build/
 projectFilesBackup/.idea/workspace.xml
 
 .idea/runConfigurations.xml
+/.gtm/

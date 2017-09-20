@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package co.herod.adbwrapper.ext
+package co.herod.adbwrapper.device
 
 import co.herod.adbwrapper.AdbCommand
 import co.herod.adbwrapper.model.AdbDevice
