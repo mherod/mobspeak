@@ -1,6 +1,7 @@
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.model.UiNode
+import java.io.File
 import java.util.concurrent.TimeUnit
 import java.util.function.Predicate
 
@@ -55,7 +56,7 @@ public interface AndroidTestHelper {
 
     fun launchUrl(url: String, packageName: String)
 
-    fun takeScreenshot()
+    fun takeScreenshot(): File
 
     fun touchText(text: String): String
 

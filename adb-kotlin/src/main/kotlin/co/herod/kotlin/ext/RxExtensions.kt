@@ -1,5 +1,6 @@
 package co.herod.kotlin.ext
 
+import co.herod.adbwrapper.model.DumpsysEntry
 import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.concurrent.TimeUnit
@@ -37,3 +38,18 @@ fun Single<String>.blocking(
         .retryWithTimeout(timeout, timeUnit)
         .onErrorReturn { "" }
         .blockingGet()
+
+fun Observable<DumpsysEntry>.justKeys(vararg keys: String) =
+        toSingleMap().map { it.filterKeys { it in keys } }
+
+fun Observable<Map<String, String>>.justKeys(vararg keys: String) =
+        map { it.filterKeys { it in keys } }
+
+fun Single<Map<String, String>>.justKeys(vararg keys: String) =
+        map { it.filterKeys { it in keys } }
+
+fun Observable<Map<String, String>>.valueOf(key: String): Observable<String> =
+        map { it[key] }
+
+private fun Observable<DumpsysEntry>.toSingleMap() =
+        toMap({ it -> it.key }, { it -> it.value })

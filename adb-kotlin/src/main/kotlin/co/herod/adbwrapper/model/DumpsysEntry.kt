@@ -1,6 +1,6 @@
 package co.herod.adbwrapper.model
 
-import co.herod.adbwrapper.util.PropHelper
+import co.herod.adbwrapper.util.hasPositiveValue
 import io.reactivex.Observable
 import io.reactivex.Single
 import kotlin.collections.Map.Entry
@@ -16,8 +16,16 @@ class DumpsysEntry(private val entry: Entry<String, String>): Entry<String, Stri
         get() = entry.value
 }
 
-fun Observable<DumpsysEntry>.property(s: String): Single<DumpsysEntry> =
-        filter { entry -> entry.key == s }.firstOrError()
+fun Single<DumpsysEntry>.hasPositiveValue(): Boolean = blockingGet().hasPositiveValue()
 
-fun Single<DumpsysEntry>.isPositive(): Boolean =
-        map(PropHelper::hasPositiveValue).blockingGet()
+fun Observable<DumpsysEntry>.completeMap(): Single<MutableMap<String, DumpsysEntry>> =
+        toMap { it.key }
+
+fun Observable<DumpsysEntry>.property(key: String): DumpsysEntry? =
+        completeMap().map { it[key] }.blockingGet()
+
+fun Observable<DumpsysEntry>.isPropertyPositive(key: String): Boolean =
+        filterProperty(key).blockingGet().hasPositiveValue()
+
+fun Observable<DumpsysEntry>.filterProperty(s: String): Single<DumpsysEntry> =
+        filter { entry -> entry.key == s }.firstOrError()

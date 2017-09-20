@@ -2,33 +2,39 @@
 
 package co.herod.adbwrapper.device
 
-import co.herod.adbwrapper.Adb
+import co.herod.adbwrapper.dumpsys
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.DumpsysEntry
+import co.herod.adbwrapper.processDumpsys
 import io.reactivex.Observable
 
 class AdbDeviceDumpsys(val adbDevice: AdbDevice)
 
 fun AdbDevice.dumpsys() = AdbDeviceDumpsys(this)
 
-fun AdbDeviceDumpsys.windows(args: String = "") = with(adbDevice) {
-    Adb.getWindowDumpsys(this, args)
-}
-
-fun AdbDeviceDumpsys.display(): Observable<DumpsysEntry> = with(adbDevice) {
-
-    return Adb.getDisplayDumpsys(this)
+@JvmOverloads
+fun AdbDeviceDumpsys.windows(args: String = ""): Observable<DumpsysEntry> = with(adbDevice) {
+    dumpsys(this, "window $args".trim())
+            .processDumpsys("=")
+            .toObservable()
             .flatMapIterable { it.entries }
-            .filter { " " in it.key }
-            .sorted(java.util.Comparator.comparing<Map.Entry<String, String>, String> { it.key })
             .map { DumpsysEntry(it) }
 }
 
-fun AdbDeviceDumpsys.inputMethod(): Observable<DumpsysEntry> = with(adbDevice) {
+@JvmOverloads
+fun AdbDeviceDumpsys.display(args: String = ""): Observable<DumpsysEntry> = with(adbDevice) {
+    dumpsys(this, "display $args".trim())
+            .processDumpsys("=")
+            .toObservable()
+            .flatMapIterable { it.entries }
+            .map { DumpsysEntry(it) }
+}
 
-    return co.herod.adbwrapper.Adb.getInputMethodDumpsys(this)
+@JvmOverloads
+fun AdbDeviceDumpsys.inputMethod(args: String = ""): Observable<DumpsysEntry> = with(adbDevice) {
+    dumpsys(this, "input_method $args".trim())
+            .processDumpsys("=")
+            .toObservable()
             .flatMapIterable({ it.entries })
-            .filter { " " in it.key }
-            .sorted(Comparator.comparing<Map.Entry<String, String>, String> { it.key })
             .map { DumpsysEntry(it) }
 }

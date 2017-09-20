@@ -1,16 +1,13 @@
 package co.herod.adbwrapper
 
-import co.herod.adbwrapper.AdbProcesses.dumpsys
-import co.herod.adbwrapper.AdbProcesses.pressKey
-import co.herod.adbwrapper.AdbProcesses.readDeviceFile
-import co.herod.adbwrapper.AdbProcesses.uiautomatorDump
-import co.herod.adbwrapper.AdbProcesses.uiautomatorDumpAndRead
-import co.herod.adbwrapper.AdbProcesses.uiautomatorDumpExecOut
+import co.herod.adbwrapper.device.dumpsys
+import co.herod.adbwrapper.device.windows
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.util.UiHierarchyHelper
 import co.herod.kotlin.ext.blocking
+import co.herod.kotlin.ext.justKeys
 import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.*
@@ -25,31 +22,23 @@ object Adb {
             pressKey(adbDevice, key)
                     .blocking(10, TimeUnit.SECONDS)
 
-    fun getDisplayDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap(S.PROPS_DISPLAY).toObservable()
+    fun getPackageDumpsys(adbDevice: AdbDevice, packageName: String = "") =
+            dumpsys(adbDevice, "package $packageName".trim())
+                    .processDumpsys("=")
+                    .toObservable()
 
-    fun getInputMethodDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap(S.PROPS_INPUT_METHOD).toObservable()
+    fun getActivityDumpsys(adbDevice: AdbDevice) =
+            dumpsys(adbDevice, "activity")
+                    .processDumpsys("=")
+                    .toObservable()
 
-    fun getPackageDumpsys(adbDevice: AdbDevice, packageName: String = ""): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap("package $packageName".trim()).toObservable()
+    fun getActivitiesDumpsys(adbDevice: AdbDevice) =
+            dumpsys(adbDevice, "activity activities")
+                    .processDumpsys("=")
+                    .toObservable()
 
-    fun getActivityDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap("activity").toObservable()
-
-    fun getActivitiesDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap("activity activities").toObservable()
-
-    fun getWindowDumpsys(adbDevice: AdbDevice, args: String = ""): Observable<Map<String, String>> =
-            adbDevice.dumpsysMap("window $args".trim()).toObservable()
-
-    fun getWindowFocusDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
-            getWindowDumpsys(adbDevice, "windows").map {
-                it.filterKeys { it == "mCurrentFocus" || it == "mFocusedApp" }
-            }
-
-    private fun AdbDevice.dumpsysMap(type: String): Single<Map<String, String>> =
-            dumpsys(this, type).processDumpsys("=")
+    fun AdbDevice.getWindowFocusDumpsys() =
+            dumpsys().windows().justKeys("mCurrentFocus", "mFocusedApp")
 
     private fun AdbDevice.dumpsysMap(type: String, pipe: String): Single<Map<String, String>> =
             dumpsys(this, type, pipe).processDumpsys("=")
@@ -134,7 +123,10 @@ object Adb {
 }
 
 fun AdbDevice.command(command: String): Observable<String> =
-        AdbProcesses.adb(this, command)
+        AdbCommand.Builder()
+                .setDevice(this)
+                .setCommand(command)
+                .observable()
 
 fun AdbDevice.execute(command: String) {
     command(command).blocking()
@@ -142,13 +134,15 @@ fun AdbDevice.execute(command: String) {
 
 private fun String.isXmlOutput() = "<?xml" in this
 
-private fun Observable<String>.processDumpsys(c: String): Single<Map<String, String>> =
+fun Observable<String>.processDumpsys(c: String): Single<Map<String, String>> =
         this
                 // .doOnNext(System.out::println)
                 .filter { c in it }
                 .map { it.trim() }
-                .map { it.split(
-                        regex = c.toRegex(),
-                        limit = 2
-                ) }
+                .map {
+                    it.split(
+                            regex = c.toRegex(),
+                            limit = 2
+                    )
+                }
                 .toMap({ it[0].trim() }) { it[1].trim() }

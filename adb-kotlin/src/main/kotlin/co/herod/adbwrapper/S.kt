@@ -7,8 +7,6 @@ object S {
     const val ENABLE = "enable"
     const val SERVICE = "svc"
     const val DEVICES = "devices"
-    const val PROPS_DISPLAY = "display"
-    const val PROPS_INPUT_METHOD = "input_method"
     const val KEY_SCREEN_STATE = "mScreenState"
     const val INTENT_ACTION_VIEW = "android.intent.action.VIEW"
     const val UI_DUMP_XML_PATH = "/sdcard/window_dump.xml"

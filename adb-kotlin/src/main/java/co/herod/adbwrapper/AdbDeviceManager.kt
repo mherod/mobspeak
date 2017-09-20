@@ -21,7 +21,5 @@ object AdbDeviceManager {
             .blockingGet()
 
     private fun allDevices(): Observable<AdbDevice> =
-            AdbProcesses.devices()
-                    .filter { "\t" in it }
-                    .map { AdbDevice.parseAdbString(it) }
+            devices().filter { "\t" in it }.map { AdbDevice.parseAdbString(it) }
 }
