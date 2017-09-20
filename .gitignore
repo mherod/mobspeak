@@ -139,3 +139,7 @@ cucumber/build/
 
 .idea/modules/adb-kotlin/adb-kotlin.iml
 .idea/modules/cucumber/cucumber.iml
+
+projectFilesBackup/.idea/workspace.xml
+
+.idea/runConfigurations.xml
