@@ -1,12 +1,9 @@
 package co.herod.adbwrapper.model
 
-/**
- * Created by matthewherod on 23/04/2017.
- */
-class AdbDevice {
+import co.herod.adbwrapper.DEVICE_CONNECTED_DEVICE
+import co.herod.adbwrapper.DEVICE_EMULATOR
 
-    private val DEVICE_CONNECTED_DEVICE = "device"
-    private val DEVICE_EMULATOR = "emulator"
+class AdbDevice {
 
     var deviceIdentifier: String? = null
         private set

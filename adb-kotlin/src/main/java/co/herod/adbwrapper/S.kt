@@ -12,3 +12,6 @@ object S {
     const val SERVICE = "svc"
     const val SPACE = " "
 }
+
+const val DEVICE_CONNECTED_DEVICE = "device"
+const val DEVICE_EMULATOR = "emulator"
