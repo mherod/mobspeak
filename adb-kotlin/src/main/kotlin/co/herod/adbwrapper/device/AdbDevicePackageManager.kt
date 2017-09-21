@@ -1,5 +1,8 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper.device
 
+import co.herod.adbwrapper.AdbPackageManager
 import co.herod.adbwrapper.execute
 import co.herod.adbwrapper.model.AdbDevice
 
@@ -21,4 +24,8 @@ fun AdbDevicePackageManager.updatePackage(apkPath: String) = with(adbDevice) {
 
 fun AdbDevicePackageManager.uninstallPackage(packageName: String) = with(adbDevice) {
     execute("uninstall $packageName")
+}
+
+fun AdbDevicePackageManager.installedPackages(): List<String> = with(adbDevice) {
+    AdbPackageManager.listPackages(this)
 }
