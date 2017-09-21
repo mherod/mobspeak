@@ -255,6 +255,7 @@ private fun AdbDeviceTestHelper.waitForUiNodeForFunc(
     subscribeUiNodesSource()
             .filter { uiNodePredicate?.test(it) == true }
             .timeout(timeout, timeUnit)
+            .firstOrError()
             .map { function(it).orEmpty() }
             .blocking(timeout, timeUnit)
 }

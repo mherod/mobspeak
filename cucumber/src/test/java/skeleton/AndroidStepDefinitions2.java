@@ -337,7 +337,6 @@ public class AndroidStepDefinitions2 {
     @Then("^I see the \"([^\"]*)\" text$")
     public void iSeeTheText(String text) throws Throwable {
 
-
         AdbTestHelperKt.waitForText(testHelper(), text, 30, TimeUnit.SECONDS);
     }
 
