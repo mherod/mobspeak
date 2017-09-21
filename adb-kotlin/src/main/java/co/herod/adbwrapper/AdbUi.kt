@@ -57,5 +57,13 @@ fun AdbDevice.getWindowBounds(): UiBounds = dumpsys().windows().filterProperty("
         .map { it.substring(it.lastIndexOf('[') + 1, it.lastIndexOf(']')) }
         .map { it.split(',') }
         .map { it.map { Integer.parseInt(it) } }
+        .map {
+            val newList = ArrayList(it)
+            if (newList.size == 2) {
+                newList.add(0, 0)
+                newList.add(0, 0)
+            }
+            newList
+        }
         .map { UiBounds(it.toTypedArray()) }
         .blockingGet()
