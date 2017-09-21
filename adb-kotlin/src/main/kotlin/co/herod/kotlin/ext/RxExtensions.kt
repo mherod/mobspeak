@@ -39,17 +39,24 @@ fun Single<String>.blocking(
         .onErrorReturn { "" }
         .blockingGet()
 
-fun Observable<DumpsysEntry>.justKeys(vararg keys: String) =
-        toSingleMap().map { it.filterKeys { it in keys } }
+@JvmName("filterPropertiesByKey")
+fun Observable<DumpsysEntry>.filterKeys(vararg keys: String): Observable<Map<String, String>> =
+        toMapRxSingle().map { it.filterKeys { it in keys } }.toObservable()
 
-fun Observable<Map<String, String>>.justKeys(vararg keys: String) =
+fun Observable<Map<String, String>>.filterKeys(vararg keys: String): Observable<Map<String, String>> =
         map { it.filterKeys { it in keys } }
 
-fun Single<Map<String, String>>.justKeys(vararg keys: String) =
+fun Single<Map<String, String>>.filterKeys(vararg keys: String): Single<Map<String, String>> =
         map { it.filterKeys { it in keys } }
+
+fun Single<Map<String, String>>.observableValues(): Observable<String> =
+        toObservable().flatMapIterable { it.values }
 
 fun Observable<Map<String, String>>.valueOf(key: String): Observable<String> =
         map { it[key] }
 
-private fun Observable<DumpsysEntry>.toSingleMap() =
+fun Observable<DumpsysEntry>.toMapRx(): Observable<MutableMap<String, String>> =
+        toMap({ it -> it.key }, { it -> it.value }).toObservable()
+
+fun Observable<DumpsysEntry>.toMapRxSingle(): Single<MutableMap<String, String>> =
         toMap({ it -> it.key }, { it -> it.value })

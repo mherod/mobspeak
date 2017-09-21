@@ -37,7 +37,7 @@ object Adb {
                     .processDumpsys("=")
                     .toObservable()
 
-    fun AdbDevice.getWindowFocusDumpsys() =
+    fun AdbDevice.getWindowFocusDumpsys(): Single<Map<String, String>> =
             dumpsys().windows().justKeys("mCurrentFocus", "mFocusedApp")
 
     private fun AdbDevice.dumpsysMap(type: String, pipe: String): Single<Map<String, String>> =

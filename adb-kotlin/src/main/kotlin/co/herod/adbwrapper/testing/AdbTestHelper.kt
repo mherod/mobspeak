@@ -1,3 +1,5 @@
+@file:JvmName("AdbTestHelperKt")
+
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.*
@@ -5,10 +7,7 @@ import co.herod.adbwrapper.device.*
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.model.isPropertyPositive
-import co.herod.kotlin.ext.assertExists
-import co.herod.kotlin.ext.blocking
-import co.herod.kotlin.ext.containsIgnoreCase
-import co.herod.kotlin.ext.timeout
+import co.herod.kotlin.ext.*
 import io.reactivex.Observable
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -43,24 +42,26 @@ fun AdbDeviceTestHelper.turnScreenOff() = with(adbDevice) {
 fun AdbDeviceTestHelper.turnScreenOn() = with(adbDevice) {
     screen().turnOn()
 }
-//
-//fun AdbDeviceTestHelper.assertActivityName(activityName: String) = with(adbDevice) {
-//
-//    dumpsys().windows().toMap { it.key }
-//            .flatMapIterable { it.values }
-//            .filter { it.containsIgnoreCase(activityName) }
-//            .firstOrError()
-//            .blocking(10, TimeUnit.SECONDS)
-//}
-//
-//fun AdbDeviceTestHelper.assertNotActivityName(activityName: String) = with(adbDevice) {
-//
-//    dumpsys().windows()
-//            .flatMapIterable { it.values }
-//            .filter { (it.containsIgnoreCase(activityName)).not() }
-//            .firstOrError()
-//            .blocking(10, TimeUnit.SECONDS)
-//}
+
+fun AdbDeviceTestHelper.assertActivityName(activityName: String) = with(adbDevice) {
+
+    this.dumpsys().windows()
+            .justKeys("mCurrentFocus", "mFocusedApp")
+            .observableValues()
+            .filter { it.containsIgnoreCase(activityName) }
+            .firstOrError()
+            .blocking(10, TimeUnit.SECONDS)
+}
+
+fun AdbDeviceTestHelper.assertNotActivityName(activityName: String) = with(adbDevice) {
+
+    this.dumpsys().windows()
+            .justKeys("mCurrentFocus", "mFocusedApp")
+            .observableValues()
+            .filter { (it.containsIgnoreCase(activityName)).not() }
+            .firstOrError()
+            .blocking(10, TimeUnit.SECONDS)
+}
 
 fun AdbDeviceTestHelper.assertPower(minPower: Int) {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -78,7 +79,8 @@ fun AdbDeviceTestHelper.dismissDialog() {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 }
 
-fun AdbDeviceTestHelper.dragDown(widthFunction: ((Int) -> Int), edgeOffset: Double) = with(adbDevice) {
+@JvmOverloads
+fun AdbDeviceTestHelper.dragDown(widthFunction: ((Int) -> Int), edgeOffset: Double = 0.0) = with(adbDevice) {
     getWindowBounds().run {
         widthFunction(width).let {
             swipe(it,
@@ -89,7 +91,8 @@ fun AdbDeviceTestHelper.dragDown(widthFunction: ((Int) -> Int), edgeOffset: Doub
     }
 }
 
-fun AdbDeviceTestHelper.dragUp(widthFunction: ((Int) -> Int), edgeOffset: Double) = with(adbDevice) {
+@JvmOverloads
+fun AdbDeviceTestHelper.dragUp(widthFunction: ((Int) -> Int), edgeOffset: Double = 0.0) = with(adbDevice) {
     getWindowBounds().run {
         widthFunction(width).let {
             swipe(
@@ -102,7 +105,8 @@ fun AdbDeviceTestHelper.dragUp(widthFunction: ((Int) -> Int), edgeOffset: Double
     }
 }
 
-fun AdbDeviceTestHelper.dragRight(heightFunction: ((Int) -> Int), edgeOffset: Double) = with(adbDevice) {
+@JvmOverloads
+fun AdbDeviceTestHelper.dragRight(heightFunction: ((Int) -> Int), edgeOffset: Double = 0.0) = with(adbDevice) {
     getWindowBounds().run {
         heightFunction(height).let {
             swipe((width * edgeOffset).toInt(),
@@ -113,7 +117,8 @@ fun AdbDeviceTestHelper.dragRight(heightFunction: ((Int) -> Int), edgeOffset: Do
     }
 }
 
-fun AdbDeviceTestHelper.dragLeft(heightFunction: ((Int) -> Int), edgeOffset: Double) = with(adbDevice) {
+@JvmOverloads
+fun AdbDeviceTestHelper.dragLeft(heightFunction: ((Int) -> Int), edgeOffset: Double = 0.0) = with(adbDevice) {
     getWindowBounds().run {
         heightFunction(height).let {
             swipe((width * (1.0 - edgeOffset)).toInt(),

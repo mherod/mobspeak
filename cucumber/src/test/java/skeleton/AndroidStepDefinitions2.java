@@ -3,20 +3,59 @@ package skeleton;
 import junit.framework.AssertionFailedError;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import co.herod.adbwrapper.testing.AdbTestHelper;
+import co.herod.adbwrapper.AdbDeviceManager;
+import co.herod.adbwrapper.device.AdbDeviceInputsKt;
+import co.herod.adbwrapper.device.AdbDeviceKeyPressKt;
+import co.herod.adbwrapper.exceptions.NoConnectedAdbDeviceException;
+import co.herod.adbwrapper.model.AdbDevice;
+import co.herod.adbwrapper.testing.AdbDeviceTestHelper;
+import co.herod.adbwrapper.testing.AdbTestHelperKt;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import io.reactivex.annotations.CheckReturnValue;
+import kotlin.jvm.functions.Function1;
 
 public class AndroidStepDefinitions2 {
 
-    public static final double DEFAULT_EDGE_OFFSET = 0.2;
+    private static final double DEFAULT_EDGE_OFFSET = 0.2;
+
+    private Optional<AdbDevice> adbDevice;
 
     public AndroidStepDefinitions2() {
+        adbDevice = Optional.empty();
+    }
 
+    private AdbDevice device() {
+        return adbDevice.orElseGet(this::tryConnectDevice);
+    }
+
+    private AdbDeviceTestHelper testHelper() {
+        return this.adbDevice
+                .map(AdbDeviceTestHelper::new)
+                .orElseThrow(NoConnectedAdbDeviceException::new);
+    }
+
+    @CheckReturnValue
+    private AdbDevice tryConnectDevice() {
+
+        List<AdbDevice> allDevices = AdbDeviceManager.getAllDevices();
+
+        if (allDevices.isEmpty()) {
+            throw new NoConnectedAdbDeviceException();
+        }
+
+        adbDevice = Optional.of(allDevices.get(0));
+
+        return testHelper().getAdbDevice();
+    }
+
+    private void tryConnectDeviceLogged() {
+        System.out.println(String.format("Connected device: %s", tryConnectDevice().toString()));
     }
 
     @When("^a monkey snatches my device$")
@@ -27,27 +66,25 @@ public class AndroidStepDefinitions2 {
 
     @Given("^I am on the \"([^\"]*)\" activity$")
     public void assertActivityName(String activityName) throws Throwable {
-
-        AdbTestHelper.INSTANCE.assertActivityName(activityName);
+        AdbTestHelperKt.assertActivityName(testHelper(), activityName);
     }
 
     @Then("^I am not on the \"([^\"]*)\" activity$")
     public void assertNotActivityName(String activityName) throws Throwable {
-
-        AdbTestHelper.INSTANCE.assertNotActivityName(activityName);
+        AdbTestHelperKt.assertNotActivityName(testHelper(), activityName);
     }
 
     @Given("^I have a device with power at least (\\d+)$")
     public void connectDeviceAssertPower(int minPower) throws Throwable {
 
-        AdbTestHelper.INSTANCE.connectDevice();
-        AdbTestHelper.INSTANCE.assertPower(minPower);
+        tryConnectDeviceLogged();
+
+        AdbTestHelperKt.assertPower(testHelper(), minPower);
     }
 
     @Then("^I dismiss the dialog$")
     public void dismissDialog() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dismissDialog();
+        AdbTestHelperKt.dismissDialog(testHelper());
     }
 
     @When("^I am on the device app launcher$")
@@ -58,20 +95,17 @@ public class AndroidStepDefinitions2 {
 
     @When("^I close the app \"([^\"]*)\"$")
     public void iCloseTheApp(String packageName) throws Throwable {
-
-        AdbTestHelper.INSTANCE.forceStopApp(packageName);
+        AdbTestHelperKt.forceStopApp(testHelper(), packageName);
     }
 
     @When("^I close the navigation drawer$")
     public void iCloseTheNavigationDrawer() throws Throwable {
-
-        AdbTestHelper.INSTANCE.closeLeftDrawer();
+        AdbTestHelperKt.closeLeftDrawer(testHelper());
     }
 
     @When("^I dismiss the keyboard$")
     public void iDismissTheKeyboard() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dismissKeyboard();
+        AdbTestHelperKt.dismissKeyboard(testHelper());
     }
 
     @Then("^I do not see any progress indicators$")
@@ -89,15 +123,15 @@ public class AndroidStepDefinitions2 {
     @Then("^I do not see the \"([^\"]*)\" text$")
     public void iDoNotSeeTheText(String text) throws Throwable {
 
-        AdbTestHelper.INSTANCE.waitSeconds(2);
-        AdbTestHelper.INSTANCE.failOnText(text, 5, TimeUnit.SECONDS);
+        AdbTestHelperKt.waitSeconds(testHelper(), 2);
+        AdbTestHelperKt.failOnText(testHelper(), text, 5, TimeUnit.SECONDS);
     }
 
     @Then("^I do not see the text \"([^\"]*)\"$")
     public void iDoNotSeeTheText2(String text) throws Throwable {
 
-        AdbTestHelper.INSTANCE.waitSeconds(2);
-        AdbTestHelper.INSTANCE.failOnText(text, 5, TimeUnit.SECONDS);
+        AdbTestHelperKt.waitSeconds(testHelper(), 2);
+        AdbTestHelperKt.failOnText(testHelper(), text, 5, TimeUnit.SECONDS);
     }
 
     @Then("^I do not see the text \"([^\"]*)\" disappear$")
@@ -108,62 +142,52 @@ public class AndroidStepDefinitions2 {
 
     @When("^I drag down$")
     public void dragDown() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dragDown(width -> width / 3, DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragDown(testHelper(), width -> width / 3, DEFAULT_EDGE_OFFSET);
     }
 
     @When("^I drag down along the left side$")
     public void dragDownAlongTheLeftSide() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dragDown(width -> width / 3, DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragDown(testHelper(), width -> width / 3, DEFAULT_EDGE_OFFSET);
     }
 
     @When("^I drag down along the right side$")
     public void dragDownAlongTheRightSide() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dragDown(width -> width - (width / 3), DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragDown(testHelper(), width -> width - (width / 3), DEFAULT_EDGE_OFFSET);
     }
 
     @Then("^I drag down from the left side$")
     public void dragDownFromTheLeftSide() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dragDown(width -> width / 3, DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragDown(testHelper(), width -> width / 3, DEFAULT_EDGE_OFFSET);
     }
 
     @Then("^I drag to scroll down$")
     public void dragToScrollDown() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dragUp(width -> width / 2, DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragUp(testHelper(), width -> width / 2, DEFAULT_EDGE_OFFSET);
     }
 
     @Then("^I drag to scroll up$")
     public void dragToScrollUp() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dragDown(width -> width / 2, DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragDown(testHelper(), width -> width / 2, DEFAULT_EDGE_OFFSET);
     }
 
     @When("^I drag up$")
     public void dragUp() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dragUp(width -> width / 2, DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragUp(testHelper(), width -> width / 2, DEFAULT_EDGE_OFFSET);
     }
 
     @When("^I drag up along the left side$")
     public void dragUpAlongTheLeftSide() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dragUp(width -> width / 3, DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragUp(testHelper(), width -> width / 3, DEFAULT_EDGE_OFFSET);
     }
 
     @When("^I drag up along the right side$")
     public void iDragUpAlongTheRightSide() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dragUp(width -> width - (width / 3), DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragUp(testHelper(), width -> width - (width / 3), DEFAULT_EDGE_OFFSET);
     }
 
     @Then("^I drag up from the left side$")
     public void iDragUpFromTheLeftSide() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dragUp(width -> width / 3, DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragUp(testHelper(), width -> width / 3, DEFAULT_EDGE_OFFSET);
     }
 
     @Then("^I enter \"([^\"]*)\" into \"([^\"]*)\"$")
@@ -186,28 +210,26 @@ public class AndroidStepDefinitions2 {
 
     @When("^I go back$")
     public void goBack() throws Throwable {
-
-        AdbTestHelper.INSTANCE.backButton();
+        AdbTestHelperKt.backButton(testHelper());
     }
 
     @Given("^I have a connected device$")
     public void iHaveAConnectedDevice() throws Throwable {
-
-        AdbTestHelper.INSTANCE.connectDevice();
+        tryConnectDeviceLogged();
     }
 
     @Then("^I have a connected device with the package \"([^\"]*)\" version \"([^\"]*)\"$")
     public void iHaveAConnectedDeviceWithThePackageVersion(String packageName, String versionName) throws Throwable {
 
-        List<String> packages = AdbTestHelper.INSTANCE.getInstalledPackages();
+        tryConnectDeviceLogged();
+
+        List<String> packages = AdbTestHelperKt.getInstalledPackages(testHelper());
 
         if (!packages.contains(packageName)) {
             throw new AssertionFailedError("Packages list did not contain " + packageName);
         }
 
-        // TODO check version
-
-        if (!AdbTestHelper.INSTANCE.installedPackageIsVersion(packageName, versionName)) {
+        if (!AdbTestHelperKt.installedPackageIsVersion(testHelper(), packageName, versionName)) {
             throw new AssertionFailedError("Package was not correct version");
         }
     }
@@ -215,7 +237,9 @@ public class AndroidStepDefinitions2 {
     @Then("^I have a connected device without the package \"([^\"]*)\"$")
     public void iHaveAConnectedDeviceWithoutThePackage(String packageName) throws Throwable {
 
-        List<String> packages = AdbTestHelper.INSTANCE.getInstalledPackages();
+        tryConnectDeviceLogged();
+
+        List<String> packages = AdbTestHelperKt.getInstalledPackages(testHelper());
 
         if (packages.contains(packageName)) {
             throw new AssertionFailedError("Packages list contained " + packageName);
@@ -236,14 +260,14 @@ public class AndroidStepDefinitions2 {
 
     @When("^I open the navigation drawer$")
     public void iOpenTheNavigationDrawer() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+
+        // Drag from left to right from the halfway point of the screen
+        AdbTestHelperKt.dragRight(testHelper(), height -> height / 2);
     }
 
     @When("^I press the home button$")
     public void iPressTheHomeButton() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        AdbDeviceKeyPressKt.pressKey(device()).home();
     }
 
     @Then("^I scroll until I see the text \"([^\"]*)\"$")
@@ -279,7 +303,7 @@ public class AndroidStepDefinitions2 {
     @Then("^I see a button$")
     public void iSeeAButton() throws Throwable {
 
-        AdbTestHelper.INSTANCE.waitForUiNode(uiNode ->
+        AdbTestHelperKt.waitForUiNode(testHelper(), uiNode ->
                 uiNode.adbUiNodeMatches("button"));
     }
 
@@ -293,13 +317,13 @@ public class AndroidStepDefinitions2 {
     public void iSeeTheText(String text) throws Throwable {
 
 
-        AdbTestHelper.INSTANCE.waitForText(text, 30, TimeUnit.SECONDS);
+        AdbTestHelperKt.waitForText(testHelper(), text, 30, TimeUnit.SECONDS);
     }
 
     @When("^I see the text \"([^\"]*)\"$")
     public void iSeeTheText2(String text) throws Throwable {
 
-        AdbTestHelper.INSTANCE.waitForText(text, 30, TimeUnit.SECONDS);
+        AdbTestHelperKt.waitForText(testHelper(), text, 30, TimeUnit.SECONDS);
     }
 
     @When("^I select the \"([^\"]*)\" drawer option$")
@@ -317,7 +341,7 @@ public class AndroidStepDefinitions2 {
     @Then("^I should see the lock screen$")
     public void iShouldSeeTheLockScreen() throws Throwable {
 
-        AdbTestHelper.INSTANCE.waitForUiNode(uiNode ->
+        AdbTestHelperKt.waitForUiNode(testHelper(), uiNode ->
                 uiNode.adbUiNodeMatches("com.android.systemui:id/keyguard_status_area"));
     }
 
@@ -371,38 +395,37 @@ public class AndroidStepDefinitions2 {
 
     @When("^I swipe open the right drawer$")
     public void iSwipeOpenTheRightDrawer() throws Throwable {
-
-        AdbTestHelper.INSTANCE.dragLeft(integer -> integer / 2, DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragLeft(testHelper(), integer -> integer / 2, DEFAULT_EDGE_OFFSET);
     }
 
     @When("^I type the \"([^\"]*)\" text$")
     public void iTypeTheText(String text) throws Throwable {
 
-        AdbTestHelper.INSTANCE.typeText(text);
+        AdbTestHelperKt.typeText(testHelper(), text);
     }
 
     @When("^I swipe up$")
     public void swipeUp() throws Throwable {
 
-        AdbTestHelper.INSTANCE.dragUp(width -> width / 2, DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragUp(testHelper(), width -> width / 2, DEFAULT_EDGE_OFFSET);
     }
 
     @When("^I swipe up along the left side$")
     public void swipeUpAlongTheLeftSide() throws Throwable {
 
-        AdbTestHelper.INSTANCE.dragUp(width -> width / 3, DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragUp(testHelper(), width -> width / 3, DEFAULT_EDGE_OFFSET);
     }
 
     @When("^I swipe up along the right side$")
     public void swipeUpAlongTheRightSide() throws Throwable {
 
-        AdbTestHelper.INSTANCE.dragUp(width -> width - (width / 3), DEFAULT_EDGE_OFFSET);
+        AdbTestHelperKt.dragUp(testHelper(), width -> width - width / 3), DEFAULT_EDGE_OFFSET);
     }
 
     @Then("^I take a screenshot$")
     public void takeScreenshot() throws Throwable {
 
-        AdbTestHelper.INSTANCE.takeScreenshot();
+        AdbTestHelperKt.takeScreenshot(testHelper());
     }
 
     @When("^I touch the menu dropdown$")
@@ -414,91 +437,87 @@ public class AndroidStepDefinitions2 {
     @When("^I touch the \"([^\"]*)\" text$")
     public void iTouchTheText(String text) throws Throwable {
 
-        AdbTestHelper.INSTANCE.touchText(text);
+        AdbTestHelperKt.touchText(testHelper(), text);
     }
 
     @Then("^I wait$")
     public void iWait() throws Throwable {
 
-        AdbTestHelper.INSTANCE.waitSeconds(3);
+        AdbTestHelperKt.waitSeconds(testHelper(), 3);
     }
 
     @Then("^I wait for the \"([^\"]*)\" text$")
     public void iWaitForTheText(String text) throws Throwable {
 
-        AdbTestHelper.INSTANCE.waitForText(text, 30, TimeUnit.SECONDS);
+        AdbTestHelperKt.waitForText(testHelper(), text, 30, TimeUnit.SECONDS);
     }
 
     @Then("^I wait for the \"([^\"]*)\" text to disappear$")
     public void iWaitForTheTextToDisappear(String text) throws Throwable {
 
-        AdbTestHelper.INSTANCE.waitForTextToDisappear(text);
+        AdbTestHelperKt.waitForTextToDisappear(testHelper(), text);
     }
 
     @Then("^I wait for \"([^\"]*)\" to appear$")
     public void iWaitForToAppear(String text) throws Throwable {
 
-        AdbTestHelper.INSTANCE.waitForText(text, 30, TimeUnit.SECONDS);
+        AdbTestHelperKt.waitForText(testHelper(), text, 30, TimeUnit.SECONDS);
     }
 
     @Then("^I wait up to (\\d+) seconds for \"([^\"]*)\" to appear$")
     public void iWaitUpToSecondsForToAppear(int seconds, String text) throws Throwable {
 
-        AdbTestHelper.INSTANCE.waitForText(text, seconds, TimeUnit.SECONDS);
+        AdbTestHelperKt.waitForText(testHelper(), text, seconds, TimeUnit.SECONDS);
     }
 
     @Then("^I wait up to (\\d+) seconds to see \"([^\"]*)\"$")
     public void iWaitUpToSecondsToSee(int seconds, String text) throws Throwable {
 
-        AdbTestHelper.INSTANCE.waitForText(text, seconds, TimeUnit.SECONDS);
+        AdbTestHelperKt.waitForText(testHelper(), text, seconds, TimeUnit.SECONDS);
     }
 
     @When("^I install the apk at \"([^\"]*)\"$")
     public void installApk(String apkPath) throws Throwable {
 
-        AdbTestHelper.INSTANCE.installApk(apkPath);
+        AdbTestHelperKt.installApk(testHelper(), apkPath);
     }
 
     @When("^I launch the app \"([^\"]*)\"$")
     public void launchApp(String packageName) throws Throwable {
 
-        AdbTestHelper.INSTANCE.launchApp(packageName);
+        AdbTestHelperKt.launchApp(testHelper(), packageName);
     }
 
     @When("^I launch the url \"([^\"]*)\"$")
     public void launchUrl(String url) throws Throwable {
 
-        AdbTestHelper.INSTANCE.launchUrl(url);
+        AdbTestHelperKt.launchUrl(testHelper(), url);
     }
 
     @When("^I click the floating action button$")
     public void tapFloatingActionButton() throws Throwable {
 
-        AdbTestHelper.INSTANCE.touchUiNode(uiNode ->
+        AdbTestHelperKt.touchUiNode(testHelper(), uiNode ->
                 uiNode.adbUiNodeMatches("floatingaction"));
     }
 
     @When("^I turn the screen on$")
     public void turnScreenOn() throws Throwable {
-
-        AdbTestHelper.INSTANCE.turnScreenOn();
+        AdbTestHelperKt.turnScreenOn(testHelper());
     }
 
     @When("^I uninstall the package \"([^\"]*)\"$")
     public void uninstallPackage(String packageName) throws Throwable {
-
-        AdbTestHelper.INSTANCE.uninstallPackage(packageName);
+        AdbTestHelperKt.uninstallPackage(testHelper(), packageName);
     }
 
     @When("^I update the app with the apk at \"([^\"]*)\"$")
     public void updateApk(String apkPath) throws Throwable {
-
-        AdbTestHelper.INSTANCE.updateApk(apkPath);
+        AdbTestHelperKt.updateApk(testHelper(), apkPath);
     }
 
     @Then("^I wait for (\\d+) seconds$")
     public void waitSeconds(int waitSeconds) throws Throwable {
-
-        AdbTestHelper.INSTANCE.waitSeconds(waitSeconds);
+        AdbTestHelperKt.waitSeconds(testHelper(), waitSeconds);
     }
 }
