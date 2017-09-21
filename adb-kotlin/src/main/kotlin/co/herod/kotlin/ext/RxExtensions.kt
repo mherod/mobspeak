@@ -52,6 +52,9 @@ fun Single<Map<String, String>>.filterKeys(vararg keys: String): Single<Map<Stri
 fun Single<Map<String, String>>.observableValues(): Observable<String> =
         toObservable().flatMapIterable { it.values }
 
+fun Observable<Map<String, String>>.observableValues(): Observable<String> =
+        flatMapIterable { it.values }
+
 fun Observable<Map<String, String>>.valueOf(key: String): Observable<String> =
         map { it[key] }
 

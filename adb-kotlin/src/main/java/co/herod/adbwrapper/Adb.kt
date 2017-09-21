@@ -1,13 +1,10 @@
 package co.herod.adbwrapper
 
-import co.herod.adbwrapper.device.dumpsys
-import co.herod.adbwrapper.device.windows
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.util.UiHierarchyHelper
 import co.herod.kotlin.ext.blocking
-import co.herod.kotlin.ext.justKeys
 import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.*
@@ -27,21 +24,21 @@ object Adb {
                     .processDumpsys("=")
                     .toObservable()
 
-    fun getActivityDumpsys(adbDevice: AdbDevice) =
-            dumpsys(adbDevice, "activity")
-                    .processDumpsys("=")
-                    .toObservable()
-
-    fun getActivitiesDumpsys(adbDevice: AdbDevice) =
-            dumpsys(adbDevice, "activity activities")
-                    .processDumpsys("=")
-                    .toObservable()
-
-    fun AdbDevice.getWindowFocusDumpsys(): Single<Map<String, String>> =
-            dumpsys().windows().justKeys("mCurrentFocus", "mFocusedApp")
-
-    private fun AdbDevice.dumpsysMap(type: String, pipe: String): Single<Map<String, String>> =
-            dumpsys(this, type, pipe).processDumpsys("=")
+//    fun getActivityDumpsys(adbDevice: AdbDevice) =
+//            dumpsys(adbDevice, "activity")
+//                    .processDumpsys("=")
+//                    .toObservable()
+//
+//    fun getActivitiesDumpsys(adbDevice: AdbDevice) =
+//            dumpsys(adbDevice, "activity activities")
+//                    .processDumpsys("=")
+//                    .toObservable()
+//
+//    fun AdbDevice.getWindowFocusDumpsys() =
+//            dumpsys().windows().filterKeys("mCurrentFocus", "mFocusedApp")
+//
+//    private fun AdbDevice.dumpsysMap(type: String, pipe: String): Single<Map<String, String>> =
+//            dumpsys(this, type, pipe).processDumpsys("=")
 
     private val DEFAULT_TIMEOUT_SECONDS: Long = 30
 

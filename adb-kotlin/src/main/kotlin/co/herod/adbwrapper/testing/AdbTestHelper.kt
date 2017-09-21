@@ -13,10 +13,6 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 import java.util.function.Predicate
 
-/**
- * Created by matthewherod on 04/09/2017.
- */
-
 class AdbDeviceTestHelper(val adbDevice: AdbDevice)
 
 fun AdbDevice.testHelper() = AdbDeviceTestHelper(this)
@@ -46,7 +42,7 @@ fun AdbDeviceTestHelper.turnScreenOn() = with(adbDevice) {
 fun AdbDeviceTestHelper.assertActivityName(activityName: String) = with(adbDevice) {
 
     this.dumpsys().windows()
-            .justKeys("mCurrentFocus", "mFocusedApp")
+            .filterKeys("mCurrentFocus", "mFocusedApp")
             .observableValues()
             .filter { it.containsIgnoreCase(activityName) }
             .firstOrError()
@@ -56,7 +52,7 @@ fun AdbDeviceTestHelper.assertActivityName(activityName: String) = with(adbDevic
 fun AdbDeviceTestHelper.assertNotActivityName(activityName: String) = with(adbDevice) {
 
     this.dumpsys().windows()
-            .justKeys("mCurrentFocus", "mFocusedApp")
+            .filterKeys("mCurrentFocus", "mFocusedApp")
             .observableValues()
             .filter { (it.containsIgnoreCase(activityName)).not() }
             .firstOrError()
