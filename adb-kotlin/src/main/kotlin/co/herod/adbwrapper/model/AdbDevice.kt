@@ -1,6 +1,9 @@
+@file:Suppress("unused", "MemberVisibilityCanPrivate")
+
 package co.herod.adbwrapper.model
 
 import co.herod.adbwrapper.S
+import co.herod.adbwrapper.getWindowBounds
 
 class AdbDevice(
         var deviceIdentifier: String? = null,
@@ -9,10 +12,30 @@ class AdbDevice(
 
     var preferredUiAutomatorStrategy = 0
 
-    override fun toString() = "AdbDevice{deviceIdentifier='$deviceIdentifier', type='$type'}"
+    val windowBounds: UiBounds by lazy {
+        @Suppress("DEPRECATION")
+        getWindowBounds()
+    }
 
+    val physical: Boolean by lazy {
+        @Suppress("DEPRECATION")
+        isConnectedDevice()
+    }
+
+    val emulator: Boolean by lazy {
+        @Suppress("DEPRECATION")
+        isEmulator()
+    }
+
+    @Deprecated(replaceWith = ReplaceWith("physical"), message = "Use the 'physical' property")
     fun isConnectedDevice(): Boolean = type == S.DEVICE_CONNECTED_DEVICE
+
+    @Deprecated(replaceWith = ReplaceWith("emulator"), message = "Use the 'emulator' property")
     fun isEmulator(): Boolean = type == S.DEVICE_EMULATOR
+
+    override fun toString(): String {
+        return "AdbDevice(deviceIdentifier=$deviceIdentifier, type=$type, preferredUiAutomatorStrategy=$preferredUiAutomatorStrategy)"
+    }
 
     companion object {
 

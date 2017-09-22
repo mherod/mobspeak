@@ -45,7 +45,7 @@ object ScreenshotHelper {
         val height = uiBounds.height
 
         if (width >= 10 && height >= 10) {
-            uiBounds.coordinates?.let { bounds: Array<Int> ->
+            uiBounds.coordinates.let { bounds ->
 
                 Observable.fromCallable {
                     getBufferedImage(
@@ -65,7 +65,7 @@ object ScreenshotHelper {
 
     private fun getBufferedImage(
             adbDevice: AdbDevice,
-            coordinates: Array<Int>,
+            coordinates: IntArray,
             width: Int,
             height: Int
     ): BufferedImage? {
@@ -80,5 +80,5 @@ object ScreenshotHelper {
     }
 }
 
-private fun pathForCropImage(coordinates: Array<Int>): String =
+private fun pathForCropImage(coordinates: IntArray): String =
         String.format("imgs/screen_sub_%d.png", Arrays.toString(coordinates).hashCode())

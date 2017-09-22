@@ -3,7 +3,7 @@ package co.herod.adbwrapper
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.UiNode
-import co.herod.adbwrapper.util.UiHierarchyHelper
+import co.herod.adbwrapper.util.UiHelper
 import co.herod.kotlin.ext.blocking
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -49,7 +49,7 @@ object Adb {
                     TimeUnit.SECONDS
             )
                     .map { AdbUiHierarchy(it, adbDevice).xmlString }
-                    .compose { UiHierarchyHelper.uiXmlToNodes(it) }
+                    .compose { UiHelper.uiXmlToNodes(it) }
                     .map { UiNode(it) }
                     .filter { Objects.nonNull(it) }
 

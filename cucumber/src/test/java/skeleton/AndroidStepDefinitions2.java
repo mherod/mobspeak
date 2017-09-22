@@ -325,7 +325,7 @@ public class AndroidStepDefinitions2 {
     public void iSeeAButton() throws Throwable {
 
         AdbTestHelperKt.waitForUiNode(testHelper(), uiNode ->
-                uiNode.adbUiNodeMatches("button"));
+                uiNode.contains("button"));
     }
 
     @Then("^I see a large image$")
@@ -362,7 +362,7 @@ public class AndroidStepDefinitions2 {
     public void iShouldSeeTheLockScreen() throws Throwable {
 
         AdbTestHelperKt.waitForUiNode(testHelper(), uiNode ->
-                uiNode.adbUiNodeMatches("com.android.systemui:id/keyguard_status_area"));
+                uiNode.contains("com.android.systemui:id/keyguard_status_area"));
     }
 
     @When("^I swipe down along the left side$")
@@ -519,7 +519,7 @@ public class AndroidStepDefinitions2 {
     public void tapFloatingActionButton() throws Throwable {
 
         AdbTestHelperKt.touchUiNode(testHelper(), uiNode ->
-                uiNode.adbUiNodeMatches("floatingaction"));
+                uiNode.contains("floatingaction"));
     }
 
     @When("^I turn the screen on$")

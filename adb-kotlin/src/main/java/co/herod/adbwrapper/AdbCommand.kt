@@ -8,6 +8,9 @@ class AdbCommand(
         val deviceIdentifier: String?,
         val command: String = ""
 ) {
+    init {
+        System.out.println(this)
+    }
 
     private fun buildAdbDeviceSerialCommand() =
             S.ADB + (deviceIdentifier?.let { " -s $it " } ?: " ")

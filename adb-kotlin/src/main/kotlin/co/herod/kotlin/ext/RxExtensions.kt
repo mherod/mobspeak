@@ -30,6 +30,7 @@ fun Observable<String>.blocking(
         .retryWithTimeout(timeout, timeUnit)
         .last("")
         .onErrorReturn { "" }
+        .doOnSuccess { System.out.println(it) }
         .blockingGet()
 
 fun Observable<String>.blockingSingle(

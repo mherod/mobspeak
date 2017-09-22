@@ -3,7 +3,7 @@ package co.herod.adbwrapper
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.rx.FixedDurationTransformer
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
-import co.herod.adbwrapper.util.UiHierarchyHelper
+import co.herod.adbwrapper.util.UiHelper
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
@@ -20,7 +20,7 @@ object AdbStreams {
         observable
                 .map { it.parseNode() }
                 .compose(ResultChangeFixedDurationTransformer())
-                .compose { UiHierarchyHelper.uiXmlToNodes(it) }
+                .compose { UiHelper.uiXmlToNodes(it) }
                 .onErrorReturn { "" }
                 .filter { it.hasValue() }
                 .compose(FixedDurationTransformer(1, TimeUnit.DAYS))

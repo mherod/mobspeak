@@ -6,7 +6,7 @@ import co.herod.adbwrapper.device.windows
 import co.herod.adbwrapper.model.*
 import co.herod.adbwrapper.rx.FixedDurationTransformer
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
-import co.herod.adbwrapper.util.UiHierarchyHelper
+import co.herod.adbwrapper.util.UiHelper
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -17,7 +17,7 @@ fun startStreamingUiHierarchy(adbDevice: AdbDevice): Observable<UiNode> = Adb.du
         .map { AdbUiHierarchy(it, adbDevice) }
         .doOnEach(AdbBusManager.uiHierarchyBus)
         .map { it.xmlString }
-        .compose { UiHierarchyHelper.uiXmlToNodes(it) }
+        .compose { UiHelper.uiXmlToNodes(it) }
         .map { UiNode(it) }
         .doOnEach(AdbBusManager.uiNodeBus)
         .observeOn(Schedulers.newThread())
@@ -27,21 +27,19 @@ fun fetchUiHierarchy(adbDevice: AdbDevice): Observable<UiNode> = Adb.dumpUiHiera
         .map { it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1) }
         .map { AdbUiHierarchy(it, adbDevice) }
         .map { it.xmlString }
-        .compose { UiHierarchyHelper.uiXmlToNodes(it) }
+        .compose { UiHelper.uiXmlToNodes(it) }
         .map { UiNode(it) }
         .doOnEach(AdbBusManager.uiNodeBus)
 
-private fun streamUiNodes() = streamUiNodeStringsInternal()
+fun AdbDevice.streamUiNodeStrings() = streamUiNodeStringsInternal()
         .map { UiNode(it) }
-
-fun AdbDevice.streamUiNodeStrings() = streamUiNodes()
         .map { it.toString() }
 
-fun AdbDevice.streamUiNodes(packageIdentifier: String) =
-        streamUiNodeStringsInternal()
-                .filter { s -> UiHierarchyHelper.isPackage(packageIdentifier, s) }.map { UiNode(it) }
+fun AdbDevice.streamUiNodes(packageIdentifier: String? = null) = streamUiNodeStringsInternal()
+        .map { UiNode(it) }
+        .filter { it.packageName == packageIdentifier }
 
-fun streamUiNodeStringsInternal() = uiNodeBus
+fun streamUiNodeStringsInternal(): Observable<String> = uiNodeBus
         .map { it.toString() }
         .compose(FixedDurationTransformer(1, TimeUnit.DAYS))
         .onErrorReturn { throwable -> throwable.printStackTrace(); "" }
@@ -52,18 +50,16 @@ fun AdbDevice.subscribeUiNodesSource(): Observable<UiNode> = Adb.dumpUiNodes(thi
         .compose(ResultChangeFixedDurationTransformer())
         .distinct { it.toString() }
 
+@Deprecated(
+        replaceWith = ReplaceWith("windowBounds"),
+        message = "Use the 'windowBounds' property"
+)
 fun AdbDevice.getWindowBounds(): UiBounds = dumpsys().windows().filterProperty("mBounds")
         .map { it.value }
+        .filter { '[' in it && ']' in it }
         .map { it.substring(it.lastIndexOf('[') + 1, it.lastIndexOf(']')) }
         .map { it.split(',') }
         .map { it.map { Integer.parseInt(it) } }
-        .map {
-            val newList = ArrayList(it)
-            if (newList.size == 2) {
-                newList.add(0, 0)
-                newList.add(0, 0)
-            }
-            newList
-        }
-        .map { UiBounds(it.toTypedArray()) }
+        .map { it.toIntArray() }
+        .map { UiBounds(it) }
         .blockingGet()
