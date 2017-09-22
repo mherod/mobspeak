@@ -21,7 +21,7 @@ fun AdbDevice.tap(centreX: Int = 0, centreY: Int = 0): String =
                 .setDevice(this)
                 .setCommand("${S.SHELL} input tap $centreX $centreY")
                 .observable()
-                .blocking(2, TimeUnit.SECONDS)
+                .blocking(5, TimeUnit.SECONDS)
 
 @JvmOverloads
 fun AdbDevice.swipe(x1: Int, y1: Int, x2: Int, y2: Int, speed: Int = 500): String =
@@ -29,8 +29,7 @@ fun AdbDevice.swipe(x1: Int, y1: Int, x2: Int, y2: Int, speed: Int = 500): Strin
                 .setDevice(this)
                 .setCommand("${S.SHELL} input swipe $x1 $y1 $x2 $y2 $speed")
                 .observable()
-                .lastOrError()
-                .blocking(2, TimeUnit.SECONDS)
+                .blocking(5, TimeUnit.SECONDS)
 
 @JvmOverloads
 fun AdbDevice.typeText(inputText: String = ""): String =
@@ -38,6 +37,5 @@ fun AdbDevice.typeText(inputText: String = ""): String =
                 .setDevice(this)
                 .setCommand("${S.SHELL} input text $inputText".trim())
                 .observable()
-                .lastOrError()
-                .blocking(2, TimeUnit.SECONDS)
+                .blocking(5, TimeUnit.SECONDS)
 

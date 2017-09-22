@@ -17,11 +17,11 @@ fun <T> Observable<T>.retryWithTimeout(
 ): Observable<T> =
         retry().timeout(timeout.toLong(), timeUnit)
 
-fun <T> Single<T>.retryWithTimeout(
-        timeout: Int,
-        timeUnit: TimeUnit
-): Single<T> =
-        retry().timeout(timeout.toLong(), timeUnit)
+//fun <T> Single<T>.retryWithTimeout(
+//        timeout: Int,
+//        timeUnit: TimeUnit
+//): Single<T> =
+//        retry().timeout(timeout.toLong(), timeUnit)
 
 fun Observable<String>.blocking(
         timeout: Int = 2,
@@ -29,13 +29,24 @@ fun Observable<String>.blocking(
 ): String = this
         .retryWithTimeout(timeout, timeUnit)
         .last("")
+        .onErrorReturn { "" }
         .blockingGet()
 
-fun Single<String>.blocking(
+fun Observable<String>.blockingSingle(
         timeout: Int = 2,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): String = this
-        .retryWithTimeout(timeout, timeUnit)
+        .retry()
+        .firstOrError()
+        .timeout(timeout.toLong(), timeUnit)
+        .onErrorReturn { "" }
+        .blockingGet()
+
+fun Single<String>.blockingSingle(
+        timeout: Int = 2,
+        timeUnit: TimeUnit = TimeUnit.SECONDS
+): String = this
+        .timeout(timeout.toLong(), timeUnit)
         .onErrorReturn { "" }
         .blockingGet()
 

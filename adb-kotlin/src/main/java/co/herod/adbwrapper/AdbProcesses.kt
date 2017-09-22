@@ -57,11 +57,11 @@ fun dumpsys(adbDevice: AdbDevice, type: String, pipe: String): Observable<String
                 .observable()
 
 @CheckReturnValue
-fun pressKey(adbDevice: AdbDevice, key: Int): Single<String> =
+fun pressKey(adbDevice: AdbDevice, key: Int): Observable<String> =
         AdbCommand.Builder()
                 .setDevice(adbDevice)
                 .setCommand("${S.SHELL} input keyevent $key")
-                .observable().lastOrError()
+                .observable()
 
 @CheckReturnValue
 fun launchUrl(adbDevice: AdbDevice, url: String): Observable<String> =

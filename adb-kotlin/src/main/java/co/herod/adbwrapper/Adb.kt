@@ -57,7 +57,7 @@ object Adb {
             adbDevice: AdbDevice,
             timeout: Long = DEFAULT_TIMEOUT_SECONDS,
             timeUnit: TimeUnit = TimeUnit.SECONDS
-    ): Observable<String> = Observable.just(adbDevice)
+    ): Observable<String?> = Observable.just(adbDevice)
             .flatMap {
                 when {
                     it.preferredUiAutomatorStrategy == 0 ->
@@ -72,6 +72,7 @@ object Adb {
             }
             .onErrorResumeNext(fallbackDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS))
             .timeout(timeout, timeUnit)
+
 
     private fun compatDumpUiHierarchy(
             adbDevice: AdbDevice,

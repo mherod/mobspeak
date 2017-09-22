@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper.model
 
 import co.herod.adbwrapper.util.UiHierarchyHelper
@@ -11,6 +13,10 @@ class UiNode(private val nodeString: String) {
 
     val text: String by lazy {
         UiHierarchyHelper.extractText(nodeString)
+    }
+
+    val contentDescription by lazy {
+        UiHierarchyHelper.extractContentDescription(nodeString)
     }
 
     val visible: Boolean by lazy {

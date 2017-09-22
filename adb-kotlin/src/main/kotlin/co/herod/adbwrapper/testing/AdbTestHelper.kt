@@ -11,7 +11,6 @@ import co.herod.kotlin.ext.*
 import io.reactivex.Observable
 import java.io.File
 import java.util.concurrent.TimeUnit
-import java.util.function.Predicate
 
 class AdbDeviceTestHelper(val adbDevice: AdbDevice)
 
@@ -45,8 +44,7 @@ fun AdbDeviceTestHelper.assertActivityName(activityName: String) = with(adbDevic
             .filterKeys("mCurrentFocus", "mFocusedApp")
             .observableValues()
             .filter { it.containsIgnoreCase(activityName) }
-            .firstOrError()
-            .blocking(10, TimeUnit.SECONDS)
+            .blockingSingle(10, TimeUnit.SECONDS)
 }
 
 fun AdbDeviceTestHelper.assertNotActivityName(activityName: String) = with(adbDevice) {
@@ -55,12 +53,13 @@ fun AdbDeviceTestHelper.assertNotActivityName(activityName: String) = with(adbDe
             .filterKeys("mCurrentFocus", "mFocusedApp")
             .observableValues()
             .filter { (it.containsIgnoreCase(activityName)).not() }
-            .firstOrError()
-            .blocking(10, TimeUnit.SECONDS)
+            .blockingSingle(10, TimeUnit.SECONDS)
 }
 
 fun AdbDeviceTestHelper.assertPower(minPower: Int) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    with(adbDevice) {
+        TODO("not implemented: assertion for power $minPower")
+    }
 }
 
 fun AdbDeviceTestHelper.backButton() = with(adbDevice) {
@@ -162,14 +161,10 @@ fun AdbDeviceTestHelper.typeText(text: String) = with(adbDevice) {
     typeText(text)
 }
 
-fun AdbDeviceTestHelper.touchUiNode(uiNodePredicate: Predicate<UiNode>) = with(adbDevice) {
+fun AdbDeviceTestHelper.touchUiNode(predicate: (UiNode) -> Boolean) = with(adbDevice) {
     waitForUiNodeForFunc(
-            uiNodePredicate = Predicate {
-                uiNodePredicate.test(it)
-            },
-            function = {
-                tap(it)
-            },
+            predicate = predicate,
+            function = { tap(it) },
             timeout = 20,
             timeUnit = TimeUnit.SECONDS
     )
@@ -177,12 +172,8 @@ fun AdbDeviceTestHelper.touchUiNode(uiNodePredicate: Predicate<UiNode>) = with(a
 
 fun AdbDeviceTestHelper.touchText(text: String) = with(adbDevice) {
     waitForUiNodeForFunc(
-            uiNodePredicate = Predicate {
-                it.text.containsIgnoreCase(text)
-            },
-            function = {
-                tap(it)
-            },
+            predicate = { it.text.containsIgnoreCase(text) },
+            function = { tap(it) },
             timeout = 20,
             timeUnit = TimeUnit.SECONDS
     )
@@ -205,9 +196,7 @@ fun AdbDeviceTestHelper.waitForTextToFailToDisappear(text: String) {
 
 fun AdbDeviceTestHelper.waitForText(text: String, timeout: Int, timeUnit: TimeUnit) = with(adbDevice) {
     waitForUiNodeForFunc(
-            uiNodePredicate = Predicate {
-                it.text.containsIgnoreCase(text)
-            },
+            predicate = { it.text.containsIgnoreCase(text) },
             function = { "Found" },
             timeout = timeout,
             timeUnit = timeUnit
@@ -218,9 +207,9 @@ fun AdbDeviceTestHelper.forceStopApp(packageName: String) = with(adbDevice) {
     pm().forceStop(packageName)
 }
 
-fun AdbDeviceTestHelper.waitForUiNode(uiNodePredicate: Predicate<UiNode>) = with(adbDevice) {
+fun AdbDeviceTestHelper.waitForUiNode(predicate: (UiNode) -> Boolean) = with(adbDevice) {
     waitForUiNodeForFunc(
-            uiNodePredicate = uiNodePredicate,
+            predicate = predicate,
             function = { "Found" },
             timeout = 20,
             timeUnit = TimeUnit.SECONDS
@@ -247,17 +236,17 @@ fun AdbDeviceTestHelper.failOnText(text: String, timeout: Int = 5, timeUnit: Tim
 }
 
 private fun AdbDeviceTestHelper.waitForUiNodeForFunc(
-        uiNodePredicate: Predicate<UiNode>?,
+        predicate: (UiNode) -> Boolean?,
         function: (UiNode) -> String? = { "No Action" },
         timeout: Int = 30,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ) = with(adbDevice) {
     subscribeUiNodesSource()
-            .filter { uiNodePredicate?.test(it) == true }
-            .timeout(timeout, timeUnit)
+            .filter { predicate(it) ?: false }
             .firstOrError()
+            .retry()
             .map { function(it).orEmpty() }
-            .blocking(timeout, timeUnit)
+            .blockingSingle(timeout, timeUnit)
 }
 
 fun AdbDeviceTestHelper.waitForTextToDisappear(text: String) {

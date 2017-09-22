@@ -13,8 +13,7 @@ object FileUtil {
         }
 
         val folder = File(getFolderPath(pathname))
-        val g = folder.exists() || folder.mkdirs()
-
+        folder.exists() || folder.mkdirs()
         return file
     }
 
@@ -24,11 +23,11 @@ object FileUtil {
             return "./"
         }
 
-        try {
+        return try {
             val lastIndexOf = pathname.lastIndexOf("/")
-            return pathname.substring(0, lastIndexOf)
+            pathname.substring(0, lastIndexOf)
         } catch (e: IndexOutOfBoundsException) {
-            return pathname
+            pathname
         }
 
     }

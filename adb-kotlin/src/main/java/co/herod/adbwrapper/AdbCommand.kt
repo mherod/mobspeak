@@ -27,7 +27,9 @@ class AdbCommand(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is AdbCommand) return false
+        if (javaClass != other?.javaClass) return false
+
+        other as AdbCommand
 
         if (deviceIdentifier != other.deviceIdentifier) return false
         if (command != other.command) return false
@@ -37,7 +39,7 @@ class AdbCommand(
 
     override fun hashCode(): Int {
         var result = deviceIdentifier?.hashCode() ?: 0
-        result = 31 * result + (command.hashCode() ?: 0)
+        result = 31 * result + command.hashCode()
         return result
     }
 

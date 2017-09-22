@@ -13,9 +13,13 @@ object UiHierarchyHelper {
     private const val KEY_DELIMITER = "=\""
     private const val KEY_BOUNDS = "bounds"
     private const val KEY_TEXT = "text"
+    private const val KEY_CONTENT_DESCRIPTION = "content-desc"
 
     private val KEY_BOUNDS_DELIM = KEY_BOUNDS + KEY_DELIMITER
     private val KEY_TEXT_DELIM = KEY_TEXT + KEY_DELIMITER
+    private val KEY_CONTENT_DESCRIPTION_DELIM = KEY_CONTENT_DESCRIPTION + KEY_DELIMITER
+
+    fun extractContentDescription(s: String): String = extract(s, KEY_CONTENT_DESCRIPTION_DELIM)
 
     fun extractText(s: String): String = extract(s, KEY_TEXT_DELIM)
 
