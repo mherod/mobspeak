@@ -3,8 +3,8 @@
 package co.herod.adbwrapper.examples;
 
 import co.herod.adbwrapper.AdbDeviceManager
-import co.herod.adbwrapper.device.tap
-import co.herod.adbwrapper.subscribeUiNodesSource
+import co.herod.adbwrapper.testing.dragUp
+import co.herod.adbwrapper.testing.testHelper
 
 fun main(args: Array<String>) {
 
@@ -12,14 +12,16 @@ fun main(args: Array<String>) {
 
     println("connected this device $device")
 
-    device.subscribeUiNodesSource().doOnNext { uiNode ->
+    device.testHelper().dragUp({ width -> width / 2 }, 0.3)
 
-        println("$uiNode")
-
-        if ("Google" in uiNode.text) {
-            device.tap(uiNode)
-        }
-    }.blockingSubscribe()
+//    device.subscribeUiNodesSource().doOnNext { uiNode ->
+//
+//        println("$uiNode")
+//
+//        if ("Google" in uiNode.text) {
+//            device.tap(uiNode)
+//        }
+//    }.blockingSubscribe()
 }
 
 

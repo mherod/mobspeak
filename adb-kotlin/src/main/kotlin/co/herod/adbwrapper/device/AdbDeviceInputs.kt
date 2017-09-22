@@ -28,7 +28,8 @@ fun AdbDevice.swipe(x1: Int, y1: Int, x2: Int, y2: Int, speed: Int = 500): Strin
         AdbCommand.Builder()
                 .setDevice(this)
                 .setCommand("${S.SHELL} input swipe $x1 $y1 $x2 $y2 $speed")
-                .observable().lastOrError()
+                .observable()
+                .lastOrError()
                 .blocking(2, TimeUnit.SECONDS)
 
 @JvmOverloads
@@ -36,6 +37,7 @@ fun AdbDevice.typeText(inputText: String = ""): String =
         AdbCommand.Builder()
                 .setDevice(this)
                 .setCommand("${S.SHELL} input text $inputText".trim())
-                .observable().lastOrError()
+                .observable()
+                .lastOrError()
                 .blocking(2, TimeUnit.SECONDS)
 

@@ -1,7 +1,9 @@
 @file:Suppress("unused")
 
-package co.herod.adbwrapper
+package co.herod.adbwrapper.device
 
+import co.herod.adbwrapper.S
+import co.herod.adbwrapper.execute
 import co.herod.adbwrapper.model.AdbDevice
 
 fun AdbDevice.enableService(enable: Boolean, serviceType: String) {

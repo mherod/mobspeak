@@ -1,2 +1,0 @@
-package co.herod.adbwrapper
-
