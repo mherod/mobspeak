@@ -40,15 +40,9 @@ object UiHelper {
             .compose { UiHelper.uiXmlToNodes(it) }
             .filter { Objects.nonNull(it) }
 
-    private fun extract(s: String, s1: String): String {
-
-        return try {
-            val substring = s.substring(s.indexOf(s1))
-            val beginIndex = s1.length
-            substring.substring(beginIndex, substring.substring(beginIndex).indexOf("\"") + beginIndex)
-        } catch (exception: StringIndexOutOfBoundsException) {
-            exception.printStackTrace()
-            throw exception
-        }
+    private fun extract(s: String, s1: String): String = try {
+        s.substring(s.indexOf(s1) + s1.length).substringBefore("\"")
+    } catch (exception: StringIndexOutOfBoundsException) {
+        throw exception
     }
 }
