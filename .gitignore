@@ -294,3 +294,4 @@ crashlytics-build.properties
 fabric.properties
 
 .idea/workspace.xml
+/.gtm/
