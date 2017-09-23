@@ -37,7 +37,7 @@ object UiHelper {
             .filter { Objects.nonNull(it) }
             .map { AdbUiHierarchy(it, adbDevice) }
             .map { it.xmlString }
-            .compose { UiHelper.uiXmlToNodes(it) }
+            .compose { uiXmlToNodes(it) }
             .filter { Objects.nonNull(it) }
 
     private fun extract(s: String, s1: String): String = try {

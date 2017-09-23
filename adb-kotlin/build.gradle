@@ -15,6 +15,7 @@ dependencies {
     compile "io.reactivex.rxjava2:rxjava:2.+"
     compile 'io.reactivex.rxjava2:rxkotlin:2.+'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    testCompile 'junit:junit:' + junitVersion
 }
 
 compileKotlin {
@@ -36,7 +37,7 @@ tasks.assemble.doLast {
         commandLine 'sh', '-c',
                 "which gtm &> /dev/null && " +
                         "gtm commit --yes &> /dev/null; " +
-                        "git fetchgtm; " +
+                        "git fetchgtm &> /dev/null; " +
                         "git pushgtm &> /dev/null"
     }
 }
