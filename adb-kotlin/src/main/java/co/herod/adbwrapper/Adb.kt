@@ -7,6 +7,7 @@ import co.herod.adbwrapper.util.UiHelper
 import co.herod.kotlin.ext.blocking
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -15,11 +16,7 @@ import java.util.concurrent.TimeUnit
  */
 object Adb {
 
-    fun pressKeyBlocking(adbDevice: AdbDevice, key: Int): String =
-            pressKey(adbDevice, key)
-                    .blocking(10, TimeUnit.SECONDS)
-
-    fun getPackageDumpsys(adbDevice: AdbDevice, packageName: String = "") =
+    fun getPackageDumpsys(adbDevice: AdbDevice, packageName: String = ""): Observable<Map<String, String>> =
             dumpsys(adbDevice, "package $packageName".trim())
                     .processDumpsys("=")
                     .toObservable()
@@ -33,90 +30,90 @@ object Adb {
 //            dumpsys(adbDevice, "activity activities")
 //                    .processDumpsys("=")
 //                    .toObservable()
-//
+
 //    fun AdbDevice.getWindowFocusDumpsys() =
 //            dumpsys().windows().filterKeys("mCurrentFocus", "mFocusedApp")
-//
+
 //    private fun AdbDevice.dumpsysMap(type: String, pipe: String): Single<Map<String, String>> =
 //            dumpsys(this, type, pipe).processDumpsys("=")
 
-    private val DEFAULT_TIMEOUT_SECONDS: Long = 30
 
-    fun dumpUiNodes(adbDevice: AdbDevice): Observable<UiNode> =
-            dumpUiHierarchy(
-                    adbDevice,
-                    DEFAULT_TIMEOUT_SECONDS,
-                    TimeUnit.SECONDS
-            )
-                    .map { AdbUiHierarchy(it, adbDevice).xmlString }
-                    .compose { UiHelper.uiXmlToNodes(it) }
-                    .map { UiNode(it) }
-                    .filter { Objects.nonNull(it) }
+    private val bs = BehaviorSubject.create<String>()
+
+    fun dumpUiNodes(
+            adbDevice: AdbDevice,
+            timeout: Long = 30,
+            timeUnit: TimeUnit = TimeUnit.SECONDS
+    ): Observable<UiNode> = bs
+            .timeout(1, TimeUnit.SECONDS)
+            .flatMap { dumpUiHierarchy(adbDevice, timeout, timeUnit).doOnNext { bs.onNext(it) } }
+            .distinct { it }
+            .map { AdbUiHierarchy(it, adbDevice).xmlString }
+            .compose { UiHelper.uiXmlToNodes(it) }
+            .filter { Objects.nonNull(it) }
 
     fun dumpUiHierarchy(
             adbDevice: AdbDevice,
-            timeout: Long = DEFAULT_TIMEOUT_SECONDS,
+            timeout: Long = 30,
             timeUnit: TimeUnit = TimeUnit.SECONDS
-    ): Observable<String?> = Observable.just(adbDevice)
+    ): Observable<String> = Observable.just(adbDevice)
             .flatMap {
                 when {
                     it.preferredUiAutomatorStrategy == 0 ->
-                        compatDumpUiHierarchy(adbDevice)
+                        adbDevice.compatDumpUiHierarchy()
                     it.preferredUiAutomatorStrategy == 1 ->
-                        primaryDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS)
+                        adbDevice.primaryDumpUiHierarchy(10, TimeUnit.SECONDS)
                     it.preferredUiAutomatorStrategy == 2 ->
-                        fallbackDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS)
+                        adbDevice.fallbackDumpUiHierarchy(10, TimeUnit.SECONDS)
                     else ->
-                        compatDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS)
+                        adbDevice.compatDumpUiHierarchy(10, TimeUnit.SECONDS)
                 }
             }
-            .onErrorResumeNext(fallbackDumpUiHierarchy(adbDevice, 10, TimeUnit.SECONDS))
+            .onErrorResumeNext(adbDevice.fallbackDumpUiHierarchy(10, TimeUnit.SECONDS))
             .timeout(timeout, timeUnit)
+            .map { it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1) }
 
 
-    private fun compatDumpUiHierarchy(
-            adbDevice: AdbDevice,
-            timeout: Long = DEFAULT_TIMEOUT_SECONDS,
+    private fun AdbDevice.compatDumpUiHierarchy(
+            timeout: Long = 30,
             timeUnit: TimeUnit = TimeUnit.SECONDS
     ): Observable<String> =
-            uiautomatorDumpAndRead(adbDevice)
+            uiautomatorDumpAndRead(this)
                     .filter { it.isXmlOutput() }
-                    .doOnNext { adbDevice.run { preferredUiAutomatorStrategy = 0 } }
+                    .doOnNext { run { preferredUiAutomatorStrategy = 0 } }
                     .timeout(maxOf(5, timeout / 3), timeUnit)
                     .retry()
                     .timeout(timeout, timeUnit)
 
-    private fun primaryDumpUiHierarchy(
-            adbDevice: AdbDevice,
-            timeout: Long = DEFAULT_TIMEOUT_SECONDS,
+    private fun AdbDevice.primaryDumpUiHierarchy(
+            timeout: Long = 30,
             timeUnit: TimeUnit = TimeUnit.SECONDS
     ): Observable<String> =
-            uiautomatorDumpExecOut(adbDevice)
+            uiautomatorDumpExecOut(this)
                     .filter { it.isXmlOutput() }
-                    .doOnNext { adbDevice.run { preferredUiAutomatorStrategy = 1 } }
+                    .doOnNext { run { preferredUiAutomatorStrategy = 1 } }
                     .timeout(maxOf(5, timeout / 3), timeUnit)
                     .retry()
                     .timeout(timeout, timeUnit)
 
-    private fun fallbackDumpUiHierarchy(
-            adbDevice: AdbDevice,
-            timeout: Long = DEFAULT_TIMEOUT_SECONDS,
+    private fun AdbDevice.fallbackDumpUiHierarchy(
+            timeout: Long = 30,
             timeUnit: TimeUnit = TimeUnit.SECONDS
     ): Observable<String> =
-            uiautomatorDump(adbDevice)
+            uiautomatorDump(this)
                     .map { it.split(' ').last() }
                     .filter { ".xml" in it }
                     .startWith("/sdcard/window_dump.xml")
                     .flatMap {
-                        readDeviceFile(adbDevice, "shell cat $it")
-                                .doOnNext { adbDevice.run { preferredUiAutomatorStrategy = 2 } }
+                        readDeviceFile(this, "shell cat $it")
+                                .doOnNext { run { preferredUiAutomatorStrategy = 2 } }
                                 .retry()
                                 .timeout(maxOf(5, timeout / 3), timeUnit)
                     }
                     .filter { it.isXmlOutput() }
                     .timeout(timeout, timeUnit)
                     .retry()
-                    .timeout(DEFAULT_TIMEOUT_SECONDS, timeUnit)
+                    .timeout(30, timeUnit)
 
 }
 

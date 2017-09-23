@@ -16,18 +16,7 @@ object AdbStreams {
 
     fun streamAdbCommands() = adbBus()?.filter { it.isAdbInput() }
 
-    fun streamUiNodeChanges(): Observable<UiNode>? = streamUiHierarchyUpdates()?.let { observable ->
-        observable
-                .map { it.parseNode() }
-                .compose(ResultChangeFixedDurationTransformer())
-                .compose { UiHelper.uiXmlToNodes(it) }
-                .onErrorReturn { "" }
-                .filter { it.hasValue() }
-                .compose(FixedDurationTransformer(1, TimeUnit.DAYS))
-                .map { UiNode(it) }
-    }
-
-    private fun String.hasValue(): Boolean = !trim().isEmpty()
+    fun streamUiNodeChanges(): Observable<UiNode>? = streamUiHierarchyUpdates()?.map { it.parseNode() }?.compose(ResultChangeFixedDurationTransformer())?.compose { UiHelper.uiXmlToNodes(it) }?.compose(FixedDurationTransformer(1, TimeUnit.DAYS))
 
     private fun String.isAdbInput(): Boolean = startsWith("adb ") && trim() != "Killed"
 

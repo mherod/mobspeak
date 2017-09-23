@@ -22,19 +22,20 @@ object UiHelper {
             .map { Integer.parseInt(it) }
             .toIntArray()
 
-    fun uiXmlToNodes(upstream: Observable<String>): Observable<String> = upstream
+    fun uiXmlToNodes(upstream: Observable<String>): Observable<UiNode> = upstream
             .flatMapIterable { it.split(">").dropLastWhile { it.isEmpty() } }
             .map { it.trim() }
             .map { s -> if (s.endsWith(">").not()) s + ">"; s }
+            .map { it.trim() }
             .filter { "=" in it }
             .filter { "bounds" + KEY_DELIMITER in it }
+            .map { UiNode(it) }
 
     fun rawDumpToNodes(upstream: Observable<String>, adbDevice: AdbDevice?): Observable<UiNode>? = upstream
             .filter { Objects.nonNull(it) }
             .map { AdbUiHierarchy(it, adbDevice) }
             .map { it.xmlString }
             .compose { UiHelper.uiXmlToNodes(it) }
-            .map { UiNode(it) }
             .filter { Objects.nonNull(it) }
 
     private fun extract(s: String, s1: String): String {

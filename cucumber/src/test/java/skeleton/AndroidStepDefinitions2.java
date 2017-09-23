@@ -1,5 +1,7 @@
 package skeleton;
 
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import junit.framework.AssertionFailedError;
 
 import java.util.List;
@@ -25,8 +27,17 @@ public class AndroidStepDefinitions2 {
     private Optional<AdbDevice> adbDevice;
 
     public AndroidStepDefinitions2() {
-
         adbDevice = Optional.empty();
+    }
+
+    @Before
+    public void beforeScenario() {
+        AdbTestHelperKt.startUiBus(testHelper());
+    }
+
+    @After
+    public void afterScenario() {
+        AdbTestHelperKt.stopUiBus(testHelper());
     }
 
     private AdbDevice device() {
@@ -35,6 +46,8 @@ public class AndroidStepDefinitions2 {
     }
 
     private AdbDeviceTestHelper testHelper() {
+
+        device();
 
         return adbDevice
                 .map(AdbDeviceTestHelper::new)
@@ -131,14 +144,14 @@ public class AndroidStepDefinitions2 {
     @Then("^I do not see the \"([^\"]*)\" text$")
     public void iDoNotSeeTheText(String text) throws Throwable {
 
-        AdbTestHelperKt.waitSeconds(testHelper(), 2);
+        AdbTestHelperKt.waitSeconds(2);
         AdbTestHelperKt.failOnText(testHelper(), text, 5, TimeUnit.SECONDS);
     }
 
     @Then("^I do not see the text \"([^\"]*)\"$")
     public void iDoNotSeeTheText2(String text) throws Throwable {
 
-        AdbTestHelperKt.waitSeconds(testHelper(), 2);
+        AdbTestHelperKt.waitSeconds(2);
         AdbTestHelperKt.failOnText(testHelper(), text, 5, TimeUnit.SECONDS);
     }
 
@@ -464,7 +477,7 @@ public class AndroidStepDefinitions2 {
     @Then("^I wait$")
     public void iWait() throws Throwable {
 
-        AdbTestHelperKt.waitSeconds(testHelper(), 3);
+        AdbTestHelperKt.waitSeconds(3);
     }
 
     @Then("^I wait for the \"([^\"]*)\" text$")
@@ -543,6 +556,6 @@ public class AndroidStepDefinitions2 {
     @Then("^I wait for (\\d+) seconds$")
     public void waitSeconds(int waitSeconds) throws Throwable {
 
-        AdbTestHelperKt.waitSeconds(testHelper(), waitSeconds);
+        AdbTestHelperKt.waitSeconds(waitSeconds);
     }
 }

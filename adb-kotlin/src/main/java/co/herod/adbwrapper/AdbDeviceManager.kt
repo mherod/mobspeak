@@ -18,7 +18,7 @@ object AdbDeviceManager {
     @JvmStatic
     @CheckReturnValue
     fun getConnectedDevice(): AdbDevice? = allDevices()
-            .filter(AdbDevice::isConnectedDevice)
+            .filter(AdbDevice::physical)
             .firstOrError()
             .retryWhen { it.delay(1, TimeUnit.SECONDS) }
             .timeout(10, TimeUnit.SECONDS)
@@ -30,6 +30,19 @@ object AdbDeviceManager {
             .toList()
             .blockingGet()
 
-    private fun allDevices(): Observable<AdbDevice> =
-            devices().filter { "\t" in it }.map { AdbDevice.parseAdbString(it) }
+    private fun allDevices(): Observable<AdbDevice> = devices()
+            .filter { "\t" in it }
+            .map { parseAdbString(it) }
+}
+
+fun parseAdbString(adbDeviceString: String): AdbDevice {
+
+    val adbDevice = AdbDevice()
+
+    val split = adbDeviceString.split("\t".toRegex(), 2)
+
+    adbDevice.deviceIdentifier = split[0]
+    adbDevice.type = split[1]
+
+    return adbDevice
 }

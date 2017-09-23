@@ -3,18 +3,21 @@
 package co.herod.adbwrapper.model
 
 import co.herod.adbwrapper.S
-import co.herod.adbwrapper.getWindowBounds
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 class AdbDevice(
         var deviceIdentifier: String? = null,
         var type: String? = null
-) {
+) : Disposable {
+
+    val disposables: CompositeDisposable = CompositeDisposable()
 
     var preferredUiAutomatorStrategy = 0
 
     val windowBounds: UiBounds by lazy {
         @Suppress("DEPRECATION")
-        getWindowBounds()
+        windowBounds
     }
 
     val physical: Boolean by lazy {
@@ -27,6 +30,9 @@ class AdbDevice(
         isEmulator()
     }
 
+    override fun dispose() = disposables.dispose()
+    override fun isDisposed() = disposables.isDisposed
+
     @Deprecated(replaceWith = ReplaceWith("physical"), message = "Use the 'physical' property")
     fun isConnectedDevice(): Boolean = type == S.DEVICE_CONNECTED_DEVICE
 
@@ -35,20 +41,5 @@ class AdbDevice(
 
     override fun toString(): String {
         return "AdbDevice(deviceIdentifier=$deviceIdentifier, type=$type, preferredUiAutomatorStrategy=$preferredUiAutomatorStrategy)"
-    }
-
-    companion object {
-
-        fun parseAdbString(adbDeviceString: String): AdbDevice {
-
-            val adbDevice = AdbDevice()
-
-            val split = adbDeviceString.split("\t".toRegex(), 2)
-
-            adbDevice.deviceIdentifier = split[0]
-            adbDevice.type = split[1]
-
-            return adbDevice
-        }
     }
 }

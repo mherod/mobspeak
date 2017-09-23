@@ -1,4 +1,5 @@
 @file:JvmName("AdbTestHelperKt")
+@file:Suppress("unused")
 
 package co.herod.adbwrapper.testing
 
@@ -16,18 +17,30 @@ class AdbDeviceTestHelper(val adbDevice: AdbDevice)
 
 fun AdbDevice.testHelper() = AdbDeviceTestHelper(this)
 
+fun AdbDeviceTestHelper.startUiBus(): Boolean = with(adbDevice) {
+    disposables.add(streamUiHierarchy().subscribe())
+}
+
+fun AdbDeviceTestHelper.stopUiBus() = with(adbDevice) {
+    dispose()
+}
+
 fun AdbDeviceTestHelper.dismissKeyboard() = with(adbDevice) {
     if (dumpsys().inputMethod().isPropertyPositive("mShowRequested")) {
         pressKey().escape()
     }
 }
 
-fun AdbDeviceTestHelper.assertScreenOn() {
-    turnScreenOn()
+fun AdbDeviceTestHelper.assertScreenOn() = with(adbDevice) {
+    if (screen().isOn().not()) {
+        throw AssertionError("Screen was not on")
+    }
 }
 
 fun AdbDeviceTestHelper.assertScreenOff() = with(adbDevice) {
-    turnScreenOff()
+    if (screen().isOn()) {
+        throw AssertionError("Screen was on")
+    }
 }
 
 fun AdbDeviceTestHelper.turnScreenOff() = with(adbDevice) {
@@ -76,7 +89,7 @@ fun AdbDeviceTestHelper.dismissDialog() {
 
 @JvmOverloads
 fun AdbDeviceTestHelper.dragDown(widthFunction: ((Int) -> Int), edgeOffset: Double = 0.0) = with(adbDevice) {
-    getWindowBounds().run {
+    windowBounds.run {
         widthFunction(width).let {
             swipe(it,
                     (height * edgeOffset).toInt(),
@@ -88,7 +101,7 @@ fun AdbDeviceTestHelper.dragDown(widthFunction: ((Int) -> Int), edgeOffset: Doub
 
 @JvmOverloads
 fun AdbDeviceTestHelper.dragUp(widthFunction: ((Int) -> Int), edgeOffset: Double = 0.0) = with(adbDevice) {
-    getWindowBounds().run {
+    windowBounds.run {
         widthFunction(width).let {
             swipe(
                     it,
@@ -102,7 +115,7 @@ fun AdbDeviceTestHelper.dragUp(widthFunction: ((Int) -> Int), edgeOffset: Double
 
 @JvmOverloads
 fun AdbDeviceTestHelper.dragRight(heightFunction: ((Int) -> Int), edgeOffset: Double = 0.0) = with(adbDevice) {
-    getWindowBounds().run {
+    windowBounds.run {
         heightFunction(height).let {
             swipe((width * edgeOffset).toInt(),
                     it,
@@ -114,7 +127,7 @@ fun AdbDeviceTestHelper.dragRight(heightFunction: ((Int) -> Int), edgeOffset: Do
 
 @JvmOverloads
 fun AdbDeviceTestHelper.dragLeft(heightFunction: ((Int) -> Int), edgeOffset: Double = 0.0) = with(adbDevice) {
-    getWindowBounds().run {
+    windowBounds.run {
         heightFunction(height).let {
             swipe((width * (1.0 - edgeOffset)).toInt(),
                     it,
@@ -191,7 +204,7 @@ fun AdbDeviceTestHelper.updateApk(apkPath: String) = with(adbDevice) {
 }
 
 fun AdbDeviceTestHelper.waitForTextToFailToDisappear(text: String) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    TODO("not implemented: waitForTextToDisappear $text")
 }
 
 fun AdbDeviceTestHelper.waitForText(text: String, timeout: Int, timeUnit: TimeUnit) = with(adbDevice) {
@@ -217,19 +230,22 @@ fun AdbDeviceTestHelper.waitForUiNode(predicate: (UiNode) -> Boolean) = with(adb
 }
 
 @JvmOverloads
-fun AdbDeviceTestHelper.waitSeconds(waitSeconds: Int = 3) = try {
+fun waitSeconds(waitSeconds: Int = 3) = try {
     Thread.sleep((waitSeconds * 1000).toLong())
 } catch (ignored: InterruptedException) {
 }
 
 @JvmOverloads
-fun AdbDeviceTestHelper.failOnText(text: String, timeout: Int = 5, timeUnit: TimeUnit = TimeUnit.SECONDS) = with(adbDevice) {
-
+fun AdbDeviceTestHelper.failOnText(
+        text: String,
+        timeout: Int = 5,
+        timeUnit: TimeUnit = TimeUnit.SECONDS
+) = with(adbDevice) {
     Observable.timer(1, TimeUnit.SECONDS)
-            .flatMap { Adb.dumpUiNodes(this) }
+            .flatMap { Adb.dumpUiNodes(this, 30, TimeUnit.SECONDS) }
             .timeout(timeout.toLong(), timeUnit)
             .blockingForEach { uiNode: UiNode ->
-                if (text.toLowerCase() in uiNode.text.toLowerCase()) {
+                if (uiNode.text.containsIgnoreCase(text)) {
                     throw AssertionError("Text was visible")
                 }
             }
