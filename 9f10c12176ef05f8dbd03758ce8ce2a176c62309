@@ -2,3 +2,5 @@
 cucumber/build.gradle:120,1506168000:120,r
 adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt:36,1506168000:36,m
 adb-kotlin/src/main/kotlin/co/herod/adbwrapper/util/PropHelper.kt:24,1506168000:24,r
+
+[ver:1,total:0]
