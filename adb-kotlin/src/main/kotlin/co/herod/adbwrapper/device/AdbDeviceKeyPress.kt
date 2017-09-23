@@ -2,8 +2,8 @@
 
 package co.herod.adbwrapper.device
 
-import co.herod.adbwrapper.S
 import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.model.AdbKeyEvent
 import co.herod.adbwrapper.pressKey
 import co.herod.kotlin.ext.blocking
 import java.util.concurrent.TimeUnit
@@ -17,27 +17,27 @@ class AdbDeviceKeyPress @JvmOverloads constructor(
 ) {
 
     fun home() {
-        pressKey(adbDevice, S.KEY_EVENT_HOME)
+        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_HOME)
                 .blocking(defaultTimeout, defaultTimeUnit)
     }
 
     fun back() {
-        pressKey(adbDevice, S.KEY_EVENT_BACK)
+        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_BACK)
                 .blocking(defaultTimeout, defaultTimeUnit)
     }
 
     fun backspace() {
-        pressKey(adbDevice, S.KEY_EVENT_BACKSPACE)
+        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_BACKSPACE)
                 .blocking(defaultTimeout, defaultTimeUnit)
     }
 
     fun power() {
-        pressKey(adbDevice, S.KEY_EVENT_POWER)
+        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_POWER)
                 .blocking(defaultTimeout, defaultTimeUnit)
     }
 
     fun escape() {
-        pressKey(adbDevice, S.KEY_EVENT_ESCAPE)
+        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_ESCAPE)
                 .blocking(defaultTimeout, defaultTimeUnit)
     }
 }

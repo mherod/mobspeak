@@ -12,9 +12,4 @@ object S {
     const val UI_DUMP_XML_PATH = "/sdcard/window_dump.xml"
     const val DEVICE_CONNECTED_DEVICE = "device"
     const val DEVICE_EMULATOR = "emulator"
-    const val KEY_EVENT_HOME = 3
-    const val KEY_EVENT_BACK = 4
-    const val KEY_EVENT_POWER = 26
-    const val KEY_EVENT_BACKSPACE = 67
-    const val KEY_EVENT_ESCAPE = 111
 }

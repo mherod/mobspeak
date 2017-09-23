@@ -2,7 +2,6 @@ package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.annotations.CheckReturnValue
 
 @CheckReturnValue
@@ -57,7 +56,7 @@ fun dumpsys(adbDevice: AdbDevice, type: String, pipe: String): Observable<String
                 .observable()
 
 @CheckReturnValue
-fun pressKey(adbDevice: AdbDevice, key: Int): Observable<String> =
+fun pressKey(adbDevice: AdbDevice, key: CharSequence): Observable<String> =
         AdbCommand.Builder()
                 .setDevice(adbDevice)
                 .setCommand("${S.SHELL} input keyevent $key")
