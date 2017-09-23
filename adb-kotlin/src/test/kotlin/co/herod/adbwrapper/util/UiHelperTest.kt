@@ -32,6 +32,16 @@ class UiHelperTest {
     }
 
     @Test
+    fun extractBoundsInts2() {
+        val boundsInts = UiHelper.extractBoundsInts("bounds=\"[0,2,4,6]\"")
+        Assert.assertTrue(boundsInts.size == 4)
+        Assert.assertTrue(boundsInts[0] == 0)
+        Assert.assertTrue(boundsInts[1] == 2)
+        Assert.assertTrue(boundsInts[2] == 4)
+        Assert.assertTrue(boundsInts[3] == 6)
+    }
+
+    @Test
     fun uiXmlToNodes() {
     }
 

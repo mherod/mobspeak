@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e552f3a-ace9-4f63-a317-cb9844901425" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/adb-kotlin/adb-kotlin_test.iml" afterPath="$PROJECT_DIR$/.idea/modules/adb-kotlin/adb-kotlin_test.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/build.gradle" afterPath="$PROJECT_DIR$/adb-kotlin/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/util/UiHelper.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/util/UiHelper.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.kt" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -94,8 +90,8 @@
       <file leaf-file-name="UiHelperTest.kt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="61">
-              <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+            <state relative-caret-position="140">
+              <caret line="35" column="75" lean-forward="true" selection-start-line="35" selection-start-column="75" selection-end-line="35" selection-end-column="75" />
               <folding>
                 <element signature="e#66#111#0" expanded="true" />
               </folding>
@@ -1296,14 +1292,11 @@
       <workItem from="1506157306543" duration="5823000" />
       <workItem from="1506165592034" duration="893000" />
       <workItem from="1506166511240" duration="21000" />
-      <workItem from="1506182467330" duration="1349000" />
+      <workItem from="1506182467330" duration="1396000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="UiHelperTest - 2017.09.23 at 17h 13m 30s.xml">
-      <configuration name="UiHelperTest" configurationId="GradleRunConfiguration" />
-    </history-entry>
     <history-entry file="UiHelperTest - 2017.09.23 at 17h 14m 53s.xml">
       <configuration name="UiHelperTest" configurationId="GradleRunConfiguration" />
     </history-entry>
@@ -1331,9 +1324,12 @@
     <history-entry file="UiHelperTest - 2017.09.23 at 17h 24m 10s.xml">
       <configuration name="UiHelperTest" configurationId="GradleRunConfiguration" />
     </history-entry>
+    <history-entry file="UiHelperTest - 2017.09.23 at 17h 25m 05s.xml">
+      <configuration name="UiHelperTest" configurationId="GradleRunConfiguration" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1619000" />
+    <option name="totallyTimeSpent" value="1666000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="842" extended-state="6" />
@@ -1782,8 +1778,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="61">
-          <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+        <state relative-caret-position="140">
+          <caret line="35" column="75" lean-forward="true" selection-start-line="35" selection-start-column="75" selection-end-line="35" selection-end-column="75" />
           <folding>
             <element signature="e#66#111#0" expanded="true" />
           </folding>
