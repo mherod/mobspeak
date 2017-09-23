@@ -54,22 +54,32 @@ fun AdbDeviceTestHelper.turnScreenOn() = with(adbDevice) {
 
 fun AdbDeviceTestHelper.assertActivityName(activityName: String) = with(adbDevice) {
 
-    this.dumpsys()
+    val result = this.dumpsys()
             .dump(dumpsysKey = DumpsysKey.WINDOW)
             .filterKeys("mCurrentFocus", "mFocusedApp")
             .observableValues()
             .filter { it.containsIgnoreCase(activityName) }
             .blockingSingle(10, TimeUnit.SECONDS)
+            .isNotEmpty()
+
+    if (result.not()) {
+        throw AssertionError("Did not see $activityName activity")
+    }
 }
 
 fun AdbDeviceTestHelper.assertNotActivityName(activityName: String) = with(adbDevice) {
 
-    this.dumpsys()
+    val result = this.dumpsys()
             .dump(dumpsysKey = DumpsysKey.WINDOW)
             .filterKeys("mCurrentFocus", "mFocusedApp")
             .observableValues()
             .filter { (it.containsIgnoreCase(activityName)).not() }
             .blockingSingle(10, TimeUnit.SECONDS)
+            .isEmpty()
+
+    if (result.not()) {
+        throw AssertionError("Did see $activityName activity")
+    }
 }
 
 fun AdbDeviceTestHelper.assertPower(minPower: Int) {
