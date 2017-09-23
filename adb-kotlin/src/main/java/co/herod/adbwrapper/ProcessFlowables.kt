@@ -61,11 +61,14 @@ object ProcessFactory {
                 it.startsWith("Android Debug Bridge version ") -> {
                     Observable.error(AdbError("Invalid output: $it"))
                 }
+                it.startsWith("ERROR: ") -> {
+                    Observable.error(AdbError(it))
+                }
                 it.contains("/system/bin/sh") -> {
                     Observable.error(AdbError("Invalid output: $it"))
                 }
-                it.startsWith("ERROR: ") -> {
-                    Observable.error(AdbError(it))
+                it.contains("** No activities found to run, monkey aborted") -> {
+                    Observable.error(AdbError(it.trim()))
                 }
                 else -> {
                     Observable.just(it)
