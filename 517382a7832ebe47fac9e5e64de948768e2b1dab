@@ -1,0 +1,5 @@
+[ver:1,total:120]
+adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt:52,1506182400:52,m
+cucumber/src/test/java/skeleton/AndroidStepDefinitions2.java:45,1506182400:45,r
+cucumber/src/test/resources/skeleton/calculator-example.feature:15,1506182400:15,r
+adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt:8,1506182400:8,r
