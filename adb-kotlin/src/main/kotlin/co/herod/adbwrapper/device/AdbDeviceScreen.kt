@@ -6,6 +6,7 @@ import co.herod.adbwrapper.Adb
 import co.herod.adbwrapper.S
 import co.herod.adbwrapper.execute
 import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.model.DumpsysKey
 import co.herod.adbwrapper.model.filterProperty
 import co.herod.adbwrapper.model.hasPositiveValue
 
@@ -22,7 +23,7 @@ fun AdbDeviceScreen.turnOff() = with(adbDevice) {
 }
 
 fun AdbDeviceScreen.isOn() = with(adbDevice) {
-    dumpsys().display().filterProperty(S.KEY_SCREEN_STATE).hasPositiveValue()
+    dumpsys().dump(dumpsysKey = DumpsysKey.DISPLAY).filterProperty(S.KEY_SCREEN_STATE).hasPositiveValue()
 }
 
 fun AdbDevice.pullCapture() = with(Adb) {

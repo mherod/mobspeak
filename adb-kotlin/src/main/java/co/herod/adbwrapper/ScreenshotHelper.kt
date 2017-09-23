@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.device.pullCapture
@@ -71,8 +73,8 @@ object ScreenshotHelper {
     ): BufferedImage? {
 
         val screenshot = adbDevice.screenshot(false)
-        try {
-            return ImageUtil.cropImage(screenshot, coordinates[0], coordinates[1], width, height)
+        return try {
+            ImageUtil.cropImage(screenshot, coordinates[0], coordinates[1], width, height)
         } catch (e: IOException) {
             e.printStackTrace()
             throw RuntimeException(e)

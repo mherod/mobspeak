@@ -1,8 +1,10 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.AdbBusManager.uiNodeBus
+import co.herod.adbwrapper.device.dump
 import co.herod.adbwrapper.device.dumpsys
-import co.herod.adbwrapper.device.windows
 import co.herod.adbwrapper.model.*
 import co.herod.adbwrapper.rx.FixedDurationTransformer
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
@@ -24,12 +26,13 @@ fun AdbDevice.streamUiHierarchy(): Observable<UiNode> =
                 .doOnSubscribe { System.out.println("Starting streamUiHierarchy") }
                 .doOnDispose { System.out.println("Disposing streamUiHierarchy") }
 
-fun AdbDevice.streamUiNodes(packageIdentifier: String? = null): Observable<UiNode> =
+@JvmOverloads
+fun streamUiNodes(packageIdentifier: String? = null): Observable<UiNode> =
         streamUiNodeStringsInternal()
                 .map { UiNode(it) }
                 .filter { it.packageName == packageIdentifier }
 
-fun AdbDevice.streamUiNodeStrings() =
+fun streamUiNodeStrings(): Observable<String> =
         streamUiNodeStringsInternal()
                 .map { UiNode(it) }
                 .map { it.toString() }
@@ -52,7 +55,7 @@ fun AdbDevice.subscribeUiNodesSource(): Observable<UiNode> =
         message = "Use the 'windowBounds' property"
 )
 fun AdbDevice.getWindowBounds(): UiBounds =
-        dumpsys().windows().filterProperty("mBounds")
+        dumpsys().dump(dumpsysKey = DumpsysKey.WINDOW).filterProperty("mBounds")
                 .map { it.value }
                 .filter { '[' in it && ']' in it }
                 .map { it.substring(it.lastIndexOf('[') + 1, it.lastIndexOf(']')) }

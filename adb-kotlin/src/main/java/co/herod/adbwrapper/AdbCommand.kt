@@ -76,10 +76,9 @@ class AdbCommand(
     }
 }
 
-fun AdbCommand.Builder.buildObservable(): Observable<String>? = build()?.toProcessBuilder()?.toObservable()
 fun AdbCommand.Builder.buildProcess(): Process? = build()?.toProcessBuilder()?.start()
 
-internal fun AdbCommand.Builder.observable(): Observable<String> = with(build()) {
+fun AdbCommand.Builder.observable(): Observable<String> = with(build()) {
     return when {
         this?.isShellCommand() == true -> {
             this.let { ProcessFactory.observableShellProcess(it) }

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper.util
 
 import co.herod.adbwrapper.model.AdbDevice
@@ -40,10 +42,10 @@ object UiHelper {
 
     private fun extract(s: String, s1: String): String {
 
-        try {
+        return try {
             val substring = s.substring(s.indexOf(s1))
             val beginIndex = s1.length
-            return substring.substring(beginIndex, substring.substring(beginIndex).indexOf("\"") + beginIndex)
+            substring.substring(beginIndex, substring.substring(beginIndex).indexOf("\"") + beginIndex)
         } catch (exception: StringIndexOutOfBoundsException) {
             exception.printStackTrace()
             throw exception

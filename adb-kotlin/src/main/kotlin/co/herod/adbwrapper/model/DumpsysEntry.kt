@@ -1,13 +1,11 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper.model
 
 import co.herod.adbwrapper.util.hasPositiveValue
 import io.reactivex.Observable
 import io.reactivex.Single
 import kotlin.collections.Map.Entry
-
-/**
- * Created by matthewherod on 16/09/2017.
- */
 
 class DumpsysEntry(private val entry: Entry<String, String>): Entry<String, String> {
     override val key: String

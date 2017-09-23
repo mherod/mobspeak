@@ -6,6 +6,7 @@ package co.herod.adbwrapper.testing
 import co.herod.adbwrapper.*
 import co.herod.adbwrapper.device.*
 import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.model.DumpsysKey
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.model.isPropertyPositive
 import co.herod.kotlin.ext.*
@@ -26,7 +27,7 @@ fun AdbDeviceTestHelper.stopUiBus() = with(adbDevice) {
 }
 
 fun AdbDeviceTestHelper.dismissKeyboard() = with(adbDevice) {
-    if (dumpsys().inputMethod().isPropertyPositive("mShowRequested")) {
+    if (dumpsys().dump(dumpsysKey = DumpsysKey.INPUT_METHOD).isPropertyPositive("mShowRequested")) {
         pressKey().escape()
     }
 }
@@ -53,7 +54,8 @@ fun AdbDeviceTestHelper.turnScreenOn() = with(adbDevice) {
 
 fun AdbDeviceTestHelper.assertActivityName(activityName: String) = with(adbDevice) {
 
-    this.dumpsys().windows()
+    this.dumpsys()
+            .dump(dumpsysKey = DumpsysKey.WINDOW)
             .filterKeys("mCurrentFocus", "mFocusedApp")
             .observableValues()
             .filter { it.containsIgnoreCase(activityName) }
@@ -62,7 +64,8 @@ fun AdbDeviceTestHelper.assertActivityName(activityName: String) = with(adbDevic
 
 fun AdbDeviceTestHelper.assertNotActivityName(activityName: String) = with(adbDevice) {
 
-    this.dumpsys().windows()
+    this.dumpsys()
+            .dump(dumpsysKey = DumpsysKey.WINDOW)
             .filterKeys("mCurrentFocus", "mFocusedApp")
             .observableValues()
             .filter { (it.containsIgnoreCase(activityName)).not() }
@@ -258,7 +261,7 @@ private fun AdbDeviceTestHelper.waitForUiNodeForFunc(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ) = with(adbDevice) {
     subscribeUiNodesSource()
-            .filter { predicate(it) ?: false }
+            .filter { predicate(it) == true }
             .firstOrError()
             .retry()
             .map { function(it).orEmpty() }

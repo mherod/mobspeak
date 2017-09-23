@@ -38,19 +38,16 @@ object Adb {
 //            dumpsys(this, type, pipe).processDumpsys("=")
 
 
-    private val bs = BehaviorSubject.create<String>()
-
     fun dumpUiNodes(
             adbDevice: AdbDevice,
             timeout: Long = 30,
             timeUnit: TimeUnit = TimeUnit.SECONDS
-    ): Observable<UiNode> = bs
-            .timeout(1, TimeUnit.SECONDS)
-            .flatMap { dumpUiHierarchy(adbDevice, timeout, timeUnit).doOnNext { bs.onNext(it) } }
-            .distinct { it }
-            .map { AdbUiHierarchy(it, adbDevice).xmlString }
-            .compose { UiHelper.uiXmlToNodes(it) }
-            .filter { Objects.nonNull(it) }
+    ): Observable<UiNode> =
+            dumpUiHierarchy(adbDevice, timeout, timeUnit)
+                    .distinct { it }
+                    .map { AdbUiHierarchy(it, adbDevice).xmlString }
+                    .compose { UiHelper.uiXmlToNodes(it) }
+                    .filter { Objects.nonNull(it) }
 
     fun dumpUiHierarchy(
             adbDevice: AdbDevice,
