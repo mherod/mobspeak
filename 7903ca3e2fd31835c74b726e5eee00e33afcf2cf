@@ -1,0 +1,5 @@
+[ver:1,total:420]
+adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.kt:285,1506182400:285,m
+adb-kotlin/build.gradle:90,1506182400:90,m
+build.gradle:30,1506182400:30,r
+cucumber/build.gradle:15,1506182400:15,r
