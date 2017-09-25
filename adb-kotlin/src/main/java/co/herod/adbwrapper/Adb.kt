@@ -64,6 +64,7 @@ object Adb {
                         adbDevice.compatDumpUiHierarchy(10, TimeUnit.SECONDS)
                 }
             }
+            .filter { it.isNotBlank() }
             .onErrorResumeNext(adbDevice.fallbackDumpUiHierarchy(10, TimeUnit.SECONDS))
             .timeout(timeout, timeUnit)
             .map { it.substring(it.indexOf('<'), it.lastIndexOf('>') + 1) }

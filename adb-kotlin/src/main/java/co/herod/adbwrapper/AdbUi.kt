@@ -54,7 +54,7 @@ fun AdbDevice.subscribeUiNodesSource(): Observable<UiNode> =
         replaceWith = ReplaceWith("windowBounds"),
         message = "Use the 'windowBounds' property"
 )
-fun AdbDevice.getWindowBounds(): UiBounds =
+fun AdbDevice.getWindowBounds1(): UiBounds =
         dumpsys().dump(dumpsysKey = DumpsysKey.WINDOW).filterProperty("mBounds")
                 .map { it.value }
                 .filter { '[' in it && ']' in it }

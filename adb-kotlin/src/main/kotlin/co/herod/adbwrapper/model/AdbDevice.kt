@@ -3,6 +3,7 @@
 package co.herod.adbwrapper.model
 
 import co.herod.adbwrapper.S
+import co.herod.adbwrapper.getWindowBounds1
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -17,7 +18,7 @@ class AdbDevice(
 
     val windowBounds: UiBounds by lazy {
         @Suppress("DEPRECATION")
-        windowBounds
+        getWindowBounds1()
     }
 
     val physical: Boolean by lazy {

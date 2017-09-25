@@ -22,6 +22,7 @@ object AdbPackageManager {
     fun getPackageVersionName(adbDevice: AdbDevice, packageName: String): String? =
             Adb.getPackageDumpsys(adbDevice, packageName)
                     .map { it["versionName"] }
+                    .map { println("Package: $packageName is version $it"); it }
                     .blockingFirst()
 }
 
