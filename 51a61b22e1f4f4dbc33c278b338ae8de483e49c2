@@ -1,0 +1,4 @@
+[ver:1,total:60]
+adb-kotlin/src/main/java/co/herod/adbwrapper/AdbUi.kt:20,1506373200:20,m
+adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt:20,1506373200:20,r
+adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt:20,1506373200:20,r
