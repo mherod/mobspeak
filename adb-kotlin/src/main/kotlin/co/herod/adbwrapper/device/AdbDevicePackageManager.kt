@@ -15,15 +15,17 @@ fun AdbDevicePackageManager.forceStop(packageName: String) = with(adbDevice) {
 }
 
 fun AdbDevicePackageManager.installPackage(apkPath: String) = with(adbDevice) {
-    execute("install $apkPath")
+    execute("install $apkPath", true)
+    // TODO check "Success"
 }
 
 fun AdbDevicePackageManager.updatePackage(apkPath: String) = with(adbDevice) {
-    execute("install -r $apkPath")
+    execute("install -r $apkPath", true)
+    // TODO check "Success"
 }
 
 fun AdbDevicePackageManager.uninstallPackage(packageName: String) = with(adbDevice) {
-    execute("uninstall $packageName")
+    execute("uninstall $packageName", true)
 }
 
 fun AdbDevicePackageManager.installedPackages(): List<String> = with(adbDevice) {

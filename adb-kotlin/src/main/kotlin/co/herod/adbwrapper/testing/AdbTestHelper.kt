@@ -279,7 +279,7 @@ private fun AdbDeviceTestHelper.waitForUiNodeForFunc(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): String = with(adbDevice) {
     subscribeUiNodesSource()
-            .filter { predicate(it) == true } // filter for items passing predicate
+            .filter { predicate(it) == true && it.visible } // filter for items passing predicate
             .firstOrError() // if not found in stream it will error
             .retry() // retry on error (stream finish before we match)
             .doOnSuccess {

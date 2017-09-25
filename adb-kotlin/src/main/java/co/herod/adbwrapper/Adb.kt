@@ -118,9 +118,9 @@ fun AdbDevice.command(command: String): Observable<String> =
                 .setCommand(command)
                 .observable()
 
-fun AdbDevice.execute(command: String) {
+fun AdbDevice.execute(command: String, silent: Boolean = false) {
     command(command).blockingSubscribe {
-        if (it.isNotBlank()) {
+        if (it.isNotBlank() && silent.not()) {
             println("Discarded output: $it")
         }
     }

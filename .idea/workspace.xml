@@ -2,17 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e552f3a-ace9-4f63-a317-cb9844901425" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbDeviceTestHelperPM.kt" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cucumber/src/test/java/skeleton/AndroidStepDefinitions2.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cucumber/src/test/java/skeleton/RunAdbTest.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceInputs.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceInputs.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceKeyPress.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceKeyPress.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/UiNode.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/UiNode.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDevicePackageManager.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDevicePackageManager.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -100,11 +93,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="AdbTestHelper.kt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AdbTestHelper.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="286" column="13" lean-forward="true" selection-start-line="286" selection-start-column="13" selection-end-line="286" selection-end-column="13" />
+            <state relative-caret-position="351">
+              <caret line="289" column="1" lean-forward="false" selection-start-line="289" selection-start-column="1" selection-end-line="289" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AdbPackageManager.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="11" column="27" lean-forward="false" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AdbDevicePackageManager.kt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDevicePackageManager.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="239">
+              <caret line="14" column="1" lean-forward="false" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -872,13 +885,14 @@
         <option value="$PROJECT_DIR$/cucumber/src/test/java/skeleton/RunAdbTest.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbDeviceTestHelperPM.kt" />
         <option value="$PROJECT_DIR$/cucumber/src/test/kotlin/skeleton/ExampleAndroidStepDefs.kt" />
-        <option value="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceInputs.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceKeyPress.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/UiNode.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDevicePackageManager.kt" />
       </list>
     </option>
   </component>
@@ -1026,7 +1040,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
-    <property name="SearchEverywhereHistoryKey" value="hasPOs&#9;null&#9;null&#10;StringExt&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/StringExtensions.kt&#10;Launch&#9;null&#9;null&#10;AdbTes&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;R&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt&#10;AdbDevi&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceKeyPress.kt&#10;AdbDev&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceInputs.kt&#10;Rx&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt&#10;blocking&#9;null&#9;null&#10;PM&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbDeviceTestHelperPM.kt&#10;E&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/cucumber/src/test/kotlin/skeleton/ExampleAndroidStepDefs.kt&#10;Adb&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;Ad&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;Ste&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/cucumber/src/test/java/skeleton/AndroidStepDefinitions2.java&#10;Wait&#9;null&#9;null&#10;wait&#9;null&#9;null&#10;testh&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;AdbError&#9;null&#9;null&#10;test&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;build&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/cucumber/build.gradle&#10;b&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/build.gradle&#10;Ui&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.kt&#10;UI&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelper.kt&#10;UiHel&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/util/UiHelper.kt" />
+    <property name="SearchEverywhereHistoryKey" value="AdbDevicePa&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDevicePackageManager.kt&#10;package&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt&#10;hasPOs&#9;null&#9;null&#10;StringExt&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/StringExtensions.kt&#10;Launch&#9;null&#9;null&#10;AdbTes&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;R&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt&#10;AdbDevi&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceKeyPress.kt&#10;AdbDev&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceInputs.kt&#10;Rx&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt&#10;blocking&#9;null&#9;null&#10;PM&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbDeviceTestHelperPM.kt&#10;E&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/cucumber/src/test/kotlin/skeleton/ExampleAndroidStepDefs.kt&#10;Adb&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;Ad&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;Ste&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/cucumber/src/test/java/skeleton/AndroidStepDefinitions2.java&#10;Wait&#9;null&#9;null&#10;wait&#9;null&#9;null&#10;testh&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;AdbError&#9;null&#9;null&#10;test&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;build&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/cucumber/build.gradle&#10;b&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/build.gradle&#10;Ui&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.kt&#10;UI&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelper.kt&#10;UiHel&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/util/UiHelper.kt" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/cucumber/src/test/kotlin" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -1387,10 +1401,10 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19058000" />
+    <option name="totallyTimeSpent" value="20346000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="356" y="22" width="1084" height="842" extended-state="0" />
+    <frame x="356" y="22" width="1084" height="842" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1477,13 +1491,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/BusSubject.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="17" column="44" lean-forward="true" selection-start-line="17" selection-start-column="44" selection-end-line="17" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.cucumber/cucumber-core/2.0.0/2f67ce80c4217ffc683142f673b025aac19efc70/cucumber-core-2.0.0-sources.jar!/cucumber/api/CucumberOptions.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="117">
@@ -1739,16 +1746,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="126" column="1" lean-forward="true" selection-start-line="126" selection-start-column="1" selection-end-line="126" selection-end-column="1" />
-          <folding>
-            <element signature="e#29#314#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cucumber/src/test/kotlin/skeleton/ExampleAndroidStepDefs.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="276">
@@ -1795,14 +1792,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
           <caret line="4796" column="12" lean-forward="true" selection-start-line="4796" selection-start-column="12" selection-end-line="4796" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1865,8 +1854,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="286" column="13" lean-forward="true" selection-start-line="286" selection-start-column="13" selection-end-line="286" selection-end-column="13" />
+        <state relative-caret-position="351">
+          <caret line="289" column="1" lean-forward="false" selection-start-line="289" selection-start-column="1" selection-end-line="289" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="27" lean-forward="false" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="125" column="5" lean-forward="true" selection-start-line="125" selection-start-column="5" selection-end-line="125" selection-end-column="5" />
+          <folding>
+            <element signature="e#29#314#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDevicePackageManager.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239">
+          <caret line="14" column="1" lean-forward="false" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
           <folding />
         </state>
       </provider>
