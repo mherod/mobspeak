@@ -5,39 +5,29 @@ package co.herod.adbwrapper.device
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbKeyEvent
 import co.herod.adbwrapper.pressKey
-import co.herod.kotlin.ext.blocking
-import java.util.concurrent.TimeUnit
+import co.herod.kotlin.ext.blockingSilent
 
 fun AdbDevice.pressKey() = AdbDeviceKeyPress(this)
 
-class AdbDeviceKeyPress @JvmOverloads constructor(
-        val adbDevice: AdbDevice,
-        private val defaultTimeout: Int = 10,
-        private val defaultTimeUnit: TimeUnit = TimeUnit.SECONDS
-) {
+class AdbDeviceKeyPress(val adbDevice: AdbDevice) {
 
     fun home() {
-        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_HOME)
-                .blocking(defaultTimeout, defaultTimeUnit)
+        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_HOME).blockingSilent()
     }
 
     fun back() {
-        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_BACK)
-                .blocking(defaultTimeout, defaultTimeUnit)
+        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_BACK).blockingSilent()
     }
 
     fun backspace() {
-        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_BACKSPACE)
-                .blocking(defaultTimeout, defaultTimeUnit)
+        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_BACKSPACE).blockingSilent()
     }
 
     fun power() {
-        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_POWER)
-                .blocking(defaultTimeout, defaultTimeUnit)
+        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_POWER).blockingSilent()
     }
 
     fun escape() {
-        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_ESCAPE)
-                .blocking(defaultTimeout, defaultTimeUnit)
+        pressKey(adbDevice, AdbKeyEvent.KEY_EVENT_ESCAPE).blockingSilent()
     }
 }

@@ -4,10 +4,8 @@ import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.util.UiHelper
-import co.herod.kotlin.ext.blocking
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -121,7 +119,11 @@ fun AdbDevice.command(command: String): Observable<String> =
                 .observable()
 
 fun AdbDevice.execute(command: String) {
-    command(command).blocking()
+    command(command).blockingSubscribe {
+        if (it.isNotBlank()) {
+            println("Discarded output: $it")
+        }
+    }
 }
 
 private fun String.isXmlOutput() = "<?xml" in this

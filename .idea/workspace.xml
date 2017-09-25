@@ -2,7 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e552f3a-ace9-4f63-a317-cb9844901425" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/ProcessFlowables.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/ProcessFlowables.kt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbDeviceTestHelperPM.kt" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cucumber/src/test/java/skeleton/AndroidStepDefinitions2.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cucumber/src/test/java/skeleton/RunAdbTest.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceInputs.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceInputs.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceKeyPress.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceKeyPress.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/UiNode.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/UiNode.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -34,6 +44,9 @@
           <activation />
         </task>
         <task path="$PROJECT_DIR$/cucumber">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/adb-kotlin">
           <activation />
         </task>
         <projects_view>
@@ -86,12 +99,24 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf>
+      <file leaf-file-name="AdbTestHelper.kt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="286" column="13" lean-forward="true" selection-start-line="286" selection-start-column="13" selection-end-line="286" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JUnit4 Test Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -101,6 +126,11 @@
       <find>junitVersion</find>
       <find>assertAct</find>
       <find>launch the app</find>
+      <find>uiNos</find>
+      <find>close</find>
+      <find>&quot;tap</find>
+      <find>activit</find>
+      <find>wait</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -600,8 +630,8 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="9036492284000" />
-        <entry key="$PROJECT_DIR$/adb-kotlin/build.gradle" value="4047992728" />
+        <entry key="$PROJECT_DIR$" value="9037250143000" />
+        <entry key="$PROJECT_DIR$/adb-kotlin/build.gradle" value="1660994237" />
         <entry key="$PROJECT_DIR$/build.gradle" value="4178994930" />
         <entry key="$PROJECT_DIR$/cucumber/build.gradle" value="4253239672" />
         <entry key="$PROJECT_DIR$/settings.gradle" value="4130899876" />
@@ -828,15 +858,27 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt" />
         <option value="$PROJECT_DIR$/cucumber/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.java" />
         <option value="$PROJECT_DIR$/cucumber/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelper.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/util/UiHelper.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/build.gradle" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.kt" />
-        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/ProcessFlowables.kt" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceScreen.kt" />
+        <option value="$PROJECT_DIR$/cucumber/src/test/java/skeleton/AndroidStepDefinitions2.java" />
+        <option value="$PROJECT_DIR$/cucumber/src/test/java/skeleton/AndroidStepDefinitions2.kt" />
+        <option value="$PROJECT_DIR$/cucumber/src/test/java/skeleton/ExampleAndroidStepDefs.kt" />
+        <option value="$PROJECT_DIR$/cucumber/src/test/java/skeleton/RunAdbTest.kt" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbDeviceTestHelperPM.kt" />
+        <option value="$PROJECT_DIR$/cucumber/src/test/kotlin/skeleton/ExampleAndroidStepDefs.kt" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceInputs.kt" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceKeyPress.kt" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/UiNode.kt" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" />
       </list>
     </option>
   </component>
@@ -847,8 +889,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="356" />
     <option name="y" value="22" />
-    <option name="width" value="1440" />
+    <option name="width" value="1084" />
     <option name="height" value="842" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -869,8 +912,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -888,6 +931,38 @@
               <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="adb-kotlin" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="adb-kotlin" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+            <path>
+              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="adb-kotlin" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="adb-kotlin" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="adbwrapper" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="adb-kotlin" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
@@ -912,29 +987,58 @@
             <path>
               <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
               <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="shell-scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="cucumber" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="cucumber" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+            <path>
+              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="cucumber" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="cucumber" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
+              <item name="skeleton" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
-    <property name="SearchEverywhereHistoryKey" value="AdbError&#9;null&#9;null&#10;test&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;build&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/cucumber/build.gradle&#10;b&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/build.gradle&#10;Ui&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.kt&#10;UI&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelper.kt&#10;UiHel&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/util/UiHelper.kt" />
-    <property name="last_directory_selection" value="$PROJECT_DIR$/adb-kotlin/src/test/kotlin" />
+    <property name="SearchEverywhereHistoryKey" value="hasPOs&#9;null&#9;null&#10;StringExt&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/StringExtensions.kt&#10;Launch&#9;null&#9;null&#10;AdbTes&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;R&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt&#10;AdbDevi&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceKeyPress.kt&#10;AdbDev&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceInputs.kt&#10;Rx&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt&#10;blocking&#9;null&#9;null&#10;PM&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbDeviceTestHelperPM.kt&#10;E&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/cucumber/src/test/kotlin/skeleton/ExampleAndroidStepDefs.kt&#10;Adb&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;Ad&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;Ste&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/cucumber/src/test/java/skeleton/AndroidStepDefinitions2.java&#10;Wait&#9;null&#9;null&#10;wait&#9;null&#9;null&#10;testh&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;AdbError&#9;null&#9;null&#10;test&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt&#10;build&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/cucumber/build.gradle&#10;b&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/build.gradle&#10;Ui&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelperTest.kt&#10;UI&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/test/kotlin/co/herod/adbwrapper/util/UiHelper.kt&#10;UiHel&#9;FILE&#9;file:///Users/matthewherod/kotlin-adb-testing/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/util/UiHelper.kt" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/cucumber/src/test/kotlin" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
       <recent name="co.herod.adbwrapper.util" />
     </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="skeleton" />
       <recent name="co.herod.adbwrapper.util" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
@@ -953,25 +1057,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.UiHelperTest">
-    <configuration name="UiHelperTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/adb-kotlin" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="--tests co.herod.adbwrapper.util.UiHelperTest" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":adb-kotlin:cleanTest" />
-            <option value=":adb-kotlin:test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-    </configuration>
+  <component name="RunManager">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="" />
       <option name="DEPLOY" value="true" />
@@ -1072,6 +1158,18 @@
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="" />
+      <envs />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="kotlin-adb-testing" />
       <envs />
     </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -1214,18 +1312,6 @@
       <envs />
       <method />
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="kotlin-adb-testing" />
-      <envs />
-    </configuration>
     <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="filePath" />
@@ -1238,26 +1324,6 @@
       <envs />
       <method />
     </configuration>
-    <configuration name="emulator-stop.sh" type="BashConfigurationType" factoryName="Bash" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="bash" />
-      <option name="INTERPRETER_PATH" value="/usr/bin/env" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/shell-scripts" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/shell-scripts/emulator-stop.sh" />
-      <option name="PARAMETERS" value="" />
-      <module name="kotlin-adb-testing" />
-      <envs />
-    </configuration>
-    <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="Bash.emulator-stop.sh" />
-      <item index="1" class="java.lang.String" itemvalue="Gradle.UiHelperTest" />
-    </list>
-    <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Gradle.UiHelperTest" />
-        <item index="1" class="java.lang.String" itemvalue="Bash.emulator-stop.sh" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -1283,7 +1349,8 @@
       <workItem from="1506157306543" duration="5823000" />
       <workItem from="1506165592034" duration="893000" />
       <workItem from="1506166511240" duration="21000" />
-      <workItem from="1506182467330" duration="1909000" />
+      <workItem from="1506182467330" duration="2334000" />
+      <workItem from="1506331530277" duration="13201000" />
     </task>
     <servers />
   </component>
@@ -1320,33 +1387,34 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2179000" />
+    <option name="totallyTimeSpent" value="19058000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1440" height="842" extended-state="6" />
+    <frame x="356" y="22" width="1084" height="842" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32857144" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5285714" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5285714" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30763888" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30627307" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1409,90 +1477,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.3/29d73207f0725011a59e0dc02022ac4e4f8445ab/rxjava-2.1.3-sources.jar!/io/reactivex/Single.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="2586" column="27" lean-forward="false" selection-start-line="2586" selection-start-column="27" selection-end-line="2586" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/rx/FixedDurationTransformer.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="9" column="38" lean-forward="true" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.3/29d73207f0725011a59e0dc02022ac4e4f8445ab/rxjava-2.1.3-sources.jar!/io/reactivex/subjects/PublishSubject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="47" column="19" lean-forward="false" selection-start-line="47" selection-start-column="19" selection-end-line="47" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.3/29d73207f0725011a59e0dc02022ac4e4f8445ab/rxjava-2.1.3-sources.jar!/io/reactivex/subjects/ReplaySubject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
-          <caret line="123" column="39" lean-forward="false" selection-start-line="123" selection-start-column="39" selection-end-line="123" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.3/29d73207f0725011a59e0dc02022ac4e4f8445ab/rxjava-2.1.3-sources.jar!/io/reactivex/internal/subscriptions/ArrayCompositeSubscription.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-402">
-          <caret line="28" column="19" lean-forward="false" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.3/29d73207f0725011a59e0dc02022ac4e4f8445ab/rxjava-2.1.3-sources.jar!/io/reactivex/disposables/CompositeDisposable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="95" column="60" lean-forward="true" selection-start-line="95" selection-start-column="60" selection-end-line="95" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.3/29d73207f0725011a59e0dc02022ac4e4f8445ab/rxjava-2.1.3-sources.jar!/io/reactivex/ObservableSource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="23" column="17" lean-forward="false" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.3/29d73207f0725011a59e0dc02022ac4e4f8445ab/rxjava-2.1.3-sources.jar!/io/reactivex/subjects/BehaviorSubject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="77" column="37" lean-forward="false" selection-start-line="77" selection-start-column="36" selection-end-line="77" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.3/29d73207f0725011a59e0dc02022ac4e4f8445ab/rxjava-2.1.3-sources.jar!/io/reactivex/Observer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="35" column="7" lean-forward="true" selection-start-line="35" selection-start-column="7" selection-end-line="35" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.3/29d73207f0725011a59e0dc02022ac4e4f8445ab/rxjava-2.1.3-sources.jar!/io/reactivex/Observable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-714">
-          <caret line="96" column="22" lean-forward="false" selection-start-line="96" selection-start-column="22" selection-end-line="96" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.3/29d73207f0725011a59e0dc02022ac4e4f8445ab/rxjava-2.1.3-sources.jar!/io/reactivex/subjects/Subject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="26" column="45" lean-forward="false" selection-start-line="26" selection-start-column="45" selection-end-line="26" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.sdkman/candidates/gradle/current/lib/gradle-core-4.1.jar!/org/gradle/api/artifacts/dsl/RepositoryHandler.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="15" column="66" lean-forward="false" selection-start-line="15" selection-start-column="66" selection-end-line="15" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/BusSubject.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="308">
@@ -1500,25 +1484,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbCommand.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="68" column="9" lean-forward="true" selection-start-line="68" selection-start-column="9" selection-end-line="68" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.cucumber/cucumber-core/2.0.0/2f67ce80c4217ffc683142f673b025aac19efc70/cucumber-core-2.0.0-sources.jar!/cucumber/api/CucumberOptions.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="117">
           <caret line="12" column="18" lean-forward="false" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cucumber/src/test/java/skeleton/RunAdbTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="7" column="14" lean-forward="false" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -1540,13 +1509,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="275">
           <caret line="30" column="34" lean-forward="false" selection-start-line="30" selection-start-column="34" selection-end-line="30" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceScreen.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="23" column="22" lean-forward="false" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
         </state>
       </provider>
     </entry>
@@ -1613,21 +1575,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.4/f5d8a80773d0d2b6538c68fc31008814dd2effed/rxjava-2.1.4-sources.jar!/io/reactivex/Observable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="11224" column="24" lean-forward="true" selection-start-line="11224" selection-start-column="24" selection-end-line="11224" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbUi.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="45" column="20" lean-forward="false" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="760">
@@ -1656,20 +1603,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbProcesses.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="58" column="4" lean-forward="false" selection-start-line="58" selection-start-column="4" selection-end-line="58" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceKeyPress.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/AdbKeyEvent.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
@@ -1677,27 +1610,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1631">
-          <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/util/UiHelper.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cucumber/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
           <caret line="15" column="38" lean-forward="true" selection-start-line="15" selection-start-column="38" selection-end-line="18" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1705,7 +1621,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
           <caret line="9" column="22" lean-forward="true" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1713,7 +1628,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="66">
           <caret line="3" column="20" lean-forward="true" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1727,14 +1641,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="42" column="18" lean-forward="true" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.1.50/6649061a364e109349b4d1fb644b4ae14ee21905/kotlin-stdlib-1.1.50-sources.jar!/kotlin/TypeAliases.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="352">
@@ -1743,26 +1649,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt">
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbUi.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
-          <caret line="168" column="0" lean-forward="true" selection-start-line="168" selection-start-column="0" selection-end-line="168" selection-end-column="0" />
+          <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cucumber/src/test/java/skeleton/AndroidStepDefinitions2.java">
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.1.50/6649061a364e109349b4d1fb644b4ae14ee21905/kotlin-stdlib-1.1.50-sources.jar!/kotlin/text/Strings.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="520" column="0" lean-forward="true" selection-start-line="520" selection-start-column="0" selection-end-line="520" selection-end-column="0" />
+        <state relative-caret-position="364">
+          <caret line="259" column="3" lean-forward="true" selection-start-line="259" selection-start-column="3" selection-end-line="259" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceScreen.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="17" column="33" lean-forward="false" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -1771,14 +1676,197 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
           <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.4/f5d8a80773d0d2b6538c68fc31008814dd2effed/rxjava-2.1.4-sources.jar!/io/reactivex/SingleSource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="26" column="17" lean-forward="false" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.4/f5d8a80773d0d2b6538c68fc31008814dd2effed/rxjava-2.1.4-sources.jar!/io/reactivex/Single.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="59" column="50" lean-forward="true" selection-start-line="59" selection-start-column="50" selection-end-line="59" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cucumber/src/test/kotlin/skeleton/RunAdbTest.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding>
+            <element signature="e#47#149#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/InputType.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.1.50/6649061a364e109349b4d1fb644b4ae14ee21905/kotlin-stdlib-1.1.50-sources.jar!/kotlin/util/Standard.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="311">
+          <caret line="57" column="3" lean-forward="true" selection-start-line="57" selection-start-column="3" selection-end-line="57" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbDeviceTestHelperPM.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="481">
+          <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+          <folding>
+            <element signature="e#37#275#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceInputs.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="348">
+          <caret line="126" column="1" lean-forward="true" selection-start-line="126" selection-start-column="1" selection-end-line="126" selection-end-column="1" />
+          <folding>
+            <element signature="e#29#314#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cucumber/src/test/kotlin/skeleton/ExampleAndroidStepDefs.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="50" column="33" lean-forward="false" selection-start-line="50" selection-start-column="33" selection-end-line="50" selection-end-column="33" />
+          <folding>
+            <element signature="e#59#623#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxkotlin/2.1.0/bb2fb2c19137ee668730e201d2fef3c87604c457/rxkotlin-2.1.0-sources.jar!/io/reactivex/rxkotlin/observable.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="22" column="26" lean-forward="false" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/ProcessFlowables.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="51" column="38" lean-forward="true" selection-start-line="51" selection-start-column="38" selection-end-line="51" selection-end-column="38" />
+        <state relative-caret-position="591">
+          <caret line="79" column="1" lean-forward="true" selection-start-line="79" selection-start-column="1" selection-end-line="79" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbCommand.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="364">
+          <caret line="87" column="9" lean-forward="true" selection-start-line="87" selection-start-column="9" selection-end-line="87" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbProcesses.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="63" column="0" lean-forward="true" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.4/f5d8a80773d0d2b6538c68fc31008814dd2effed/rxjava-2.1.4-sources.jar!/io/reactivex/Observable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="4796" column="12" lean-forward="true" selection-start-line="4796" selection-start-column="12" selection-end-line="4796" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceKeyPress.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239">
+          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="52" column="19" lean-forward="false" selection-start-line="52" selection-start-column="19" selection-end-line="52" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/util/UiHelper.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/StringExtensions.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="64" lean-forward="true" selection-start-line="2" selection-start-column="64" selection-end-line="2" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/util/PropHelper.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/DumpsysEntry.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="16" column="76" lean-forward="false" selection-start-line="16" selection-start-column="76" selection-end-line="16" selection-end-column="76" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/UiNode.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1213">
+          <caret line="15" column="34" lean-forward="false" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="286" column="13" lean-forward="true" selection-start-line="286" selection-start-column="13" selection-end-line="286" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -1786,5 +1874,81 @@
   </component>
   <component name="gradleExecuteTaskHistory">
     <option value="" />
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>Kotlin</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>cucumber_test|cucumber</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Gradle: info.cukes:cucumber-html:0.2.6</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

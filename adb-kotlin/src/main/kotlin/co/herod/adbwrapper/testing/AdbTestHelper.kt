@@ -11,7 +11,6 @@ import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.model.isPropertyPositive
 import co.herod.kotlin.ext.*
 import io.reactivex.Observable
-import java.io.File
 import java.util.concurrent.TimeUnit
 
 class AdbDeviceTestHelper(val adbDevice: AdbDevice)
@@ -54,33 +53,45 @@ fun AdbDeviceTestHelper.turnScreenOn() = with(adbDevice) {
 
 fun AdbDeviceTestHelper.assertActivityName(activityName: String) = with(adbDevice) {
 
-    val result = this.dumpsys()
-            .dump(dumpsysKey = DumpsysKey.WINDOW)
-            .filterKeys("mCurrentFocus", "mFocusedApp")
-            .observableValues()
-            .filter { it.containsIgnoreCase(activityName) }
-            .blockingSingle(10, TimeUnit.SECONDS)
-            .isNotEmpty()
-
-    if (result.not()) {
-        throw AssertionError("Did not see $activityName activity")
+    try {
+        assert(matchActivity(activityName)) {
+            "Did not see $activityName activity"
+        }
+    } catch (exception: IllegalStateException) {
+        throw AssertionError(exception)
     }
 }
 
 fun AdbDeviceTestHelper.assertNotActivityName(activityName: String) = with(adbDevice) {
 
-    val result = this.dumpsys()
-            .dump(dumpsysKey = DumpsysKey.WINDOW)
-            .filterKeys("mCurrentFocus", "mFocusedApp")
-            .observableValues()
-            .filter { (it.containsIgnoreCase(activityName)).not() }
-            .blockingSingle(10, TimeUnit.SECONDS)
-            .isEmpty()
-
-    if (result.not()) {
-        throw AssertionError("Did see $activityName activity")
+    try {
+        assert(matchActivity(activityName).not()) {
+            "Did not see $activityName activity"
+        }
+    } catch (exception: IllegalStateException) {
+        throw AssertionError(exception)
     }
 }
+
+private fun AdbDevice.matchActivity(activityName: String): Boolean =
+        Observable.just(this)
+                .flatMap { device ->
+                    device.dumpsys()
+                            .dump(dumpsysKey = DumpsysKey.WINDOW)
+                            .filterKeys("mCurrentFocus", "mFocusedApp")
+                            .observableValues()
+                            .filter { it.containsIgnoreCase(activityName) }
+                }
+                .firstOrError()
+                .retryWithTimeout(10, TimeUnit.SECONDS)
+                .onErrorReturn { "" } // timeout without match
+                .doOnSuccess {
+                    if (it.isNotBlank()) {
+                        System.out.println("Matched: $it")
+                    }
+                }
+                .blockingGet()
+                .isNotBlank()
 
 fun AdbDeviceTestHelper.assertPower(minPower: Int) {
     with(adbDevice) {
@@ -101,7 +112,10 @@ fun AdbDeviceTestHelper.dismissDialog() {
 }
 
 @JvmOverloads
-fun AdbDeviceTestHelper.dragDown(widthFunction: ((Int) -> Int), edgeOffset: Double = 0.0) = with(adbDevice) {
+fun AdbDeviceTestHelper.dragDown(
+        widthFunction: ((Int) -> Int),
+        edgeOffset: Double = 0.0
+) = with(adbDevice) {
     windowBounds.run {
         widthFunction(width).let {
             swipe(it,
@@ -113,7 +127,10 @@ fun AdbDeviceTestHelper.dragDown(widthFunction: ((Int) -> Int), edgeOffset: Doub
 }
 
 @JvmOverloads
-fun AdbDeviceTestHelper.dragUp(widthFunction: ((Int) -> Int), edgeOffset: Double = 0.0) = with(adbDevice) {
+fun AdbDeviceTestHelper.dragUp(
+        widthFunction: ((Int) -> Int),
+        edgeOffset: Double = 0.0
+) = with(adbDevice) {
     windowBounds.run {
         widthFunction(width).let {
             swipe(
@@ -127,7 +144,10 @@ fun AdbDeviceTestHelper.dragUp(widthFunction: ((Int) -> Int), edgeOffset: Double
 }
 
 @JvmOverloads
-fun AdbDeviceTestHelper.dragRight(heightFunction: ((Int) -> Int), edgeOffset: Double = 0.0) = with(adbDevice) {
+fun AdbDeviceTestHelper.dragRight(
+        heightFunction: ((Int) -> Int),
+        edgeOffset: Double = 0.0
+) = with(adbDevice) {
     windowBounds.run {
         heightFunction(height).let {
             swipe((width * edgeOffset).toInt(),
@@ -139,7 +159,10 @@ fun AdbDeviceTestHelper.dragRight(heightFunction: ((Int) -> Int), edgeOffset: Do
 }
 
 @JvmOverloads
-fun AdbDeviceTestHelper.dragLeft(heightFunction: ((Int) -> Int), edgeOffset: Double = 0.0) = with(adbDevice) {
+fun AdbDeviceTestHelper.dragLeft(
+        heightFunction: ((Int) -> Int),
+        edgeOffset: Double = 0.0
+) = with(adbDevice) {
     windowBounds.run {
         heightFunction(height).let {
             swipe((width * (1.0 - edgeOffset)).toInt(),
@@ -149,23 +172,6 @@ fun AdbDeviceTestHelper.dragLeft(heightFunction: ((Int) -> Int), edgeOffset: Dou
         }
     }
 }
-
-fun AdbDeviceTestHelper.getInstalledPackages(): MutableList<String> = with(adbDevice) {
-    AdbPackageManager.listPackages(this)
-}
-
-fun AdbDeviceTestHelper.getPackageVersionName(packageName: String): String? = with(adbDevice) {
-    AdbPackageManager.getPackageVersionName(this, packageName)
-}
-
-fun AdbDeviceTestHelper.installApk(apkPath: String) = with(adbDevice) {
-
-    File(apkPath).assertExists()
-    pm().installPackage(apkPath)
-}
-
-fun AdbDeviceTestHelper.installedPackageIsVersion(packageName: String, versionName: String): Boolean =
-        getPackageVersionName(packageName) == versionName
 
 fun AdbDeviceTestHelper.launchApp(packageName: String) = with(adbDevice) {
     AdbPackageManager.launchApp(this, packageName)
@@ -187,60 +193,62 @@ fun AdbDeviceTestHelper.typeText(text: String) = with(adbDevice) {
     typeText(text)
 }
 
-fun AdbDeviceTestHelper.touchUiNode(predicate: (UiNode) -> Boolean) = with(adbDevice) {
-    waitForUiNodeForFunc(
-            predicate = predicate,
-            function = { tap(it) },
-            timeout = 20,
-            timeUnit = TimeUnit.SECONDS
-    )
-}
+fun AdbDeviceTestHelper.touchUiNode(predicate: (UiNode) -> Boolean) =
+        with(adbDevice) {
+            waitForUiNodeForFunc(
+                    predicate = predicate,
+                    function = { tap(it) },
+                    timeout = 10,
+                    timeUnit = TimeUnit.SECONDS
+            )
+        }
 
-fun AdbDeviceTestHelper.touchText(text: String) = with(adbDevice) {
-    waitForUiNodeForFunc(
-            predicate = { it.text.containsIgnoreCase(text) },
-            function = { tap(it) },
-            timeout = 20,
-            timeUnit = TimeUnit.SECONDS
-    )
-}
+fun AdbDeviceTestHelper.touchText(text: String) =
+        with(adbDevice) {
+            waitForUiNodeForFunc(
+                    predicate = { it.text.containsIgnoreCase(text) },
+                    function = { tap(it) },
+                    timeout = 10,
+                    timeUnit = TimeUnit.SECONDS
+            )
+        }
 
 fun AdbDeviceTestHelper.uninstallPackage(packageName: String) = with(adbDevice) {
     pm().uninstallPackage(packageName)
 }
 
-fun AdbDeviceTestHelper.updateApk(apkPath: String) = with(adbDevice) {
-
-    File(apkPath).assertExists()
-
-    pm().updatePackage(apkPath)
-}
 
 fun AdbDeviceTestHelper.waitForTextToFailToDisappear(text: String) {
     TODO("not implemented: waitForTextToDisappear $text")
 }
 
-fun AdbDeviceTestHelper.waitForText(text: String, timeout: Int, timeUnit: TimeUnit) = with(adbDevice) {
-    waitForUiNodeForFunc(
-            predicate = { it.text.containsIgnoreCase(text) },
-            function = { "Found" },
-            timeout = timeout,
-            timeUnit = timeUnit
-    )
-}
+@JvmOverloads
+fun AdbDeviceTestHelper.waitForText(
+        text: String,
+        timeout: Int = 30,
+        timeUnit: TimeUnit = TimeUnit.SECONDS
+): String =
+        with(adbDevice) {
+            waitForUiNodeForFunc(
+                    { uiNode -> uiNode.text.containsIgnoreCase(text) },
+                    timeout = timeout,
+                    timeUnit = timeUnit
+            )
+        }
+
+fun AdbDeviceTestHelper.waitForUiNode(
+        predicate: (UiNode) -> Boolean
+): String =
+        waitForUiNodeForFunc(
+                predicate = predicate,
+                timeout = 10,
+                timeUnit = TimeUnit.SECONDS
+        )
 
 fun AdbDeviceTestHelper.forceStopApp(packageName: String) = with(adbDevice) {
     pm().forceStop(packageName)
 }
 
-fun AdbDeviceTestHelper.waitForUiNode(predicate: (UiNode) -> Boolean) = with(adbDevice) {
-    waitForUiNodeForFunc(
-            predicate = predicate,
-            function = { "Found" },
-            timeout = 20,
-            timeUnit = TimeUnit.SECONDS
-    )
-}
 
 @JvmOverloads
 fun waitSeconds(waitSeconds: Int = 3) = try {
@@ -266,16 +274,19 @@ fun AdbDeviceTestHelper.failOnText(
 
 private fun AdbDeviceTestHelper.waitForUiNodeForFunc(
         predicate: (UiNode) -> Boolean?,
-        function: (UiNode) -> String? = { "No Action" },
+        function: (UiNode) -> String? = { "" },
         timeout: Int = 30,
         timeUnit: TimeUnit = TimeUnit.SECONDS
-) = with(adbDevice) {
+): String = with(adbDevice) {
     subscribeUiNodesSource()
-            .filter { predicate(it) == true }
-            .firstOrError()
-            .retry()
-            .map { function(it).orEmpty() }
-            .blockingSingle(timeout, timeUnit)
+            .filter { predicate(it) == true } // filter for items passing predicate
+            .firstOrError() // if not found in stream it will error
+            .retry() // retry on error (stream finish before we match)
+            .doOnSuccess {
+                println("Matched: ${it.resourceId}")
+            }
+            .map { function(it).orEmpty() } // do this function with item
+            .blocking(timeout, timeUnit) // with max max timeout
 }
 
 fun AdbDeviceTestHelper.waitForTextToDisappear(text: String) {

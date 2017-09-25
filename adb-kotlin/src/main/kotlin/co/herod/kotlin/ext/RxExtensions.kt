@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package co.herod.kotlin.ext
 
 import co.herod.adbwrapper.model.DumpsysEntry
@@ -6,49 +8,53 @@ import io.reactivex.Single
 import java.util.concurrent.TimeUnit
 
 fun <T> Observable<T>.timeout(
-        timeout: Int,
-        timeUnit: TimeUnit
-): Observable<T> =
-        timeout(timeout.toLong(), timeUnit)
+        timeout: Int = 5,
+        timeUnit: TimeUnit = TimeUnit.SECONDS
+): Observable<T> = timeout(timeout.toLong(), timeUnit)
+
+fun <T> Single<T>.timeout(
+        timeout: Int = 5,
+        timeUnit: TimeUnit = TimeUnit.SECONDS
+): Single<T> = timeout(timeout.toLong(), timeUnit)
 
 fun <T> Observable<T>.retryWithTimeout(
-        timeout: Int,
-        timeUnit: TimeUnit
-): Observable<T> =
-        retry().timeout(timeout.toLong(), timeUnit)
+        timeout: Int = 5,
+        timeUnit: TimeUnit = TimeUnit.SECONDS
+): Observable<T> = retry().timeout(timeout, timeUnit)
 
-//fun <T> Single<T>.retryWithTimeout(
-//        timeout: Int,
-//        timeUnit: TimeUnit
-//): Single<T> =
-//        retry().timeout(timeout.toLong(), timeUnit)
+fun <T> Single<T>.retryWithTimeout(
+        timeout: Int = 5,
+        timeUnit: TimeUnit = TimeUnit.SECONDS
+): Single<T> = retry().timeout(timeout, timeUnit)
 
-fun Observable<String>.blocking(
-        timeout: Int = 2,
+//fun Observable<String>.toSingleBlocking(
+//        timeout: Int = 5,
+//        timeUnit: TimeUnit = TimeUnit.SECONDS
+//) = try {
+//    this
+//            // .lastOrError()
+//            // .retryWithTimeout(timeout, timeUnit)
+//            .timeout(timeout.toLong(), timeUnit)
+//            // .doOnSuccess { System.out.println(it) }
+//            // .blockingGet()
+//            .blockingSubscribe()
+//} catch (exception: IllegalStateException) {
+//    throw AssertionError(exception)
+//}
+
+fun Observable<String>.blockingSilent(
+        timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): String = this
-        .retryWithTimeout(timeout, timeUnit)
-        .last("")
-        .onErrorReturn { "" }
-        .doOnSuccess { System.out.println(it) }
+        .last("") // succeeds silently
+        .timeout(timeout.toLong(), timeUnit)
         .blockingGet()
 
-fun Observable<String>.blockingSingle(
-        timeout: Int = 2,
-        timeUnit: TimeUnit = TimeUnit.SECONDS
-): String = this
-        .retry()
-        .firstOrError()
-        .timeout(timeout.toLong(), timeUnit)
-        .onErrorReturn { "" }
-        .blockingGet()
-
-fun Single<String>.blockingSingle(
-        timeout: Int = 2,
+fun Single<String>.blocking(
+        timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): String = this
         .timeout(timeout.toLong(), timeUnit)
-        .onErrorReturn { "" }
         .blockingGet()
 
 @JvmName("filterPropertiesByKey")
