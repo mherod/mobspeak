@@ -1,0 +1,17 @@
+[ver:1,total:3600]
+adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt:1364,1506355200:609,1506358800:755,d
+cucumber/src/test/kotlin/skeleton/ExampleAndroidStepDefs.kt:871,1506355200:506,1506358800:365,d
+adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt:655,1506355200:655,d
+adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceInputs.kt:154,1506355200:154,d
+adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceKeyPress.kt:150,1506348000:150,d
+adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt:105,1506355200:105,r
+cucumber/src/test/java/skeleton/ExampleAndroidStepDefs.kt:87,1506355200:87,d
+cucumber/src/test/java/skeleton/AndroidStepDefinitions2.java:40,1506355200:40,r
+cucumber/src/test/java/skeleton/RunAdbTest.java:37,1506355200:37,r
+cucumber/src/test/java/skeleton/AndroidStepDefinitions2.kt:30,1506355200:30,d
+adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDeviceScreen.kt:30,1506348000:30,d
+cucumber/src/test/kotlin/skeleton/RunAdbTest.kt:20,1506358800:20,d
+adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/UiNode.kt:20,1506355200:20,d
+cucumber/src/test/java/skeleton/RunAdbTest.kt:16,1506355200:16,d
+adb-kotlin/src/main/kotlin/co/herod/adbwrapper/exceptions/AdbError.kt:12,1506355200:12,d
+adb-kotlin/src/main/java/co/herod/adbwrapper/AdbCommand.kt:9,1506355200:9,r
