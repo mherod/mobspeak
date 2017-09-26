@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0e552f3a-ace9-4f63-a317-cb9844901425" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/build.gradle" afterPath="$PROJECT_DIR$/adb-kotlin/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -90,7 +90,18 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="AdbTestHelper.kt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="430">
+              <caret line="301" column="1" lean-forward="false" selection-start-line="301" selection-start-column="1" selection-end-line="301" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -113,6 +124,7 @@
       <find>wait</find>
       <find>Matched</find>
       <find>uninstall</find>
+      <find>Text was visible</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -612,11 +624,11 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="9037307188000" />
+        <entry key="$PROJECT_DIR$" value="9037484867000" />
         <entry key="$PROJECT_DIR$/adb-kotlin/build.gradle" value="3103421835" />
-        <entry key="$PROJECT_DIR$/build.gradle" value="4178994930" />
-        <entry key="$PROJECT_DIR$/cucumber/build.gradle" value="4253239672" />
-        <entry key="$PROJECT_DIR$/settings.gradle" value="4130899876" />
+        <entry key="$PROJECT_DIR$/build.gradle" value="1962011498" />
+        <entry key="$PROJECT_DIR$/cucumber/build.gradle" value="1932515882" />
+        <entry key="$PROJECT_DIR$/settings.gradle" value="834353156" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -862,8 +874,8 @@
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/AdbDevice.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbUi.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt" />
-        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/build.gradle" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" />
       </list>
     </option>
   </component>
@@ -1300,7 +1312,7 @@
       <workItem from="1506166511240" duration="21000" />
       <workItem from="1506182467330" duration="2334000" />
       <workItem from="1506331530277" duration="13201000" />
-      <workItem from="1506417019066" duration="197000" />
+      <workItem from="1506417019066" duration="1155000" />
     </task>
     <servers />
   </component>
@@ -1337,10 +1349,11 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23748000" />
+    <option name="totallyTimeSpent" value="24706000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="356" y="22" width="1084" height="842" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1354,8 +1367,9 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30627307" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30627307" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1375,7 +1389,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1570,6 +1583,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="242">
           <caret line="17" column="33" lean-forward="false" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1619,6 +1633,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="481">
           <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+          <folding>
+            <element signature="e#37#275#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1661,6 +1678,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
           <caret line="4796" column="12" lean-forward="true" selection-start-line="4796" selection-start-column="12" selection-end-line="4796" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1668,6 +1686,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="239">
           <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1703,6 +1722,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1213">
           <caret line="15" column="34" lean-forward="false" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1710,6 +1730,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="293">
           <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1717,6 +1738,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="261">
           <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1752,13 +1774,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="415">
           <caret line="392" column="34" lean-forward="true" selection-start-line="392" selection-start-column="34" selection-end-line="392" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="77" column="16" lean-forward="true" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
           <folding />
         </state>
       </provider>
@@ -1767,6 +1782,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="44">
           <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1782,6 +1798,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="308">
           <caret line="14" column="9" lean-forward="true" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="430">
+          <caret line="301" column="1" lean-forward="false" selection-start-line="301" selection-start-column="1" selection-end-line="301" selection-end-column="1" />
           <folding />
         </state>
       </provider>

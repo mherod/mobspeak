@@ -296,7 +296,7 @@ fun AdbDeviceTestHelper.failOnText(
             .timeout(timeout.toLong(), timeUnit)
             .blockingForEach { uiNode: UiNode ->
                 if (uiNode.text.containsIgnoreCase(text)) {
-                    throw AssertionError("Text was visible")
+                    throw AssertionError("Text was visible: $text")
                 }
             }
 }
