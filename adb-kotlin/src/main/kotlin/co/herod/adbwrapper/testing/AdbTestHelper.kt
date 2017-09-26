@@ -305,15 +305,40 @@ fun waitSeconds(waitSeconds: Int = 3) = try {
 } catch (ignored: InterruptedException) {
 }
 
+fun AdbDeviceTestHelper.waitWhileProgressVisible() {
+    return waitWhileTrue { it.uiClass.endsWith("ProgressBar") }
+}
+
+fun AdbDeviceTestHelper.waitWhileTrue(predicate: (UiNode) -> Boolean?) = with(adbDevice) {
+
+    whileTrueLoopBlock(predicate)
+            .timeout(30, TimeUnit.SECONDS)
+            .blockingSubscribe()
+}
+
+private fun AdbDeviceTestHelper.whileTrueLoopBlock(predicate: (UiNode) -> Boolean?): Observable<Unit> {
+    return Observable.fromCallable {
+        var loop: Boolean
+        do loop = uiHierarchySource()
+                .filter { predicate(it) == true }
+                .toList()
+                .blockingGet()
+                .isNotEmpty()
+        while (loop)
+    }
+}
+
 @JvmOverloads
 fun AdbDeviceTestHelper.failOnText(
         text: String,
-        timeout: Int = 15,
+        timeout: Int = 20,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ) = with(adbDevice) {
-    Observable.timer(1, TimeUnit.SECONDS)
-            .flatMap { Adb.dumpUiNodes(this, 30, TimeUnit.SECONDS) }
-            .timeout(timeout.toLong(), timeUnit)
+
+    Observable.timer(100, TimeUnit.MILLISECONDS)
+            .flatMap { uiHierarchySource().sample(5, TimeUnit.SECONDS) }
+            .timeout(timeout, timeUnit)
+            .onErrorResumeNext { _: Throwable -> Observable.empty() }
             .blockingForEach { uiNode: UiNode ->
                 if (uiNode.text.containsIgnoreCase(text)) {
                     throw AssertionError("Text was visible: $text")
