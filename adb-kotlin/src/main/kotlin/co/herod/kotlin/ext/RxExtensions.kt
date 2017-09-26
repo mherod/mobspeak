@@ -6,6 +6,7 @@ import co.herod.adbwrapper.model.DumpsysEntry
 import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 fun <T> Observable<T>.timeout(
         timeout: Int = 5,
@@ -55,6 +56,14 @@ fun Single<String>.blocking(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): String = this
         .timeout(timeout.toLong(), timeUnit)
+        .onErrorResumeNext { throwable ->
+            if (throwable is TimeoutException) {
+                Single.error<String> {
+                    AssertionError("Timed out")
+                }
+            }
+            Single.error<String> { throwable }
+        }
         .blockingGet()
 
 @JvmName("filterPropertiesByKey")

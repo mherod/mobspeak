@@ -13,30 +13,12 @@ import cucumber.api.java.Before
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import io.reactivex.annotations.CheckReturnValue
 import junit.framework.AssertionFailedError
 import java.util.concurrent.TimeUnit
 
 class ExampleAndroidStepDefs {
 
-    private var adbDevice: AdbDevice? = null
-
-    @Before
-    fun beforeScenario() {
-        // device().testHelper().startUiBus()
-    }
-
-    @After
-    fun afterScenario() {
-        // device().testHelper().stopUiBus()
-    }
-
-    private fun device(): AdbDevice {
-        return adbDevice ?: this.tryConnectDevice()
-    }
-
-    @CheckReturnValue
-    private fun tryConnectDevice(): AdbDevice {
+    private val adbDevice: AdbDevice by lazy {
 
         val allDevices = AdbDeviceManager.getAllDevices()
 
@@ -48,7 +30,21 @@ class ExampleAndroidStepDefs {
 
         String.format("Connected device: %s", newConnectedDevice.toString())
 
-        return newConnectedDevice
+        newConnectedDevice
+    }
+
+    private val testHelper: AdbDeviceTestHelper by lazy {
+        adbDevice.testHelper()
+    }
+
+    @Before
+    fun beforeScenario() {
+        testHelper.startUiBus()
+    }
+
+    @After
+    fun afterScenario() {
+        testHelper.stopUiBus()
     }
 
     @When("^a monkey snatches my device$")
@@ -61,25 +57,25 @@ class ExampleAndroidStepDefs {
     @Given("^I am on the \"([^\"]*)\" activity$")
     @Throws(Throwable::class)
     fun assertActivityName(activityName: String) {
-        device().testHelper().assertActivityName(activityName)
+        testHelper.assertActivityName(activityName)
     }
 
     @Then("^I am not on the \"([^\"]*)\" activity$")
     @Throws(Throwable::class)
     fun assertNotActivityName(activityName: String) {
-        device().testHelper().assertNotActivityName(activityName)
+        testHelper.assertNotActivityName(activityName)
     }
 
     @Given("^I have a device with power at least (\\d+)$")
     @Throws(Throwable::class)
     fun connectDeviceAssertPower(minPower: Int) {
-        device().testHelper().assertPower(minPower)
+        testHelper.assertPower(minPower)
     }
 
     @Then("^I dismiss the dialog$")
     @Throws(Throwable::class)
     fun dismissDialog() {
-        device().testHelper().dismissDialog()
+        testHelper.dismissDialog()
     }
 
     @When("^I am on the device app launcher$")
@@ -92,19 +88,19 @@ class ExampleAndroidStepDefs {
     @When("^I close the app \"([^\"]*)\"$")
     @Throws(Throwable::class)
     fun iCloseTheApp(packageName: String) {
-        device().testHelper().forceStopApp(packageName)
+        testHelper.forceStopApp(packageName)
     }
 
     @When("^I close the navigation drawer$")
     @Throws(Throwable::class)
     fun iCloseTheNavigationDrawer() {
-        device().testHelper().closeLeftDrawer()
+        testHelper.closeLeftDrawer()
     }
 
     @When("^I dismiss the keyboard$")
     @Throws(Throwable::class)
     fun iDismissTheKeyboard() {
-        device().testHelper().dismissKeyboard()
+        testHelper.dismissKeyboard()
     }
 
     @Then("^I do not see any progress indicators$")
@@ -117,13 +113,13 @@ class ExampleAndroidStepDefs {
     @Then("^I do not see the \"([^\"]*)\" text$")
     @Throws(Throwable::class)
     fun iDoNotSeeTheText(text: String) {
-        device().testHelper().failOnText(text, 5, TimeUnit.SECONDS)
+        testHelper.failOnText(text, 5, TimeUnit.SECONDS)
     }
 
     @Then("^I do not see the text \"([^\"]*)\"$")
     @Throws(Throwable::class)
     fun iDoNotSeeTheText2(text: String) {
-        device().testHelper().failOnText(text, 5, TimeUnit.SECONDS)
+        testHelper.failOnText(text, 5, TimeUnit.SECONDS)
     }
 
     @Then("^I do not see the text \"([^\"]*)\" disappear$")
@@ -136,61 +132,61 @@ class ExampleAndroidStepDefs {
     @When("^I drag down$")
     @Throws(Throwable::class)
     fun dragDown() {
-        device().testHelper().dragDown({ width -> width / 3 }, 0.2)
+        testHelper.dragDown({ width -> width / 3 }, 0.2)
     }
 
     @When("^I drag down along the left side$")
     @Throws(Throwable::class)
     fun dragDownAlongTheLeftSide() {
-        device().testHelper().dragDown({ width -> width / 3 }, 0.2)
+        testHelper.dragDown({ width -> width / 3 }, 0.2)
     }
 
     @When("^I drag down along the right side$")
     @Throws(Throwable::class)
     fun dragDownAlongTheRightSide() {
-        device().testHelper().dragDown({ width -> width - width / 3 }, 0.2)
+        testHelper.dragDown({ width -> width - width / 3 }, 0.2)
     }
 
     @Then("^I drag down from the left side$")
     @Throws(Throwable::class)
     fun dragDownFromTheLeftSide() {
-        device().testHelper().dragDown({ width -> width / 3 }, 0.2)
+        testHelper.dragDown({ width -> width / 3 }, 0.2)
     }
 
     @Then("^I drag to scroll down$")
     @Throws(Throwable::class)
     fun dragToScrollDown() {
-        device().testHelper().dragUp({ width -> width / 2 }, 0.2)
+        testHelper.dragUp({ width -> width / 2 }, 0.2)
     }
 
     @Then("^I drag to scroll up$")
     @Throws(Throwable::class)
     fun dragToScrollUp() {
-        device().testHelper().dragDown({ width -> width / 2 }, 0.2)
+        testHelper.dragDown({ width -> width / 2 }, 0.2)
     }
 
     @When("^I drag up$")
     @Throws(Throwable::class)
     fun dragUp() {
-        device().testHelper().dragUp({ width -> width / 2 }, 0.2)
+        testHelper.dragUp({ width -> width / 2 }, 0.2)
     }
 
     @When("^I drag up along the left side$")
     @Throws(Throwable::class)
     fun dragUpAlongTheLeftSide() {
-        device().testHelper().dragUp({ width -> width / 3 }, 0.2)
+        testHelper.dragUp({ width -> width / 3 }, 0.2)
     }
 
     @When("^I drag up along the right side$")
     @Throws(Throwable::class)
     fun iDragUpAlongTheRightSide() {
-        device().testHelper().dragUp({ width -> width - width / 3 }, 0.2)
+        testHelper.dragUp({ width -> width - width / 3 }, 0.2)
     }
 
     @Then("^I drag up from the left side$")
     @Throws(Throwable::class)
     fun iDragUpFromTheLeftSide() {
-        device().testHelper().dragUp({ width -> width / 3 }, 0.2)
+        testHelper.dragUp({ width -> width / 3 }, 0.2)
     }
 
     @Then("^I enter \"([^\"]*)\" into \"([^\"]*)\"$")
@@ -203,26 +199,26 @@ class ExampleAndroidStepDefs {
     @When("^I go back$")
     @Throws(Throwable::class)
     fun goBack() {
-        device().testHelper().backButton()
+        testHelper.backButton()
     }
 
     @Given("^I have a connected device$")
     @Throws(Throwable::class)
     fun iHaveAConnectedDevice() {
-        device()
+        adbDevice
     }
 
     @Then("^I have a connected device with the package \"([^\"]*)\" version \"([^\"]*)\"$")
     @Throws(Throwable::class)
     fun iHaveAConnectedDeviceWithThePackageVersion(packageName: String, versionName: String) {
 
-        val packages = device().testHelper().getInstalledPackages()
+        val packages = testHelper.getInstalledPackages()
 
         if (!packages.contains(packageName)) {
             throw AssertionFailedError("Packages list did not contain " + packageName)
         }
 
-        if (!device().testHelper().installedPackageIsVersion(packageName, versionName)) {
+        if (!testHelper.installedPackageIsVersion(packageName, versionName)) {
             throw AssertionFailedError("Package was not correct version")
         }
     }
@@ -231,7 +227,7 @@ class ExampleAndroidStepDefs {
     @Throws(Throwable::class)
     fun iHaveAConnectedDeviceWithoutThePackage(packageName: String) {
 
-        val packages = device().testHelper().getInstalledPackages()
+        val packages = testHelper.getInstalledPackages()
 
         if (packages.contains(packageName)) {
             throw AssertionFailedError("Packages list contained " + packageName)
@@ -243,43 +239,43 @@ class ExampleAndroidStepDefs {
     fun iOpenTheNavigationDrawer() {
 
         // Drag from left to right from the halfway point of the screen
-        device().testHelper().dragRight({ height -> height / 2 })
+        testHelper.dragRight({ height -> height / 2 })
     }
 
     @When("^I press the home button$")
     @Throws(Throwable::class)
     fun iPressTheHomeButton() {
-        device().pressKey().home()
+        adbDevice.pressKey().home()
     }
 
     @Then("^I see a button$")
     @Throws(Throwable::class)
     fun iSeeAButton() {
-        device().testHelper().waitForUiNode { uiNode -> uiNode.uiClass.endsWith("Button") }
+        testHelper.waitForUiNode { uiNode -> uiNode.uiClass.endsWith("Button") }
     }
 
     @Then("^I see the \"([^\"]*)\" text$")
     @Throws(Throwable::class)
     fun iSeeTheText(text: String) {
-        device().testHelper().waitForText(text)
+        testHelper.waitForText(text)
     }
 
     @When("^I see the text \"([^\"]*)\"$")
     @Throws(Throwable::class)
     fun iSeeTheText2(text: String) {
-        device().testHelper().waitForText(text)
+        testHelper.waitForText(text)
     }
 
     @Then("^I should see the lock screen$")
     @Throws(Throwable::class)
     fun iShouldSeeTheLockScreen() {
-        device().testHelper().waitForUiNode { uiNode -> uiNode.contains("com.android.systemui:id/keyguard_status_area") }
+        testHelper.waitForUiNode { uiNode -> uiNode.contains("com.android.systemui:id/keyguard_status_area") }
     }
 
     @When("^I swipe open the right drawer$")
     @Throws(Throwable::class)
     fun iSwipeOpenTheRightDrawer() {
-        device().testHelper().dragLeft(
+        testHelper.dragLeft(
                 { integer -> integer / 2 },
                 0.2
         )
@@ -288,37 +284,37 @@ class ExampleAndroidStepDefs {
     @When("^I type the \"([^\"]*)\" text$")
     @Throws(Throwable::class)
     fun iTypeTheText(text: String) {
-        device().testHelper().typeText(text)
+        testHelper.typeText(text)
     }
 
     @When("^I swipe up$")
     @Throws(Throwable::class)
     fun swipeUp() {
-        device().testHelper().dragUp({ width -> width / 2 }, 0.2)
+        testHelper.dragUp({ width -> width / 2 }, 0.2)
     }
 
     @When("^I swipe up along the left side$")
     @Throws(Throwable::class)
     fun swipeUpAlongTheLeftSide() {
-        device().testHelper().dragUp({ width -> width / 3 }, 0.2)
+        testHelper.dragUp({ width -> width / 3 }, 0.2)
     }
 
     @When("^I swipe up along the right side$")
     @Throws(Throwable::class)
     fun swipeUpAlongTheRightSide() {
-        device().testHelper().dragUp({ width -> width - width / 3 }, 0.2)
+        testHelper.dragUp({ width -> width - width / 3 }, 0.2)
     }
 
     @Then("^I take a screenshot$")
     @Throws(Throwable::class)
     fun takeScreenshot() {
-        device().testHelper().takeScreenshot()
+        testHelper.takeScreenshot()
     }
 
     @When("^I touch the \"([^\"]*)\" text$")
     @Throws(Throwable::class)
     fun iTouchTheText(text: String) {
-        device().testHelper().touchText(text)
+        testHelper.touchText(text)
     }
 
     @Then("^I wait$")
@@ -330,72 +326,72 @@ class ExampleAndroidStepDefs {
     @Then("^I wait for the \"([^\"]*)\" text$")
     @Throws(Throwable::class)
     fun iWaitForTheText(text: String) {
-        device().testHelper().waitForText(text)
+        testHelper.waitForText(text)
     }
 
     @Then("^I wait for the \"([^\"]*)\" text to disappear$")
     @Throws(Throwable::class)
     fun iWaitForTheTextToDisappear(text: String) {
-        device().testHelper().waitForTextToDisappear(text)
+        testHelper.waitForTextToDisappear(text)
     }
 
     @Then("^I wait for \"([^\"]*)\" to appear$")
     @Throws(Throwable::class)
     fun iWaitForToAppear(text: String) {
-        device().testHelper().waitForText(text)
+        testHelper.waitForText(text)
     }
 
     @Then("^I wait up to (\\d+) seconds for \"([^\"]*)\" to appear$")
     @Throws(Throwable::class)
     fun iWaitUpToSecondsForToAppear(seconds: Int, text: String) {
-        device().testHelper().waitForText(text)
+        testHelper.waitForText(text)
     }
 
     @Then("^I wait up to (\\d+) seconds to see \"([^\"]*)\"$")
     @Throws(Throwable::class)
     fun iWaitUpToSecondsToSee(seconds: Int, text: String) {
-        device().testHelper().waitForText(text)
+        testHelper.waitForText(text)
     }
 
     @When("^I install the apk at \"([^\"]*)\"$")
     @Throws(Throwable::class)
     fun installApk(apkPath: String) {
-        device().testHelper().installApk(apkPath)
+        testHelper.installApk(apkPath)
     }
 
     @When("^I launch the app \"([^\"]*)\"$")
     @Throws(Throwable::class)
     fun launchApp(packageName: String) {
-        device().testHelper().launchApp(packageName)
+        testHelper.launchApp(packageName)
     }
 
     @When("^I launch the url \"([^\"]*)\"$")
     @Throws(Throwable::class)
     fun launchUrl(url: String) {
-        device().testHelper().launchUrl(url)
+        testHelper.launchUrl(url)
     }
 
     @When("^I click the floating action button$")
     @Throws(Throwable::class)
     fun tapFloatingActionButton() {
-        device().testHelper().touchUiNode { uiNode -> uiNode.contains("floatingaction") }
+        testHelper.touchUiNode { uiNode -> uiNode.contains("floatingaction") }
     }
 
     @When("^I turn the screen on$")
     @Throws(Throwable::class)
     fun turnScreenOn() {
-        device().testHelper().turnScreenOn()
+        testHelper.turnScreenOn()
     }
 
     @When("^I uninstall the package \"([^\"]*)\"$")
     @Throws(Throwable::class)
     fun uninstallPackage(packageName: String) {
-        device().testHelper().uninstallPackage(packageName)
+        testHelper.uninstallPackage(packageName)
     }
 
     @When("^I update the app with the apk at \"([^\"]*)\"$")
     @Throws(Throwable::class)
     fun updateApk(apkPath: String) {
-        device().testHelper().updateApk(apkPath)
+        testHelper.updateApk(apkPath)
     }
 }

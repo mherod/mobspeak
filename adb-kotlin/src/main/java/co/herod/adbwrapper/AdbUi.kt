@@ -2,6 +2,7 @@
 
 package co.herod.adbwrapper
 
+import co.herod.adbwrapper.AdbBusManager.uiHierarchyBusActive
 import co.herod.adbwrapper.AdbBusManager.uiNodeBus
 import co.herod.adbwrapper.device.dump
 import co.herod.adbwrapper.device.dumpsys
@@ -23,8 +24,14 @@ fun AdbDevice.streamUiHierarchy(): Observable<UiNode> =
                 .doOnEach(AdbBusManager._uiNodeBus)
                 .observeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.newThread())
-                .doOnSubscribe { System.out.println("Starting streamUiHierarchy") }
-                .doOnDispose { System.out.println("Disposing streamUiHierarchy") }
+                .doOnSubscribe {
+                    println("Subscribe of streamUiHierarchy")
+                    uiHierarchyBusActive = true
+                }
+                .doOnDispose {
+                    println("Dispose of streamUiHierarchy")
+                    uiHierarchyBusActive = false
+                }
 
 @JvmOverloads
 fun streamUiNodes(packageIdentifier: String? = null): Observable<UiNode> =
