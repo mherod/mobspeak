@@ -20,7 +20,7 @@ object AdbBusManager {
 
     val uiHierarchyBus: Observable<AdbUiHierarchy>
         get() = _uiHierarchyBus
-                .sample(100, TimeUnit.MILLISECONDS)
+                .sample(50, TimeUnit.MILLISECONDS)
                 .doOnSubscribe {
                     //
                 }

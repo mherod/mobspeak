@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit
 
 fun AdbDevice.streamUiHierarchy(): Observable<UiNode> =
         Adb.dumpUiHierarchy(this, 30, TimeUnit.SECONDS)
+                .throttleFirst(1, TimeUnit.SECONDS)
                 .compose(ResultChangeFixedDurationTransformer())
                 .map { AdbUiHierarchy(it, this) }
                 .doOnEach { println("ui changed") }
@@ -33,6 +34,7 @@ fun AdbDevice.streamUiHierarchy(): Observable<UiNode> =
                     println("Dispose of streamUiHierarchy")
                     uiHierarchyBusActive = false
                 }
+// TODO do something on ui change
 
 @JvmOverloads
 fun streamUiNodes(packageIdentifier: String? = null): Observable<UiNode> =

@@ -21,7 +21,7 @@ fun AdbDevice.testHelper() = AdbDeviceTestHelper(this)
 
 fun AdbDeviceTestHelper.uiHierarchySource(): Observable<UiNode> = with(adbDevice) {
 
-    Observable.timer(100, TimeUnit.MILLISECONDS)
+    Observable.timer(50, TimeUnit.MILLISECONDS)
             .flatMap {
                 if (AdbBusManager.uiHierarchyBusActive) {
                     AdbBusManager.uiHierarchyBus
@@ -305,9 +305,8 @@ fun waitSeconds(waitSeconds: Int = 3) = try {
 } catch (ignored: InterruptedException) {
 }
 
-fun AdbDeviceTestHelper.waitWhileProgressVisible() {
-    return waitWhileTrue { it.uiClass.endsWith("ProgressBar") }
-}
+fun AdbDeviceTestHelper.waitWhileProgressVisible() =
+        waitWhileTrue { it.uiClass.endsWith("ProgressBar") }
 
 fun AdbDeviceTestHelper.waitWhileTrue(predicate: (UiNode) -> Boolean?) = with(adbDevice) {
 
@@ -316,17 +315,17 @@ fun AdbDeviceTestHelper.waitWhileTrue(predicate: (UiNode) -> Boolean?) = with(ad
             .blockingSubscribe()
 }
 
-private fun AdbDeviceTestHelper.whileTrueLoopBlock(predicate: (UiNode) -> Boolean?): Observable<Unit> {
-    return Observable.fromCallable {
-        var loop: Boolean
-        do loop = uiHierarchySource()
-                .filter { predicate(it) == true }
-                .toList()
-                .blockingGet()
-                .isNotEmpty()
-        while (loop)
-    }
-}
+private fun AdbDeviceTestHelper.whileTrueLoopBlock(predicate: (UiNode) -> Boolean?): Observable<MutableList<UiNode>> =
+        uiHierarchySource()
+                .filter { predicate(it) == true && it.visible }
+                .doOnNext { println("Blocking while visible: $it") }
+                .buffer(2, TimeUnit.SECONDS)
+                .doOnNext { list ->
+                    if (list.size > 0) {
+                        println("Blocking on ${list.size} uiNodes")
+                    }
+                }
+                .takeWhile { it.isNotEmpty() }
 
 @JvmOverloads
 fun AdbDeviceTestHelper.failOnText(
@@ -336,7 +335,7 @@ fun AdbDeviceTestHelper.failOnText(
 ) = with(adbDevice) {
 
     Observable.timer(100, TimeUnit.MILLISECONDS)
-            .flatMap { uiHierarchySource().sample(5, TimeUnit.SECONDS) }
+            .flatMap { uiHierarchySource().sample(1, TimeUnit.SECONDS) }
             .timeout(timeout, timeUnit)
             .onErrorResumeNext { _: Throwable -> Observable.empty() }
             .blockingForEach { uiNode: UiNode ->
@@ -353,7 +352,7 @@ fun AdbDeviceTestHelper.waitForActivity(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Boolean = with(adbDevice) {
     try {
-        Observable.timer(1, TimeUnit.SECONDS)
+        Observable.timer(100, TimeUnit.MILLISECONDS)
                 .flatMap {
                     Observable.fromCallable {
                         matchActivity(activityName, 10, TimeUnit.SECONDS)
@@ -377,7 +376,7 @@ private fun AdbDeviceTestHelper.waitForUiNodeForFunc(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): String = with(adbDevice) {
 
-    Observable.timer(100, TimeUnit.MILLISECONDS)
+    Observable.timer(10, TimeUnit.MILLISECONDS)
             .flatMap { uiHierarchySource() }
             .filter { predicate(it) == true && it.visible } // filter for items passing predicate
             .firstOrError() // if not found in stream it will error
