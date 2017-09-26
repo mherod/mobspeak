@@ -16,10 +16,10 @@ import java.util.concurrent.TimeUnit
 
 fun AdbDevice.streamUiHierarchy(): Observable<UiNode> =
         Adb.dumpUiHierarchy(this, 30, TimeUnit.SECONDS)
-                .throttleFirst(1, TimeUnit.SECONDS)
+                // .throttleFirst(1, TimeUnit.SECONDS)
                 .compose(ResultChangeFixedDurationTransformer())
                 .map { AdbUiHierarchy(it, this) }
-                .doOnEach { println("ui changed") }
+                // .doOnEach { println("ui changed") }
                 .doOnEach(AdbBusManager._uiHierarchyBus)
                 .map { it.xmlString }
                 .compose { UiHelper.uiXmlToNodes(it) }

@@ -3,35 +3,21 @@
 
 package co.herod.adbwrapper.testing
 
-import co.herod.adbwrapper.*
+import co.herod.adbwrapper.AdbPackageManager
 import co.herod.adbwrapper.device.*
+import co.herod.adbwrapper.launchUrl
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.DumpsysKey
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.model.isPropertyPositive
-import co.herod.adbwrapper.util.UiHelper
-import co.herod.kotlin.ext.*
-import io.reactivex.Observable
+import co.herod.adbwrapper.screenshot
+import co.herod.adbwrapper.streamUiHierarchy
+import co.herod.kotlin.ext.containsIgnoreCase
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
 class AdbDeviceTestHelper(val adbDevice: AdbDevice)
 
 fun AdbDevice.testHelper() = AdbDeviceTestHelper(this)
-
-fun AdbDeviceTestHelper.uiHierarchySource(): Observable<UiNode> = with(adbDevice) {
-
-    Observable.timer(50, TimeUnit.MILLISECONDS)
-            .flatMap {
-                if (AdbBusManager.uiHierarchyBusActive) {
-                    AdbBusManager.uiHierarchyBus
-                            .map { it.xmlString }
-                            .compose { UiHelper.uiXmlToNodes(it) }
-                } else {
-                    subscribeUiNodesSource()
-                }
-            }
-}
 
 fun AdbDeviceTestHelper.startUiBus(): Boolean = with(adbDevice) {
     disposables.add(streamUiHierarchy().subscribe())
@@ -110,26 +96,6 @@ fun AdbDeviceTestHelper.assertInstalledPackageVersionName(packageName: String, v
         throw AssertionError("Package was not correct version")
     }
 }
-
-private fun AdbDevice.matchActivity(activityName: String, timeout: Int, timeUnit: TimeUnit): Boolean =
-        Observable.just(this)
-                .flatMap { device ->
-                    device.dumpsys()
-                            .dump(dumpsysKey = DumpsysKey.WINDOW)
-                            .filterKeys("mCurrentFocus", "mFocusedApp")
-                            .observableValues()
-                            .filter { it.containsIgnoreCase(activityName) }
-                }
-                .firstOrError()
-                .retryWithTimeout(timeout, timeUnit)
-                .onErrorReturn { "" } // timeout without match
-                .doOnSuccess {
-                    if (it.isNotBlank()) {
-                        System.out.println("Matched: $it")
-                    }
-                }
-                .blockingGet()
-                .isNotBlank()
 
 fun AdbDeviceTestHelper.assertPower(minPower: Int) {
     with(adbDevice) {
@@ -294,7 +260,7 @@ fun AdbDeviceTestHelper.forceStopApp(packageName: String) = with(adbDevice) {
     pm().forceStop(packageName)
 }
 
-// waitWhile
+// waitWhileTrue
 // waitUntilTrue
 // waitUntilFalse
 // failIf
@@ -307,86 +273,6 @@ fun waitSeconds(waitSeconds: Int = 3) = try {
 
 fun AdbDeviceTestHelper.waitWhileProgressVisible() =
         waitWhileTrue { it.uiClass.endsWith("ProgressBar") }
-
-fun AdbDeviceTestHelper.waitWhileTrue(predicate: (UiNode) -> Boolean?) = with(adbDevice) {
-
-    whileTrueLoopBlock(predicate)
-            .timeout(30, TimeUnit.SECONDS)
-            .blockingSubscribe()
-}
-
-private fun AdbDeviceTestHelper.whileTrueLoopBlock(predicate: (UiNode) -> Boolean?): Observable<MutableList<UiNode>> =
-        uiHierarchySource()
-                .filter { predicate(it) == true && it.visible }
-                .doOnNext { println("Blocking while visible: $it") }
-                .buffer(2, TimeUnit.SECONDS)
-                .doOnNext { list ->
-                    if (list.size > 0) {
-                        println("Blocking on ${list.size} uiNodes")
-                    }
-                }
-                .takeWhile { it.isNotEmpty() }
-
-@JvmOverloads
-fun AdbDeviceTestHelper.failOnText(
-        text: String,
-        timeout: Int = 20,
-        timeUnit: TimeUnit = TimeUnit.SECONDS
-) = with(adbDevice) {
-
-    Observable.timer(100, TimeUnit.MILLISECONDS)
-            .flatMap { uiHierarchySource().sample(1, TimeUnit.SECONDS) }
-            .timeout(timeout, timeUnit)
-            .onErrorResumeNext { _: Throwable -> Observable.empty() }
-            .blockingForEach { uiNode: UiNode ->
-                if (uiNode.text.containsIgnoreCase(text)) {
-                    throw AssertionError("Text was visible: $text")
-                }
-            }
-}
-
-@JvmOverloads
-fun AdbDeviceTestHelper.waitForActivity(
-        activityName: String,
-        timeout: Int = 30,
-        timeUnit: TimeUnit = TimeUnit.SECONDS
-): Boolean = with(adbDevice) {
-    try {
-        Observable.timer(100, TimeUnit.MILLISECONDS)
-                .flatMap {
-                    Observable.fromCallable {
-                        matchActivity(activityName, 10, TimeUnit.SECONDS)
-                    }
-                }
-                .filter { it }
-                .firstOrError()
-                .retry()
-                .toObservable()
-                .timeout(timeout, timeUnit)
-                .blockingFirst()
-    } catch (timeoutException: TimeoutException) {
-        throw AssertionError("Timed out when waiting for activity")
-    }
-}
-
-private fun AdbDeviceTestHelper.waitForUiNodeForFunc(
-        predicate: (UiNode) -> Boolean?,
-        function: (UiNode) -> String? = { "" },
-        timeout: Int = 30,
-        timeUnit: TimeUnit = TimeUnit.SECONDS
-): String = with(adbDevice) {
-
-    Observable.timer(10, TimeUnit.MILLISECONDS)
-            .flatMap { uiHierarchySource() }
-            .filter { predicate(it) == true && it.visible } // filter for items passing predicate
-            .firstOrError() // if not found in stream it will error
-            .retry() // retry on error (stream finish before we match)
-            .doOnSuccess {
-                println("Matched: ${it.resourceId}")
-            }
-            .map { function(it).orEmpty() } // do this function with item
-            .blocking(timeout, timeUnit) // with max max timeout
-}
 
 fun AdbDeviceTestHelper.waitForTextToDisappear(text: String) {
 

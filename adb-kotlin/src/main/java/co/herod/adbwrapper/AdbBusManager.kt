@@ -20,13 +20,8 @@ object AdbBusManager {
 
     val uiHierarchyBus: Observable<AdbUiHierarchy>
         get() = _uiHierarchyBus
-                .sample(50, TimeUnit.MILLISECONDS)
-                .doOnSubscribe {
-                    //
-                }
-                .doOnDispose {
-                    //
-                }
+                .doOnSubscribe { }
+                .doOnDispose { }
 
     internal val _uiNodeBus: BusSubject<UiNode> = AdbUiNodeBus()
     val uiNodeBus: Observable<UiNode>
