@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e552f3a-ace9-4f63-a317-cb9844901425" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AnrDetector.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbPackageManager.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbUi.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbUi.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/AdbDevice.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/AdbDevice.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" afterPath="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -115,6 +113,7 @@
       <find>activit</find>
       <find>wait</find>
       <find>Matched</find>
+      <find>uninstall</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -863,9 +862,9 @@
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/UiNode.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/device/AdbDevicePackageManager.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/model/AdbDevice.kt" />
-        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/AdbUi.kt" />
         <option value="$PROJECT_DIR$/adb-kotlin/src/main/java/co/herod/adbwrapper/Adb.kt" />
+        <option value="$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt" />
       </list>
     </option>
   </component>
@@ -932,7 +931,7 @@
               <item name="adb-kotlin" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
@@ -940,7 +939,17 @@
               <item name="adb-kotlin" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
+              <item name="herod" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="adb-kotlin" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
+              <item name="herod" type="462c0819:PsiDirectoryNode" />
               <item name="adbwrapper" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -950,56 +959,9 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="adb-kotlin" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="adb-kotlin" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="cucumber" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="cucumber" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="cucumber" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="cucumber" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="kotlin-adb-testing" type="b2602c69:ProjectViewProjectNode" />
-              <item name="kotlin-adb-testing" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="cucumber" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-              <item name="skeleton" type="462c0819:PsiDirectoryNode" />
+              <item name="herod" type="462c0819:PsiDirectoryNode" />
+              <item name="adbwrapper" type="462c0819:PsiDirectoryNode" />
+              <item name="testing" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -1374,7 +1336,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21101000" />
+    <option name="totallyTimeSpent" value="23084000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="356" y="22" width="1084" height="842" extended-state="0" />
@@ -1391,7 +1353,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30627307" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30627307" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1463,13 +1425,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.cucumber/cucumber-core/2.0.0/2f67ce80c4217ffc683142f673b025aac19efc70/cucumber-core-2.0.0-sources.jar!/cucumber/api/CucumberOptions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="12" column="18" lean-forward="false" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.cucumber/cucumber-core/2.0.0/2f67ce80c4217ffc683142f673b025aac19efc70/cucumber-core-2.0.0-sources.jar!/cucumber/runtime/formatter/PluginFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="125">
@@ -1704,16 +1659,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cucumber/src/test/kotlin/skeleton/ExampleAndroidStepDefs.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="50" column="33" lean-forward="false" selection-start-line="50" selection-start-column="33" selection-end-line="50" selection-end-column="33" />
-          <folding>
-            <element signature="e#59#623#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxkotlin/2.1.0/bb2fb2c19137ee668730e201d2fef3c87604c457/rxkotlin-2.1.0-sources.jar!/io/reactivex/rxkotlin/observable.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="248">
@@ -1831,7 +1776,7 @@
         <state relative-caret-position="541">
           <caret line="65" column="13" lean-forward="true" selection-start-line="65" selection-start-column="13" selection-end-line="65" selection-end-column="13" />
           <folding>
-            <element signature="e#29#314#0" expanded="true" />
+            <element signature="e#29#314#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1844,18 +1789,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="151">
-          <caret line="280" column="19" lean-forward="false" selection-start-line="280" selection-start-column="19" selection-end-line="280" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/kotlin/ext/RxExtensions.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="437">
           <caret line="51" column="0" lean-forward="true" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cucumber/src/test/kotlin/skeleton/ExampleAndroidStepDefs.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="392" column="34" lean-forward="true" selection-start-line="392" selection-start-column="34" selection-end-line="392" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AdbTestHelper.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="77" column="16" lean-forward="true" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adb-kotlin/src/main/kotlin/co/herod/adbwrapper/testing/AnrDetector.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
           <folding />
         </state>
       </provider>

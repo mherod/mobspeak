@@ -73,6 +73,28 @@ fun AdbDeviceTestHelper.assertNotActivityName(activityName: String) = with(adbDe
     }
 }
 
+fun AdbDeviceTestHelper.assertWithoutPackage(packageName: String) = with(adbDevice) {
+
+    val packages = pm().installedPackages()
+
+    if (packages.contains(packageName)) {
+        throw AssertionError("Packages list contained " + packageName)
+    }
+}
+
+fun AdbDeviceTestHelper.assertInstalledPackageVersionName(packageName: String, versionName: String) = with(adbDevice) {
+
+    val packages = pm().installedPackages()
+
+    if (!packages.contains(packageName)) {
+        throw AssertionError("Packages list did not contain " + packageName)
+    }
+
+    if (!installedPackageIsVersion(packageName, versionName)) {
+        throw AssertionError("Package was not correct version")
+    }
+}
+
 private fun AdbDevice.matchActivity(activityName: String): Boolean =
         Observable.just(this)
                 .flatMap { device ->
@@ -193,6 +215,10 @@ fun AdbDeviceTestHelper.typeText(text: String) = with(adbDevice) {
     typeText(text)
 }
 
+fun AdbDeviceTestHelper.scrollUpUntilISee(function: (UiNode) -> Boolean) {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+}
+
 fun AdbDeviceTestHelper.touchUiNode(predicate: (UiNode) -> Boolean) =
         with(adbDevice) {
             waitForUiNodeForFunc(
@@ -214,6 +240,9 @@ fun AdbDeviceTestHelper.touchText(text: String) =
         }
 
 fun AdbDeviceTestHelper.uninstallPackage(packageName: String) = with(adbDevice) {
+
+    pressKey().home() // go home first because input method can cause crash
+
     pm().uninstallPackage(packageName)
 }
 
