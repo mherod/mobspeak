@@ -30,19 +30,12 @@ object AdbDeviceManager {
             .toList()
             .blockingGet()
 
-    private fun allDevices(): Observable<AdbDevice> = devices()
-            .filter { "\t" in it }
-            .map { parseAdbString(it) }
 }
 
-fun parseAdbString(adbDeviceString: String): AdbDevice {
+private fun allDevices(): Observable<AdbDevice> =
+        AdbCommand.Builder()
+                .setCommand(DEVICES)
+                .observable()
+                .filter { "\t" in it }
+                .map { parseAdbString(it) }
 
-    val adbDevice = AdbDevice()
-
-    val split = adbDeviceString.split("\t".toRegex(), 2)
-
-    adbDevice.deviceIdentifier = split[0]
-    adbDevice.type = split[1]
-
-    return adbDevice
-}

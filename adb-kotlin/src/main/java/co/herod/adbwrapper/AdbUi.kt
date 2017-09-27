@@ -2,10 +2,11 @@
 
 package co.herod.adbwrapper
 
+import co.herod.adbwrapper.AdbBusManager.uiHierarchyBusActive
 import co.herod.adbwrapper.AdbBusManager.uiNodeBus
-import co.herod.adbwrapper.device.dump
-import co.herod.adbwrapper.device.dumpsys
-import co.herod.adbwrapper.model.*
+import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.model.AdbUiHierarchy
+import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.rx.FixedDurationTransformer
 import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
 import co.herod.adbwrapper.util.UiHelper
@@ -14,7 +15,8 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 fun AdbDevice.streamUiHierarchy(): Observable<UiNode> =
-        Adb.dumpUiHierarchy(this, 30, TimeUnit.SECONDS)
+        dumpUiHierarchy(this, 30, TimeUnit.SECONDS)
+                // .throttleFirst(1, TimeUnit.SECONDS)
                 .compose(ResultChangeFixedDurationTransformer())
                 .map { AdbUiHierarchy(it, this) }
                 .doOnEach(AdbBusManager._uiHierarchyBus)
@@ -23,8 +25,15 @@ fun AdbDevice.streamUiHierarchy(): Observable<UiNode> =
                 .doOnEach(AdbBusManager._uiNodeBus)
                 .observeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.newThread())
-                .doOnSubscribe { System.out.println("Starting streamUiHierarchy") }
-                .doOnDispose { System.out.println("Disposing streamUiHierarchy") }
+                .doOnSubscribe {
+                    println("Subscribe of streamUiHierarchy")
+                    uiHierarchyBusActive = true
+                }
+                .doOnDispose {
+                    println("Dispose of streamUiHierarchy")
+                    uiHierarchyBusActive = false
+                }
+// TODO do something on ui change
 
 @JvmOverloads
 fun streamUiNodes(packageIdentifier: String? = null): Observable<UiNode> =
@@ -46,21 +55,7 @@ fun streamUiNodeStringsInternal(): Observable<String> =
                 .filter { it.trim().isEmpty().not() }
 
 fun AdbDevice.subscribeUiNodesSource(): Observable<UiNode> =
-        Adb.dumpUiNodes(this, 30, TimeUnit.SECONDS)
+        dumpUiNodes(this, 30, TimeUnit.SECONDS)
                 .compose(ResultChangeFixedDurationTransformer())
                 .distinct { it.toString() }
 
-@Deprecated(
-        replaceWith = ReplaceWith("windowBounds"),
-        message = "Use the 'windowBounds' property"
-)
-fun AdbDevice.getWindowBounds1(): UiBounds =
-        dumpsys().dump(dumpsysKey = DumpsysKey.WINDOW).filterProperty("mBounds")
-                .map { it.value }
-                .filter { '[' in it && ']' in it }
-                .map { it.substring(it.lastIndexOf('[') + 1, it.lastIndexOf(']')) }
-                .map { it.split(',') }
-                .map { it.map { Integer.parseInt(it) } }
-                .map { it.toIntArray() }
-                .map { UiBounds(it) }
-                .blockingGet()

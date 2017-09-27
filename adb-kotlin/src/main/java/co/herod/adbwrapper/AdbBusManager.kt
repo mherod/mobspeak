@@ -5,6 +5,7 @@ package co.herod.adbwrapper
 import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.UiNode
 import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
 object AdbBusManager {
@@ -13,9 +14,14 @@ object AdbBusManager {
     val outputBus: BusSubject<String>
         get() = _outputBus
 
-    internal val _uiHierarchyBus: BusSubject<AdbUiHierarchy> = AdbUiHierarchyBus()
+    var uiHierarchyBusActive = false
+
+    internal val _uiHierarchyBus = BehaviorSubject.create<AdbUiHierarchy>()
+
     val uiHierarchyBus: Observable<AdbUiHierarchy>
         get() = _uiHierarchyBus
+                .doOnSubscribe { }
+                .doOnDispose { }
 
     internal val _uiNodeBus: BusSubject<UiNode> = AdbUiNodeBus()
     val uiNodeBus: Observable<UiNode>
@@ -28,5 +34,5 @@ object AdbBusManager {
 }
 
 class MainBusSubject : BusSubject<String>()
-class AdbUiHierarchyBus : BusSubject<AdbUiHierarchy>()
+// class AdbUiHierarchyBus : BusSubject<AdbUiHierarchy>()
 class AdbUiNodeBus : BusSubject<UiNode>()

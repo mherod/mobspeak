@@ -1,8 +1,10 @@
 package co.herod.adbwrapper.device
 
 import co.herod.adbwrapper.AdbCommand
-import co.herod.adbwrapper.S
+import co.herod.adbwrapper.INPUT
+import co.herod.adbwrapper.SHELL
 import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.model.InputType
 import co.herod.adbwrapper.model.UiBounds
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.observable
@@ -19,7 +21,7 @@ fun AdbDevice.tap(c: UiBounds): String =
 fun AdbDevice.tap(centreX: Int = 0, centreY: Int = 0): String =
         AdbCommand.Builder()
                 .setDevice(this)
-                .setCommand("${S.SHELL} input tap $centreX $centreY".trim())
+                .setCommand("$SHELL $INPUT ${InputType.TAP} $centreX $centreY".trim())
                 .observable()
                 .last("") // succeeds silently
                 .blocking(5, TimeUnit.SECONDS)
@@ -28,7 +30,7 @@ fun AdbDevice.tap(centreX: Int = 0, centreY: Int = 0): String =
 fun AdbDevice.swipe(x1: Int, y1: Int, x2: Int, y2: Int, speed: Int = 500): String =
         AdbCommand.Builder()
                 .setDevice(this)
-                .setCommand("${S.SHELL} input swipe $x1 $y1 $x2 $y2 $speed".trim())
+                .setCommand("$SHELL $INPUT ${InputType.SWIPE} $x1 $y1 $x2 $y2 $speed".trim())
                 .observable()
                 .last("") // succeeds silently
                 .blocking(5, TimeUnit.SECONDS)
@@ -37,7 +39,7 @@ fun AdbDevice.swipe(x1: Int, y1: Int, x2: Int, y2: Int, speed: Int = 500): Strin
 fun AdbDevice.typeText(inputText: String = ""): String =
         AdbCommand.Builder()
                 .setDevice(this)
-                .setCommand("${S.SHELL} input text $inputText".trim())
+                .setCommand("$SHELL $INPUT ${InputType.TEXT} $inputText".trim())
                 .observable()
                 .last("") // succeeds silently
                 .blocking(5, TimeUnit.SECONDS)

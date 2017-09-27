@@ -3,14 +3,16 @@
 
 package co.herod.adbwrapper.testing
 
-import co.herod.adbwrapper.*
+import co.herod.adbwrapper.AdbPackageManager
 import co.herod.adbwrapper.device.*
+import co.herod.adbwrapper.launchUrl
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.DumpsysKey
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.model.isPropertyPositive
-import co.herod.kotlin.ext.*
-import io.reactivex.Observable
+import co.herod.adbwrapper.screenshot
+import co.herod.adbwrapper.streamUiHierarchy
+import co.herod.kotlin.ext.containsIgnoreCase
 import java.util.concurrent.TimeUnit
 
 class AdbDeviceTestHelper(val adbDevice: AdbDevice)
@@ -54,7 +56,7 @@ fun AdbDeviceTestHelper.turnScreenOn() = with(adbDevice) {
 fun AdbDeviceTestHelper.assertActivityName(activityName: String) = with(adbDevice) {
 
     try {
-        assert(matchActivity(activityName)) {
+        assert(matchActivity(activityName, 5, TimeUnit.SECONDS)) {
             "Did not see $activityName activity"
         }
     } catch (exception: IllegalStateException) {
@@ -65,7 +67,7 @@ fun AdbDeviceTestHelper.assertActivityName(activityName: String) = with(adbDevic
 fun AdbDeviceTestHelper.assertNotActivityName(activityName: String) = with(adbDevice) {
 
     try {
-        assert(matchActivity(activityName).not()) {
+        assert(matchActivity(activityName, 5, TimeUnit.SECONDS).not()) {
             "Did not see $activityName activity"
         }
     } catch (exception: IllegalStateException) {
@@ -94,26 +96,6 @@ fun AdbDeviceTestHelper.assertInstalledPackageVersionName(packageName: String, v
         throw AssertionError("Package was not correct version")
     }
 }
-
-private fun AdbDevice.matchActivity(activityName: String): Boolean =
-        Observable.just(this)
-                .flatMap { device ->
-                    device.dumpsys()
-                            .dump(dumpsysKey = DumpsysKey.WINDOW)
-                            .filterKeys("mCurrentFocus", "mFocusedApp")
-                            .observableValues()
-                            .filter { it.containsIgnoreCase(activityName) }
-                }
-                .firstOrError()
-                .retryWithTimeout(10, TimeUnit.SECONDS)
-                .onErrorReturn { "" } // timeout without match
-                .doOnSuccess {
-                    if (it.isNotBlank()) {
-                        System.out.println("Matched: $it")
-                    }
-                }
-                .blockingGet()
-                .isNotBlank()
 
 fun AdbDeviceTestHelper.assertPower(minPower: Int) {
     with(adbDevice) {
@@ -278,6 +260,10 @@ fun AdbDeviceTestHelper.forceStopApp(packageName: String) = with(adbDevice) {
     pm().forceStop(packageName)
 }
 
+// waitWhileTrue
+// waitUntilTrue
+// waitUntilFalse
+// failIf
 
 @JvmOverloads
 fun waitSeconds(waitSeconds: Int = 3) = try {
@@ -285,38 +271,8 @@ fun waitSeconds(waitSeconds: Int = 3) = try {
 } catch (ignored: InterruptedException) {
 }
 
-@JvmOverloads
-fun AdbDeviceTestHelper.failOnText(
-        text: String,
-        timeout: Int = 5,
-        timeUnit: TimeUnit = TimeUnit.SECONDS
-) = with(adbDevice) {
-    Observable.timer(1, TimeUnit.SECONDS)
-            .flatMap { Adb.dumpUiNodes(this, 30, TimeUnit.SECONDS) }
-            .timeout(timeout.toLong(), timeUnit)
-            .blockingForEach { uiNode: UiNode ->
-                if (uiNode.text.containsIgnoreCase(text)) {
-                    throw AssertionError("Text was visible: $text")
-                }
-            }
-}
-
-private fun AdbDeviceTestHelper.waitForUiNodeForFunc(
-        predicate: (UiNode) -> Boolean?,
-        function: (UiNode) -> String? = { "" },
-        timeout: Int = 30,
-        timeUnit: TimeUnit = TimeUnit.SECONDS
-): String = with(adbDevice) {
-    subscribeUiNodesSource()
-            .filter { predicate(it) == true && it.visible } // filter for items passing predicate
-            .firstOrError() // if not found in stream it will error
-            .retry() // retry on error (stream finish before we match)
-            .doOnSuccess {
-                println("Matched: ${it.resourceId}")
-            }
-            .map { function(it).orEmpty() } // do this function with item
-            .blocking(timeout, timeUnit) // with max max timeout
-}
+fun AdbDeviceTestHelper.waitWhileProgressVisible() =
+        waitWhileTrue { it.uiClass.endsWith("ProgressBar") }
 
 fun AdbDeviceTestHelper.waitForTextToDisappear(text: String) {
 
