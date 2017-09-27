@@ -11,22 +11,33 @@ import co.herod.kotlin.ext.retryWithTimeout
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
-fun AdbDevice.matchActivity(activityName: String, timeout: Int, timeUnit: TimeUnit): Boolean =
-        Observable.just(this)
-                .flatMap { device ->
-                    device.dumpsys()
-                            .dump(dumpsysKey = DumpsysKey.WINDOW)
-                            .filterKeys("mCurrentFocus", "mFocusedApp")
-                            .observableValues()
-                            .filter { it.containsIgnoreCase(activityName) }
-                }
-                .firstOrError()
-                .retryWithTimeout(timeout, timeUnit)
-                .onErrorReturn { "" } // timeout without match
-                .doOnSuccess {
-                    if (it.isNotBlank()) {
-                        println("\t\tMatched: $it")
+fun AdbDevice.matchActivity(
+        activityName: String,
+        timeout: Int,
+        timeUnit: TimeUnit
+): Boolean = Observable.just(this)
+        .flatMap { device: AdbDevice ->
+            device.dumpsys()
+                    .dump(dumpsysKey = DumpsysKey.WINDOW)
+                    .filterKeys(
+                            "mCurrentFocus",
+                            "mFocusedApp"
+                    )
+                    .observableValues()
+                    .filter {
+                        it.containsIgnoreCase(activityName)
                     }
-                }
-                .blockingGet()
-                .isNotBlank()
+        }
+        .firstOrError()
+        .retryWithTimeout(
+                timeout,
+                timeUnit
+        )
+        .onErrorReturn { "" } // timeout without match
+        .doOnSuccess {
+            if (it.isNotBlank()) {
+                println("\t\tMatched: $it")
+            }
+        }
+        .blockingGet()
+        .isNotBlank()

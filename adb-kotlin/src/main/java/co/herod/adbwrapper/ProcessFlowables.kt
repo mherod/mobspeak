@@ -9,45 +9,41 @@ import java.util.concurrent.TimeUnit
 
 object ProcessFactory {
 
-    fun observableShellProcess(adbCommand: AdbCommand): Observable<String> {
-        return shell(adbCommand.deviceIdentifier)?.run {
+    fun observableShellProcess(adbCommand: AdbCommand): Observable<String> =
+            shell(adbCommand.deviceIdentifier)?.run {
 
-            outputStream.bufferedWriter().run { // bw: BufferedWriter ->
-                adbCommand
-                        .shellInternalCommand()
-                        .plus("; exit")
-                        .split(";")
-                        .map { "$it; \n" }
-                        .forEach { write(it) }
-                        .also { flush() }
-            }
+                outputStream.bufferedWriter().run {
+                    // bw: BufferedWriter ->
+                    adbCommand
+                            .shellInternalCommand()
+                            .plus("; exit")
+                            .split(";")
+                            .map { "$it; \n" }
+                            .forEach { write(it) }
+                            .also { flush() }
+                }
 
-            inputStream.bufferedReader().run { // br: BufferedReader ->
-                lineSequence()
-                        .toObservable()
-                        .spotAdbError()
-                        .timeout(5, TimeUnit.SECONDS)
-                        .doOnError { destroyForcibly() }
-                        .doOnComplete { destroyForcibly() }
-            }
+                inputStream.bufferedReader().run {
+                    // br: BufferedReader ->
+                    lineSequence()
+                            .toObservable()
+                            .cache()
+                            .spotAdbError()
+                            .timeout(5, TimeUnit.SECONDS)
+                            .doOnError { destroyForcibly() }
+                            .doOnComplete { destroyForcibly() }
+                }
 
-        } ?: Observable.error(IllegalStateException())
-    }
+            } ?: Observable.error(IllegalStateException())
 
-    private fun AdbDevice.shell(): Process? {
-        return shell(this.deviceIdentifier)
-    }
-
-    private fun shell(deviceIdentifier: String?): Process? {
-        return AdbCommand.Builder()
-                .setDeviceIdentifier(deviceIdentifier)
-                .setCommand("shell")
-                .buildProcess()
-    }
+    private fun shell(deviceIdentifier: String?): Process? =
+            AdbCommand.Builder()
+                    .setDeviceIdentifier(deviceIdentifier)
+                    .setCommand(SHELL)
+                    .buildProcess()
 
     fun observableProcess(processBuilder: ProcessBuilder): Observable<String> =
             Observable.just(processBuilder)
-                    // .doOnNext { System.out.println(it.command()) }
                     .flatMap { it.start().stringsFromProcess() }
                     .map { it.trim() }
                     .flatMap { spotAdbError(it) }
@@ -64,17 +60,19 @@ object ProcessFactory {
                 it.startsWith("ERROR: ") -> {
                     Observable.error(AdbError(it))
                 }
-                it.contains("/system/bin/sh") -> {
+                "/system/bin/sh" in it -> {
                     Observable.error(AdbError("Invalid output: $it"))
                 }
-                it.contains("** No activities found to run, monkey aborted") -> {
+                "** No activities found to run, monkey aborted" in it -> {
                     Observable.error(AdbError(it.trim()))
                 }
-                else -> {
-                    Observable.just(it)
-                }
+                else -> Observable.just(it)
             }
 
     private fun Process.stringsFromProcess(): Observable<String> =
-            inputStream.bufferedReader().lineSequence().toObservable()
+            inputStream
+                    .bufferedReader()
+                    .lineSequence()
+                    .toObservable()
+                    .cache()
 }

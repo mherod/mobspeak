@@ -10,6 +10,8 @@ open class FixedDurationTransformer<T>(
         private val timeUnit: TimeUnit
 ) : ObservableTransformer<T, T> {
 
-    override fun apply(upstream: Observable<T>): Observable<T> =
-            upstream.retry().timeout(timeout.toLong(), timeUnit)
+    override fun apply(upstream: Observable<T>):
+            Observable<T> = upstream
+            // .retry()
+            .timeout(timeout.toLong(), timeUnit)
 }

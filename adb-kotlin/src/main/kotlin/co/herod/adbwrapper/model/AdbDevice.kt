@@ -35,13 +35,22 @@ class AdbDevice(
     override fun dispose() = disposables.dispose()
     override fun isDisposed() = disposables.isDisposed
 
-    @Deprecated(replaceWith = ReplaceWith("physical"), message = "Use the 'physical' property")
-    fun isConnectedDevice(): Boolean = type == DEVICE_CONNECTED_DEVICE
-
-    @Deprecated(replaceWith = ReplaceWith("emulator"), message = "Use the 'emulator' property")
-    fun isEmulator(): Boolean = type == DEVICE_EMULATOR
-
-    override fun toString(): String {
-        return "AdbDevice(deviceIdentifier=$deviceIdentifier, type=$type, preferredUiAutomatorStrategy=$preferredUiAutomatorStrategy)"
+    @Deprecated(
+            replaceWith = ReplaceWith("physical"),
+            message = "Use the 'physical' property"
+    )
+    fun isConnectedDevice(): Boolean {
+        return type == DEVICE_CONNECTED_DEVICE
     }
+
+    @Deprecated(
+            replaceWith = ReplaceWith("emulator"),
+            message = "Use the 'emulator' property"
+    )
+    fun isEmulator(): Boolean {
+        return type == DEVICE_EMULATOR
+    }
+
+    override fun toString(): String =
+            "AdbDevice(deviceIdentifier=$deviceIdentifier, type=$type, preferredUiAutomatorStrategy=$preferredUiAutomatorStrategy)"
 }

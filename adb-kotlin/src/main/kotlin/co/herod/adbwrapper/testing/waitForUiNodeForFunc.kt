@@ -20,7 +20,7 @@ fun AdbDeviceTestHelper.waitForUiNodeForFunc(
             }
             .filter { predicate(it) == true && it.visible } // filter for items passing predicate
             .firstOrError() // if not found in stream it will error
-            .retry() // retry on error (stream finish before we match)
+//            .retry() // retry on error (stream finish before we match)
             .map { function(it).orEmpty() } // do this function with item
             .doOnSuccess {
                 when {

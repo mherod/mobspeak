@@ -15,10 +15,10 @@ fun AdbDevice.fallbackDumpUiHierarchy(
                 .flatMap {
                     readDeviceFile(this, "shell cat $it")
                             .doOnNext { run { preferredUiAutomatorStrategy = 2 } }
-                            .retry()
+//                            .retry()
                             .timeout(maxOf(5, timeout / 3), timeUnit)
                 }
                 .filter { it.isXmlOutput() }
                 .timeout(maxOf(timeout / 3, 10), timeUnit)
-                .retry()
+//                .retry()
                 .timeout(timeout, timeUnit)
