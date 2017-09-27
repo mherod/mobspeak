@@ -15,7 +15,7 @@ fun AdbDeviceTestHelper.waitForUiNodeForFunc(
     Observable.timer(50, TimeUnit.MILLISECONDS)
             .flatMap {
                 uiHierarchySource()
-                        .buffer(150, TimeUnit.MILLISECONDS)
+                        .buffer(50, TimeUnit.MILLISECONDS)
                         .flatMapIterable { it }
             }
             .filter { predicate(it) == true && it.visible } // filter for items passing predicate

@@ -38,7 +38,9 @@ Feature: Example
       | 111    | +        | 222    | 333    |
       | 400    | +        | 98     | 498    |
       | 99,999 | -        | 66,666 | 33,333 |
-      | 99     | *        | 55     | 5445   |
+      | 8888   | +        | 202    | 9090   |
+      | 780    | +        | 25     | 805    |
+      | 44,999 | -        | 22,666 | 22,333 |
 
   Scenario: I can use the calculator by touch
     When I touch the "5" button

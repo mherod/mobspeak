@@ -78,13 +78,6 @@ class ExampleAndroidStepDefs {
         testHelper.dismissDialog()
     }
 
-    @When("^I am on the device app launcher$")
-    @Throws(Throwable::class)
-    fun iAmOnTheDeviceAppLauncher() {
-        // Write code here that turns the phrase above into concrete actions
-        throw PendingException()
-    }
-
     @When("^I close the app \"([^\"]*)\"$")
     @Throws(Throwable::class)
     fun iCloseTheApp(packageName: String) {
@@ -103,30 +96,10 @@ class ExampleAndroidStepDefs {
         testHelper.dismissKeyboard()
     }
 
-    @Then("^I do not see any progress indicators$")
-    @Throws(Throwable::class)
-    fun iDoNotSeeAnyProgressIndicators() {
-        // Write code here that turns the phrase above into concrete actions
-        throw PendingException()
-    }
-
-    @Then("^I do not see the \"([^\"]*)\" text$")
+    @Then("^I do not see the(?: text)? \"([^\"]*)\"(?: text)?$")
     @Throws(Throwable::class)
     fun iDoNotSeeTheText(text: String) {
-        testHelper.failOnText(text, 5, TimeUnit.SECONDS)
-    }
-
-    @Then("^I do not see the text \"([^\"]*)\"$")
-    @Throws(Throwable::class)
-    fun iDoNotSeeTheText2(text: String) {
-        testHelper.failOnText(text, 5, TimeUnit.SECONDS)
-    }
-
-    @Then("^I do not see the text \"([^\"]*)\" disappear$")
-    @Throws(Throwable::class)
-    fun iDoNotSeeTheTextDisappear(arg0: String) {
-        // Write code here that turns the phrase above into concrete actions
-        throw PendingException()
+        testHelper.failOnText(text, 2, TimeUnit.SECONDS)
     }
 
     @When("^I drag down$")

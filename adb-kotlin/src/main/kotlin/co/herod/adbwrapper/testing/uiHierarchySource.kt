@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 
 fun AdbDeviceTestHelper.uiHierarchySource(): Observable<UiNode> = with(adbDevice) {
 
-    Observable.timer(80, TimeUnit.MILLISECONDS)
+    Observable.timer(50, TimeUnit.MILLISECONDS)
             .flatMap {
                 if (AdbBusManager.uiHierarchyBusActive) {
                     AdbBusManager.uiHierarchyBus
