@@ -1,4 +1,3 @@
-
 *.suo
 *.user
 *.userosscache
@@ -99,7 +98,6 @@ publish/
 *.publishproj
 PublishScripts/
 *.nupkg
-**/packages/*
 !**/packages/build/
 *.nuget.props
 *.nuget.targets
@@ -151,7 +149,6 @@ _Pvt_Extensions
 .paket/paket.exe
 paket-files/
 .fake/
-.idea/
 *.sln.iml
 .cr/
 __pycache__/
@@ -180,8 +177,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-*.class
-*.log
 *.ctxt
 .mtj.tmp/
 *.jar
@@ -194,7 +189,6 @@ hs_err_pid*
 *.apk
 *.ap_
 *.dex
-*.class
 bin/
 gen/
 out/
@@ -202,13 +196,9 @@ out/
 build/
 local.properties
 proguard/
-*.log
 .navigation/
 captures/
-*.iml
-.idea/workspace.xml
 .idea/tasks.xml
-.idea/gradle.xml
 .idea/dictionaries
 .idea/libraries
 *.jks
@@ -218,13 +208,9 @@ freeline.py
 freeline/
 freeline_project_description.json
 .metadata
-bin/
-tmp/
-*.tmp
 *.bak
 *.swp
 *~.nib
-local.properties
 .settings/
 .loadpath
 .recommenders
@@ -242,17 +228,6 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
-*.class
-*.log
-*.ctxt
-.mtj.tmp/
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.rar
-hs_err_pid*
 Thumbs.db
 ehthumbs.db
 ehthumbs_vista.db
@@ -264,14 +239,10 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 *.lnk
-.gradle
-/build/
 gradle-app.setting
 !gradle-wrapper.jar
 .gradletasknamecache
-.idea/**/workspace.xml
 .idea/**/tasks.xml
-.idea/dictionaries
 .idea/**/dataSources/
 .idea/**/dataSources.ids
 .idea/**/dataSources.xml
@@ -279,12 +250,10 @@ gradle-app.setting
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
-.idea/**/gradle.xml
 .idea/**/libraries
 cmake-build-debug/
 .idea/**/mongoSettings.xml
 *.iws
-out/
 .idea_modules/
 atlassian-ide-plugin.xml
 .idea/replstate.xml
@@ -293,7 +262,5 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-.idea/workspace.xml
 /.gtm/
-
-.idea/workspace.xml
+/.idea/workspace.xml
