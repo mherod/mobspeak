@@ -77,7 +77,7 @@ fun AdbCommand.Builder.buildProcess(): Process? = build()?.toProcessBuilder()?.s
 fun AdbCommand.Builder.observable(): Observable<String> = with(build()) {
     return when {
         this?.isShellCommand() == true -> {
-            this.let { ProcessFactory.observableShellProcess(it) }
+            this.let { outputAsObservable(it) }
         }
         else -> {
             this?.toProcessBuilder()?.toObservable() ?: Observable.error(IllegalStateException())
@@ -91,6 +91,3 @@ fun AdbCommand.shellInternalCommand(): String = command.substring(6).trim { it <
 fun AdbCommand.toProcessBuilder(): ProcessBuilder = ProcessBuilder()
         .command(createShellCommandStrings())
         .redirectErrorStream(true)
-
-private fun ProcessBuilder.toObservable(): Observable<String> =
-        ProcessFactory.observableProcess(this)
