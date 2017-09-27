@@ -7,12 +7,12 @@ import java.util.*
 object AdbPackageManager {
 
     fun launchApp(adbDevice: AdbDevice, packageName: String): String =
-            adbDevice.command("shell monkey -p $packageName 1")
+            adbDevice.command("$SHELL monkey -p $packageName 1")
                     .filter { it.containsIgnoreCase("Events injected: 1") }
                     .blockingFirst()
 
     fun listPackages(adbDevice: AdbDevice): MutableList<String> =
-            adbDevice.command("shell pm list packages")
+            adbDevice.command("$SHELL pm list packages")
                     .filter { ":" in it }
                     .map { it.split(":").last() }
                     .toSortedList()
@@ -20,7 +20,7 @@ object AdbPackageManager {
                     .blockingGet()
 
     fun getPackageVersionName(adbDevice: AdbDevice, packageName: String): String? =
-            Adb.getPackageDumpsys(adbDevice, packageName)
+            getPackageDumpsys(adbDevice, packageName)
                     .map { it["versionName"] }
                     .map { println("Package: $packageName is version $it"); it }
                     .blockingFirst()

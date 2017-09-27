@@ -15,7 +15,7 @@ fun AdbDeviceTestHelper.waitForUiNodeForFunc(
     Observable.timer(50, TimeUnit.MILLISECONDS)
             .flatMap {
                 uiHierarchySource()
-                        .buffer(250, TimeUnit.MILLISECONDS)
+                        .buffer(150, TimeUnit.MILLISECONDS)
                         .flatMapIterable { it }
             }
             .filter { predicate(it) == true && it.visible } // filter for items passing predicate
@@ -24,7 +24,7 @@ fun AdbDeviceTestHelper.waitForUiNodeForFunc(
             .map { function(it).orEmpty() } // do this function with item
             .doOnSuccess {
                 when {
-                    it.startsWith("Matched:") -> println(it)
+                    it.trim().startsWith("Matched:") -> println("\t\t$it")
                 }
             }
             .blocking(timeout, timeUnit) // with max max timeout

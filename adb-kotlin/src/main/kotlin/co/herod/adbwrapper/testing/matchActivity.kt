@@ -25,7 +25,7 @@ fun AdbDevice.matchActivity(activityName: String, timeout: Int, timeUnit: TimeUn
                 .onErrorReturn { "" } // timeout without match
                 .doOnSuccess {
                     if (it.isNotBlank()) {
-                        System.out.println("Matched: $it")
+                        println("\t\tMatched: $it")
                     }
                 }
                 .blockingGet()

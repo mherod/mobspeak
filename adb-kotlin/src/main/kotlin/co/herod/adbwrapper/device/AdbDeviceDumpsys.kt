@@ -8,6 +8,7 @@ import co.herod.adbwrapper.model.DumpsysEntry
 import co.herod.adbwrapper.model.DumpsysKey
 import co.herod.adbwrapper.processDumpsys
 import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 class AdbDeviceDumpsys(val adbDevice: AdbDevice)
 
@@ -15,7 +16,8 @@ fun AdbDevice.dumpsys() = AdbDeviceDumpsys(this)
 
 @JvmOverloads
 fun AdbDeviceDumpsys.dump(dumpsysKey: DumpsysKey, args: String = ""): Observable<DumpsysEntry> = with(adbDevice) {
-    dumpsys(this, "$dumpsysKey $args".trim())
+    Observable.timer(250, TimeUnit.MILLISECONDS)
+            .flatMap { dumpsys("$dumpsysKey $args".trim()) }
             .processDumpsys("=")
             .toObservable()
             .flatMapIterable { it.entries }

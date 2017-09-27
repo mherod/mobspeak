@@ -13,7 +13,7 @@ class AdbCommand(
 //    }
 
     private fun buildAdbDeviceSerialCommand() =
-            S.ADB + (deviceIdentifier?.let { " -s $it " } ?: " ")
+            ADB + (deviceIdentifier?.let { " -s $it " } ?: " ")
 
     private fun buildShellCommand(): String =
             buildAdbDeviceSerialCommand() + " " + command

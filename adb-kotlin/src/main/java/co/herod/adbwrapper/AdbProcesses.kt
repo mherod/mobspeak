@@ -1,23 +1,15 @@
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.model.InputType
 import io.reactivex.Observable
 import io.reactivex.annotations.CheckReturnValue
 
 @CheckReturnValue
-fun devices(): Observable<String> = AdbCommand.Builder()
-        .setCommand(S.DEVICES)
-        .observable()
-
-@CheckReturnValue
-fun uiautomatorDumpAndRead(adbDevice: AdbDevice): Observable<String> =
+fun uiautomatorDumpFull(adbDevice: AdbDevice): Observable<String> =
         AdbCommand.Builder()
                 .setDevice(adbDevice)
-                .setCommand("shell \"" +
-                        "uiautomator dump ${S.UI_DUMP_XML_PATH}; " +
-                        "cat ${S.UI_DUMP_XML_PATH}; " +
-                        "echo" +
-                        "\"")
+                .setCommand(cmdStringUiautomatorDumpFull())
                 .observable()
 
 @CheckReturnValue
@@ -31,57 +23,71 @@ fun uiautomatorDumpExecOut(adbDevice: AdbDevice): Observable<String> =
 fun uiautomatorDump(adbDevice: AdbDevice): Observable<String> =
         AdbCommand.Builder()
                 .setDevice(adbDevice)
-                .setCommand("shell uiautomator dump ${S.UI_DUMP_XML_PATH}")
+                .setCommand("shell uiautomator dump $UI_DUMP_XML_PATH")
                 .observable()
 
 @CheckReturnValue
 fun readDeviceFile(adbDevice: AdbDevice, filePath: String): Observable<String> =
         AdbCommand.Builder()
                 .setDevice(adbDevice)
-                .setCommand("shell cat $filePath")
+                .setCommand(cmdStringCatFile(filePath))
                 .observable()
 
 @CheckReturnValue
-fun dumpsys(adbDevice: AdbDevice, type: String): Observable<String> =
+fun AdbDevice.dumpsys(type: String): Observable<String> =
         AdbCommand.Builder()
-                .setDevice(adbDevice)
-                .setCommand(dumpsys(type))
+                .setDevice(this)
+                .setCommand(cmdStringDumpsys(type))
                 .observable()
 
 @CheckReturnValue
-fun dumpsys(adbDevice: AdbDevice, type: String, pipe: String): Observable<String> =
+fun AdbDevice.dumpsys(type: String, pipe: String): Observable<String> =
         AdbCommand.Builder()
-                .setDevice(adbDevice)
-                .setCommand(dumpsys(type, pipe))
+                .setDevice(this)
+                .setCommand(cmdStringDumpsys(type, pipe))
                 .observable()
 
 @CheckReturnValue
-fun pressKey(adbDevice: AdbDevice, key: CharSequence): Observable<String> =
+fun AdbDevice.pressKey(key: CharSequence): Observable<String> =
         AdbCommand.Builder()
-                .setDevice(adbDevice)
-                .setCommand("${S.SHELL} input keyevent $key")
+                .setDevice(this)
+                .setCommand(cmdStringInputKey(key))
                 .observable()
 
 @CheckReturnValue
 fun launchUrl(adbDevice: AdbDevice, url: String): Observable<String> =
         AdbCommand.Builder()
                 .setDevice(adbDevice)
-                .setCommand(intentViewUrl(url))
+                .setCommand(cmdStringIntentViewUrl(url))
                 .observable()
 
 @CheckReturnValue
 fun launchUrl(adbDevice: AdbDevice, url: String, packageName: String): Observable<String> =
         AdbCommand.Builder()
                 .setDevice(adbDevice)
-                .setCommand(intentViewUrl(url, packageName))
+                .setCommand(cmdStringIntentViewUrl(url, packageName))
                 .observable()
 
-@JvmOverloads
-fun intentViewUrl(url: String, packageName: String = ""): String =
-        "${S.SHELL} am start -a ${S.INTENT_ACTION_VIEW} ${"-d '$url' $packageName".trim()}"
+@CheckReturnValue
+private fun cmdStringInputKey(key: CharSequence): String =
+        "$SHELL input ${InputType.KEY_EVENT} $key"
 
-fun dumpsys(type: String): String =
-        "${S.SHELL} dumpsys $type"
+@CheckReturnValue
+private fun cmdStringIntentViewUrl(url: String, packageName: String = ""): String =
+        "$SHELL am start -a $INTENT_ACTION_VIEW ${"-d '$url' $packageName".trim()}"
 
-fun dumpsys(type: String, pipe: String): String =
-        "${S.SHELL} \"dumpsys $type | $pipe\""
+@CheckReturnValue
+private fun cmdStringDumpsys(type: String): String =
+        "$SHELL $DUMPSYS $type"
+
+@CheckReturnValue
+private fun cmdStringDumpsys(type: String, pipe: String): String =
+        "$SHELL \"$DUMPSYS $type | $pipe\""
+
+@CheckReturnValue
+private fun cmdStringUiautomatorDumpFull(): String =
+        "$SHELL \"uiautomator dump $UI_DUMP_XML_PATH; cat $UI_DUMP_XML_PATH; echo\""
+
+@CheckReturnValue
+private fun cmdStringCatFile(filePath: String): String =
+        "$SHELL cat $filePath"
