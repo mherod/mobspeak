@@ -85,6 +85,14 @@ class UiNode(private val nodeString: String) {
         bounds.let { it.width > 0 && it.height > 0 }
     }
 
+    val isTextField: Boolean by lazy {
+        arrayOf("EditText", "TextInput").any { it in uiClass }
+    }
+
+    val isButton: Boolean by lazy {
+        arrayOf("Button", "Text").any { it in uiClass } && (clickable || longClickable)
+    }
+
     fun contains(charSequence: String): Boolean = this
             .toString()
             .containsIgnoreCase(charSequence)

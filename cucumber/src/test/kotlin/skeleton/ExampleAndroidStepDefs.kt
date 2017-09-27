@@ -251,13 +251,19 @@ class ExampleAndroidStepDefs {
     @Then("^I see a button$")
     @Throws(Throwable::class)
     fun iSeeAButton() {
-        testHelper.waitForUiNode { uiNode -> uiNode.uiClass.endsWith("Button") }
+        testHelper.waitForUiNode { uiNode -> uiNode.isButton }
     }
 
     @Then("^I see the \"([^\"]*)\" text$")
     @Throws(Throwable::class)
     fun iSeeTheText(text: String) {
         testHelper.waitForText(text)
+    }
+
+    @Then("^I see the \"([^\"]*)\" button$")
+    @Throws(Throwable::class)
+    fun iSeeTheButton(text: String) {
+        testHelper.waitForUiNode { it.isButton && text in it.text }
     }
 
     @When("^I see the text \"([^\"]*)\"$")
@@ -269,7 +275,7 @@ class ExampleAndroidStepDefs {
     @Then("^I should see the lock screen$")
     @Throws(Throwable::class)
     fun iShouldSeeTheLockScreen() {
-        testHelper.waitForUiNode { uiNode -> uiNode.contains("com.android.systemui:id/keyguard_status_area") }
+        testHelper.waitForUiNode { it.contains("com.android.systemui:id/keyguard_status_area") }
     }
 
     @When("^I swipe open the right drawer$")
@@ -315,6 +321,12 @@ class ExampleAndroidStepDefs {
     @Throws(Throwable::class)
     fun iTouchTheText(text: String) {
         testHelper.touchText(text)
+    }
+
+    @When("^I touch the \"([^\"]*)\" button$")
+    @Throws(Throwable::class)
+    fun iTouchTheButton(text: String) {
+        testHelper.touchUiNode { it.isButton && text in it.text }
     }
 
     @Then("^I wait$")
