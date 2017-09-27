@@ -18,7 +18,29 @@ Feature: Example
     And I see the "9" button
     And I see the "0" button
 
-  Scenario: I can use the calculator
+  Scenario Outline: I can use the calculator
+    When I type the "<op1>" text
+    Then I see the "<op1>" text
+    When I touch the "<operator>" button
+    Then I type the "<op2>" text
+    Then I touch the "=" button
+    Then I see the "<result>" text
+    Then I do not see the "<op1>" text
+    Then I do not see the "<op2>" text
+    When I touch the "CLR" button
+    When I do not see the text "CLR"
+    When I see the text "DEL"
+    When I close the app "com.android.calculator2"
+    Then I am not on the "Calculator" activity
+
+    Examples:
+      | op1    | operator | op2    | result |
+      | 111    | +        | 222    | 333    |
+      | 400    | +        | 98     | 498    |
+      | 99,999 | -        | 66,666 | 33,333 |
+      | 99     | *        | 55     | 5445   |
+
+  Scenario: I can use the calculator by touch
     When I touch the "5" button
     And I touch the "2" button
     And I touch the "4" button
