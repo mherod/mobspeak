@@ -21,7 +21,7 @@ Feature: Example
   Scenario Outline: I can use the calculator
     When I type the "<op1>" text
     Then I see the "<op1>" text
-    When I touch the "<operator>" button
+    When I type the "<operator>" text
     Then I type the "<op2>" text
     Then I touch the "=" button
     Then I see the "<result>" text
