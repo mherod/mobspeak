@@ -35,7 +35,7 @@ fun AdbDeviceTestHelper.failOnText(
                     }
                 }
     }
-    if ((deadlineMillis * 1.5) < timeMillis) {
+    if ((deadlineMillis * 2.0) < timeMillis) {
         throw AssertionError("Exceeded provided timeout (took $timeMillis, expected $deadlineMillis)")
     }
 
