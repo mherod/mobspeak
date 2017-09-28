@@ -16,9 +16,9 @@ import java.util.concurrent.TimeUnit
 
 fun AdbDevice.streamUiHierarchy(): Observable<UiNode> =
         dumpUiHierarchy(this, 30, TimeUnit.SECONDS)
+                .compose(ResultChangeFixedDurationTransformer())
                 .doOnEach(AdbBusManager._uiHierarchyBus)
                 .map { it.xmlString }
-                .compose(ResultChangeFixedDurationTransformer())
                 .compose { UiHelper.uiXmlToNodes(it) }
                 .doOnEach(AdbBusManager._uiNodeBus)
                 .doOnSubscribe {
