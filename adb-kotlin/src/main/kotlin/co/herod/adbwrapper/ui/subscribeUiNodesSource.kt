@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper.ui
 
 import co.herod.adbwrapper.model.AdbDevice

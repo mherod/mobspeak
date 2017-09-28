@@ -14,8 +14,9 @@ class UiHierarchy(
 ) {
 
     val childUiNodes: MutableList<UiNode> by lazy {
-        UiHelper.uiXmlToNodes(Observable.just(xmlString))
+        UiHelper.uiXmlToNodes(Observable.just(xmlString), dumpDate)
                 .observeOn(Schedulers.computation())
+                .filter { Objects.nonNull(it) }
                 .toList()
                 .blockingGet()
     }
