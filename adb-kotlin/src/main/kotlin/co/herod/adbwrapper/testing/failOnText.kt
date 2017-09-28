@@ -25,9 +25,9 @@ fun AdbDeviceTestHelper.failOnText(
     // requires at least 3 second timeout
     val deadlineMillis = maxOf(timeUnit.toMillis(timeout.toLong()), 2000)
     val timeMillis = measureTimeMillis {
-        Observable.timer(50, TimeUnit.MILLISECONDS)
+        Observable.timer(100, TimeUnit.MILLISECONDS)
                 .flatMap {
-                    val startTime = now().plusMillis(300)
+                    val startTime = now().plusMillis(500)
                     sourceUiNodes()
                             .skipWhile { it.time.isBefore(startTime) }
                             .skipWhile { !it.text.containsIgnoreCase(text) }
