@@ -14,7 +14,7 @@ fun dumpUiNodes(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Observable<UiNode> =
         dumpUiHierarchy(adbDevice, timeout, timeUnit)
+                .map { it.xmlString }
                 .distinct { it }
-                .map { AdbUiHierarchy(it, adbDevice).xmlString }
                 .compose { UiHelper.uiXmlToNodes(it) }
                 .filter { Objects.nonNull(it) }

@@ -1,6 +1,7 @@
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.model.AdbUiHierarchy
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -9,7 +10,7 @@ fun dumpUiHierarchy(
         adbDevice: AdbDevice,
         timeout: Long = 30,
         timeUnit: TimeUnit = TimeUnit.SECONDS
-): Observable<String> = with(adbDevice) {
+): Observable<AdbUiHierarchy> = with(adbDevice) {
     Observable.just(adbDevice)
             .flatMap {
                 when {
@@ -26,6 +27,8 @@ fun dumpUiHierarchy(
             .observeOn(Schedulers.single())
             .subscribeOn(Schedulers.computation())
             .filter { it.isNotBlank() }
+            .timeout(6, TimeUnit.SECONDS)
+            .retry()
             .timeout(timeout, timeUnit)
             .map {
                 it.substring(
@@ -33,4 +36,5 @@ fun dumpUiHierarchy(
                         it.lastIndexOf('>') + 1
                 )
             }
+            .map { AdbUiHierarchy(it, this) }
 }
