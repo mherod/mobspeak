@@ -2,7 +2,7 @@ package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.AdbBusManager
 import co.herod.adbwrapper.model.UiNode
-import co.herod.adbwrapper.subscribeUiNodesSource
+import co.herod.adbwrapper.ui.subscribeUiNodesSource
 import co.herod.adbwrapper.util.UiHelper
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers

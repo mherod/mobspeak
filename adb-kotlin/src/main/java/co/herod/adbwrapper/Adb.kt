@@ -4,6 +4,7 @@ import co.herod.adbwrapper.device.dump
 import co.herod.adbwrapper.device.dumpsys
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.DumpsysKey
+import co.herod.adbwrapper.props.processDumpsys
 import co.herod.kotlin.ext.filterKeys
 import io.reactivex.Observable
 import io.reactivex.Single

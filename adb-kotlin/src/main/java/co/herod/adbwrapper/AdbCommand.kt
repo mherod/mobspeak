@@ -1,6 +1,8 @@
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.processes.outputAsObservable
+import co.herod.adbwrapper.processes.toObservable
 import io.reactivex.Observable
 
 @Suppress("MemberVisibilityCanPrivate")

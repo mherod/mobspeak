@@ -1,4 +1,4 @@
-package co.herod.adbwrapper
+package co.herod.adbwrapper.props
 
 import co.herod.adbwrapper.device.dump
 import co.herod.adbwrapper.device.dumpsys

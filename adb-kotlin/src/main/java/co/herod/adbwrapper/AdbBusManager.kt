@@ -4,6 +4,7 @@ package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.UiNode
+import co.herod.adbwrapper.rx.BusSubject
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit

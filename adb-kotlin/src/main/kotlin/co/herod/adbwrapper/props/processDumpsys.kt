@@ -1,4 +1,4 @@
-package co.herod.adbwrapper
+package co.herod.adbwrapper.props
 
 import io.reactivex.Observable
 import io.reactivex.Single

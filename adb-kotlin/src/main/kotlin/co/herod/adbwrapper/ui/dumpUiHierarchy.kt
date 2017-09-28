@@ -1,7 +1,10 @@
-package co.herod.adbwrapper
+package co.herod.adbwrapper.ui
 
+import co.herod.adbwrapper.ui.dump.compatDumpUiHierarchy
+import co.herod.adbwrapper.ui.dump.fallbackDumpUiHierarchy
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.AdbUiHierarchy
+import co.herod.adbwrapper.ui.dump.primaryDumpUiHierarchy
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -16,12 +19,16 @@ fun dumpUiHierarchy(
                 when {
                     it.preferredUiAutomatorStrategy == 0 ->
                         adbDevice.compatDumpUiHierarchy()
+                                .timeout(6, TimeUnit.SECONDS)
                     it.preferredUiAutomatorStrategy == 1 ->
                         adbDevice.primaryDumpUiHierarchy()
+                                .timeout(6, TimeUnit.SECONDS)
                     it.preferredUiAutomatorStrategy == 2 ->
                         adbDevice.fallbackDumpUiHierarchy()
+                                .timeout(6, TimeUnit.SECONDS)
                     else ->
                         adbDevice.compatDumpUiHierarchy()
+                                .timeout(6, TimeUnit.SECONDS)
                 }
             }
             .observeOn(Schedulers.single())

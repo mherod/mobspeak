@@ -1,8 +1,8 @@
-package co.herod.adbwrapper
+package co.herod.adbwrapper.ui
 
 import co.herod.adbwrapper.model.AdbDevice
-import co.herod.adbwrapper.model.AdbUiHierarchy
 import co.herod.adbwrapper.model.UiNode
+import co.herod.adbwrapper.ui.dumpUiHierarchy
 import co.herod.adbwrapper.util.UiHelper
 import io.reactivex.Observable
 import java.util.*

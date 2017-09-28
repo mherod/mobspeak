@@ -1,6 +1,7 @@
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.processes.parseAdbString
 import io.reactivex.Observable
 import io.reactivex.annotations.CheckReturnValue
 import java.util.concurrent.TimeUnit

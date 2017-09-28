@@ -4,7 +4,7 @@ package co.herod.adbwrapper.model
 
 import co.herod.adbwrapper.DEVICE_CONNECTED_DEVICE
 import co.herod.adbwrapper.DEVICE_EMULATOR
-import co.herod.adbwrapper.lookupWindowBounds
+import co.herod.adbwrapper.props.lookupWindowBounds
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
