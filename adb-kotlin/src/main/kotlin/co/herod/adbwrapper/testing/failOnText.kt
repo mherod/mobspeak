@@ -13,12 +13,14 @@ fun AdbDeviceTestHelper.failOnText(
         timeout: Int = 20,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ) = with(adbDevice) {
+
     // Required cases:
     // fail - if text is visible throughout
     // fail - if text becomes visible
     // pass immediately - if text disappears before end of timeout
     // fail fast mode - fail immediately - if text is visible within the first second
     // pass fast mode - pass immediately - if text is not visible within the first second
+
     val deadlineMillis = timeUnit.toMillis(timeout.toLong())
     val timeMillis = measureTimeMillis {
         // TEMP FIX to allow time for UI to refresh
