@@ -21,12 +21,16 @@ fun <T> Single<T>.timeout(
 fun <T> Observable<T>.retryWithTimeout(
         timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
-): Observable<T> = retry().timeout(timeout, timeUnit)
+): Observable<T> = this
+//        .retry()
+        .timeout(timeout, timeUnit)
 
 fun <T> Single<T>.retryWithTimeout(
         timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
-): Single<T> = retry().timeout(timeout, timeUnit)
+): Single<T> = this
+//        .retry()
+        .timeout(timeout, timeUnit)
 
 //fun Observable<String>.toSingleBlocking(
 //        timeout: Int = 5,

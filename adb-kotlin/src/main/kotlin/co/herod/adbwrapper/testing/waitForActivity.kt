@@ -22,7 +22,7 @@ fun AdbDeviceTestHelper.waitForActivity(
                 }
                 .filter { it }
                 .firstOrError()
-                .retry()
+//                .retry()
                 .toObservable()
                 .timeout(timeout, timeUnit)
                 .blockingFirst()
