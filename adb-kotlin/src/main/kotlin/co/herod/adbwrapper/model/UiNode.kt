@@ -4,9 +4,18 @@ package co.herod.adbwrapper.model
 
 import co.herod.adbwrapper.util.UiHelper
 import co.herod.kotlin.ext.containsIgnoreCase
+import java.time.Instant
+import java.util.*
 
 @Suppress("MemberVisibilityCanPrivate")
-class UiNode(private val nodeString: String) {
+class UiNode(
+        private val nodeString: String,
+        val date: Date = Date()
+) {
+
+    val time: Instant by lazy {
+        date.toInstant()
+    }
 
     val selected: Boolean by lazy {
         UiHelper.extractProperty(nodeString, "selected").hasPositiveValue()
@@ -97,9 +106,9 @@ class UiNode(private val nodeString: String) {
             .toString()
             .containsIgnoreCase(charSequence)
 
-    override fun toString(): String {
-        return "UiNode(nodeString='$nodeString')"
-    }
-
     private fun String.hasPositiveValue(): Boolean = this == "on" || this == "1" || "true" in this
+
+    override fun toString(): String {
+        return "UiNode(nodeString='$nodeString', date=$date)"
+    }
 }

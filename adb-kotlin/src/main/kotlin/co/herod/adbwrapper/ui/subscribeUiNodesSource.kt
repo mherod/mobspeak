@@ -6,6 +6,4 @@ import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
 import io.reactivex.Observable
 
 fun AdbDevice.subscribeUiNodesSource(): Observable<UiNode> =
-        dumpUiNodes(this)
-                .compose(ResultChangeFixedDurationTransformer())
-                .distinct { it.toString() }
+        dumpUiNodes().compose(ResultChangeFixedDurationTransformer())

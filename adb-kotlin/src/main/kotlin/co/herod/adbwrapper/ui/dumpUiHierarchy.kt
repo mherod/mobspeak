@@ -1,33 +1,32 @@
 package co.herod.adbwrapper.ui
 
-import co.herod.adbwrapper.ui.dump.compatDumpUiHierarchy
-import co.herod.adbwrapper.ui.dump.fallbackDumpUiHierarchy
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiHierarchy
+import co.herod.adbwrapper.ui.dump.compatDumpUiHierarchy
+import co.herod.adbwrapper.ui.dump.fallbackDumpUiHierarchy
 import co.herod.adbwrapper.ui.dump.primaryDumpUiHierarchy
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-fun dumpUiHierarchy(
-        adbDevice: AdbDevice,
+fun AdbDevice.dumpUiHierarchy(
         timeout: Long = 30,
         timeUnit: TimeUnit = TimeUnit.SECONDS
-): Observable<UiHierarchy> = with(adbDevice) {
-    Observable.just(adbDevice)
+): Observable<UiHierarchy> = with(this) {
+    Observable.just(this)
             .flatMap {
                 when {
                     it.preferredUiAutomatorStrategy == 0 ->
-                        adbDevice.compatDumpUiHierarchy()
+                        this.compatDumpUiHierarchy()
                                 .timeout(6, TimeUnit.SECONDS)
                     it.preferredUiAutomatorStrategy == 1 ->
-                        adbDevice.primaryDumpUiHierarchy()
+                        this.primaryDumpUiHierarchy()
                                 .timeout(6, TimeUnit.SECONDS)
                     it.preferredUiAutomatorStrategy == 2 ->
-                        adbDevice.fallbackDumpUiHierarchy()
+                        this.fallbackDumpUiHierarchy()
                                 .timeout(6, TimeUnit.SECONDS)
                     else ->
-                        adbDevice.compatDumpUiHierarchy()
+                        this.compatDumpUiHierarchy()
                                 .timeout(6, TimeUnit.SECONDS)
                 }
             }

@@ -9,7 +9,7 @@ import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 fun AdbDevice.streamUi(): Observable<UiNode> =
-        dumpUiHierarchy(this, 30, TimeUnit.SECONDS)
+        this.dumpUiHierarchy(30, TimeUnit.SECONDS)
                 .compose(ResultChangeFixedDurationTransformer())
                 .doOnEach(AdbBusManager._uiHierarchyBus)
                 .map { it.xmlString }

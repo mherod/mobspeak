@@ -1,9 +1,7 @@
 package co.herod.adbwrapper.ui
 
-import co.herod.adbwrapper.AdbBusManager
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.testing.AdbDeviceTestHelper
-import co.herod.adbwrapper.util.UiHelper
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -11,15 +9,7 @@ import java.util.concurrent.TimeUnit
 fun AdbDeviceTestHelper.sourceUiNodes(): Observable<UiNode> = with(adbDevice) {
 
     Observable.timer(5, TimeUnit.MILLISECONDS)
-            .flatMap {
-                if (AdbBusManager.uiHierarchyBusActive) {
-                    AdbBusManager.uiHierarchyBus
-                            .map { it.xmlString }
-                            .compose { UiHelper.uiXmlToNodes(it) }
-                } else {
-                    subscribeUiNodesSource()
-                }
-            }
+            .flatMap { sourceUiHierarchy().flatMapIterable { it.childUiNodes } }
             .observeOn(Schedulers.newThread())
             .subscribeOn(Schedulers.computation())
 }
