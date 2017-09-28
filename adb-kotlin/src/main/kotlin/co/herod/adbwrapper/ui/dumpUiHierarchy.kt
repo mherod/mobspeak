@@ -3,7 +3,7 @@ package co.herod.adbwrapper.ui
 import co.herod.adbwrapper.ui.dump.compatDumpUiHierarchy
 import co.herod.adbwrapper.ui.dump.fallbackDumpUiHierarchy
 import co.herod.adbwrapper.model.AdbDevice
-import co.herod.adbwrapper.model.AdbUiHierarchy
+import co.herod.adbwrapper.model.UiHierarchy
 import co.herod.adbwrapper.ui.dump.primaryDumpUiHierarchy
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -13,7 +13,7 @@ fun dumpUiHierarchy(
         adbDevice: AdbDevice,
         timeout: Long = 30,
         timeUnit: TimeUnit = TimeUnit.SECONDS
-): Observable<AdbUiHierarchy> = with(adbDevice) {
+): Observable<UiHierarchy> = with(adbDevice) {
     Observable.just(adbDevice)
             .flatMap {
                 when {
@@ -43,5 +43,5 @@ fun dumpUiHierarchy(
                         it.lastIndexOf('>') + 1
                 )
             }
-            .map { AdbUiHierarchy(it, this) }
+            .map { UiHierarchy(it, this) }
 }

@@ -260,7 +260,7 @@ fun AdbDeviceTestHelper.forceStopApp(packageName: String) = with(adbDevice) {
     pm().forceStop(packageName)
 }
 
-// waitWhileTrue
+// waitWhileUiNodeExists
 // waitUntilTrue
 // waitUntilFalse
 // failIf
@@ -272,7 +272,7 @@ fun waitSeconds(waitSeconds: Int = 3) = try {
 }
 
 fun AdbDeviceTestHelper.waitWhileProgressVisible() =
-        waitWhileTrue { it.uiClass.endsWith("ProgressBar") }
+        waitWhileUiNodeExists { it.uiClass.endsWith("ProgressBar") }
 
 fun AdbDeviceTestHelper.waitForTextToDisappear(text: String) {
 

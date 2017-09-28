@@ -1,6 +1,7 @@
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.model.UiNode
+import co.herod.adbwrapper.ui.sourceUiNodes
 import co.herod.kotlin.ext.blocking
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
@@ -14,7 +15,7 @@ fun AdbDeviceTestHelper.waitForUiNodeForFunc(
 
     Observable.timer(50, TimeUnit.MILLISECONDS)
             .flatMap {
-                uiNodeSource()
+                sourceUiNodes()
                         .buffer(50, TimeUnit.MILLISECONDS)
                         .flatMapIterable { it }
             }

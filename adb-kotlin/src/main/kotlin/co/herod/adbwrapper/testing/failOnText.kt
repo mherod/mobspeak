@@ -1,6 +1,7 @@
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.model.UiNode
+import co.herod.adbwrapper.ui.sourceUiNodes
 import co.herod.kotlin.ext.containsIgnoreCase
 import co.herod.kotlin.ext.timeout
 import io.reactivex.Observable
@@ -26,7 +27,7 @@ fun AdbDeviceTestHelper.failOnText(
         // TEMP FIX to allow time for UI to refresh
         Observable.timer(2000, TimeUnit.MILLISECONDS)
         // Observable.timer(100, TimeUnit.MILLISECONDS)
-                .flatMap { uiNodeSource() }
+                .flatMap { sourceUiNodes() }
                 .timeout(timeout, timeUnit)
                 .onErrorResumeNext { _: Throwable -> Observable.empty() }
                 .blockingForEach { uiNode: UiNode ->

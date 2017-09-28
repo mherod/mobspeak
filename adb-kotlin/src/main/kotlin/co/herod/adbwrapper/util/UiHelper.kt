@@ -3,7 +3,7 @@
 package co.herod.adbwrapper.util
 
 import co.herod.adbwrapper.model.AdbDevice
-import co.herod.adbwrapper.model.AdbUiHierarchy
+import co.herod.adbwrapper.model.UiHierarchy
 import co.herod.adbwrapper.model.UiNode
 import io.reactivex.Observable
 import java.util.*
@@ -35,7 +35,7 @@ object UiHelper {
 
     fun rawDumpToNodes(upstream: Observable<String>, adbDevice: AdbDevice?): Observable<UiNode>? = upstream
             .filter { Objects.nonNull(it) }
-            .map { AdbUiHierarchy(it, adbDevice) }
+            .map { UiHierarchy(it, adbDevice) }
             .map { it.xmlString }
             .compose { uiXmlToNodes(it) }
             .filter { Objects.nonNull(it) }
