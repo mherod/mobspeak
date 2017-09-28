@@ -16,15 +16,12 @@ import java.util.concurrent.TimeUnit
 
 fun AdbDevice.streamUiHierarchy(): Observable<UiNode> =
         dumpUiHierarchy(this, 30, TimeUnit.SECONDS)
-                // .throttleFirst(1, TimeUnit.SECONDS)
                 .compose(ResultChangeFixedDurationTransformer())
                 .map { AdbUiHierarchy(it, this) }
                 .doOnEach(AdbBusManager._uiHierarchyBus)
                 .map { it.xmlString }
                 .compose { UiHelper.uiXmlToNodes(it) }
                 .doOnEach(AdbBusManager._uiNodeBus)
-                .observeOn(Schedulers.newThread())
-                .subscribeOn(Schedulers.newThread())
                 .doOnSubscribe {
                     println("Subscribe of streamUiHierarchy")
                     uiHierarchyBusActive = true

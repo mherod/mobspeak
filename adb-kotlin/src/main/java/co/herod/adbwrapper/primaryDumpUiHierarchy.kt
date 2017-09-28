@@ -12,5 +12,5 @@ fun AdbDevice.primaryDumpUiHierarchy(
                 .filter { it.isXmlOutput() }
                 .doOnNext { preferredUiAutomatorStrategy = 1 }
                 .timeout(maxOf(5, timeout / 3), timeUnit)
-                .retry()
+//                .retry()
                 .timeout(timeout, timeUnit)
