@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit
 
 fun AdbDeviceTestHelper.waitWhileTrue(predicate: (UiNode) -> Boolean?) = with(adbDevice) {
 
-    uiHierarchySource()
+    uiNodeSource()
             .filter { predicate(it) == true && it.visible }
             .doOnNext { println("Blocking while visible: $it") }
             .buffer(200, TimeUnit.MILLISECONDS)

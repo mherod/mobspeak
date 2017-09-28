@@ -14,7 +14,7 @@ fun AdbDeviceTestHelper.waitForUiNodeForFunc(
 
     Observable.timer(50, TimeUnit.MILLISECONDS)
             .flatMap {
-                uiHierarchySource()
+                uiNodeSource()
                         .buffer(50, TimeUnit.MILLISECONDS)
                         .flatMapIterable { it }
             }

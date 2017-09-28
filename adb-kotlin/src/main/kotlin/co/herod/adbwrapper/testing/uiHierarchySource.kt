@@ -7,9 +7,9 @@ import co.herod.adbwrapper.util.UiHelper
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
-fun AdbDeviceTestHelper.uiHierarchySource(): Observable<UiNode> = with(adbDevice) {
+fun AdbDeviceTestHelper.uiNodeSource(): Observable<UiNode> = with(adbDevice) {
 
-    Observable.timer(50, TimeUnit.MILLISECONDS)
+    Observable.timer(5, TimeUnit.MILLISECONDS)
             .flatMap {
                 if (AdbBusManager.uiHierarchyBusActive) {
                     AdbBusManager.uiHierarchyBus
