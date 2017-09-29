@@ -25,5 +25,5 @@ fun AdbDeviceTestHelper.waitWhileUiNodeExists(predicate: (UiNode) -> Boolean?) =
             .takeWhile { it.isNotEmpty() }
             .onErrorReturn { Collections.emptyList() }
             .timeout(30, TimeUnit.SECONDS)
-            .blockingSubscribe()
+            .blockingSubscribe({}, {})
 }
