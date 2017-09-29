@@ -10,19 +10,25 @@ import io.reactivex.Observable
 import io.reactivex.Single
 
 
-fun getActivityDumpsys(adbDevice: AdbDevice) =
+fun getActivityDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
         adbDevice.dumpsys("activity")
                 .processDumpsys("=")
                 .toObservable()
 
-fun getActivitiesDumpsys(adbDevice: AdbDevice) =
+fun getActivitiesDumpsys(adbDevice: AdbDevice): Observable<Map<String, String>> =
         adbDevice.dumpsys("activity activities")
                 .processDumpsys("=")
                 .toObservable()
 
 fun AdbDevice.getWindowFocusDumpsys() = dumpsys()
-                .dump(dumpsysKey = DumpsysKey.WINDOW, args = "windows")
-                .filterKeys("mCurrentFocus", "mFocusedApp")
+        .dump(
+                dumpsysKey = DumpsysKey.WINDOW,
+                args = "windows"
+        )
+        .filterKeys(
+                "mCurrentFocus",
+                "mFocusedApp"
+        )
 
 private fun AdbDevice.dumpsysMap(type: String, pipe: String): Single<Map<String, String>> =
         this.dumpsys(type, pipe).processDumpsys("=")

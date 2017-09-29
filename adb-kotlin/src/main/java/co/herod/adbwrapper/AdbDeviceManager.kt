@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
@@ -30,7 +32,6 @@ object AdbDeviceManager {
     fun getAllDevices(): List<AdbDevice> = allDevices()
             .toList()
             .blockingGet()
-
 }
 
 private fun allDevices(): Observable<AdbDevice> =

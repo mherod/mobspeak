@@ -1,6 +1,6 @@
 @file:JvmName("DemoDemoDemo")
 
-package co.herod.adbwrapper.examples;
+package co.herod.adbwrapper.examples
 
 import co.herod.adbwrapper.AdbDeviceManager
 import co.herod.adbwrapper.testing.dragUp

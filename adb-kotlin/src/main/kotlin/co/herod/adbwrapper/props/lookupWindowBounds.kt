@@ -11,18 +11,19 @@ import co.herod.adbwrapper.model.filterProperty
         replaceWith = ReplaceWith("windowBounds"),
         message = "Use the 'windowBounds' property"
 )
-internal fun AdbDevice.lookupWindowBounds(): UiBounds =
-        dumpsys().dump(dumpsysKey = DumpsysKey.WINDOW).filterProperty("mBounds")
-                .map { it.value }
-                .filter { '[' in it && ']' in it }
-                .map {
-                    it.substring(
-                            it.lastIndexOf('[') + 1,
-                            it.lastIndexOf(']')
-                    )
-                }
-                .map { it.split(',') }
-                .map { it.map { Integer.parseInt(it) } }
-                .map { it.toIntArray() }
-                .map { UiBounds(it) }
-                .blockingGet()
+internal fun AdbDevice.lookupWindowBounds(): UiBounds = dumpsys()
+        .dump(dumpsysKey = DumpsysKey.WINDOW)
+        .filterProperty("mBounds")
+        .map { it.value }
+        .filter { '[' in it && ']' in it }
+        .map {
+            it.substring(
+                    it.lastIndexOf('[') + 1,
+                    it.lastIndexOf(']')
+            )
+        }
+        .map { it.split(',') }
+        .map { it.map { Integer.parseInt(it) } }
+        .map { it.toIntArray() }
+        .map { UiBounds(it) }
+        .blockingGet()

@@ -18,7 +18,7 @@ class AdbCommand(
 
     internal fun createShellCommandStrings(): List<String> =
             buildShellCommand()
-                    .split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)".toRegex())
+                    .split(regex = " (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)".toRegex())
                     .filter { it.isNotEmpty() }
                     .map { it.trim() }
 
