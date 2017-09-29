@@ -11,7 +11,7 @@ import co.herod.adbwrapper.model.DumpsysKey
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.model.isPropertyPositive
 import co.herod.adbwrapper.screenshot
-import co.herod.adbwrapper.streamUiHierarchy
+import co.herod.adbwrapper.ui.streamUi
 import co.herod.kotlin.ext.containsIgnoreCase
 import java.util.concurrent.TimeUnit
 
@@ -20,7 +20,7 @@ class AdbDeviceTestHelper(val adbDevice: AdbDevice)
 fun AdbDevice.testHelper() = AdbDeviceTestHelper(this)
 
 fun AdbDeviceTestHelper.startUiBus(): Boolean = with(adbDevice) {
-    disposables.add(streamUiHierarchy().subscribe())
+    disposables.add(streamUi().subscribe())
 }
 
 fun AdbDeviceTestHelper.stopUiBus() = with(adbDevice) {
@@ -260,7 +260,7 @@ fun AdbDeviceTestHelper.forceStopApp(packageName: String) = with(adbDevice) {
     pm().forceStop(packageName)
 }
 
-// waitWhileTrue
+// waitWhileUiNodeExists
 // waitUntilTrue
 // waitUntilFalse
 // failIf
@@ -272,7 +272,7 @@ fun waitSeconds(waitSeconds: Int = 3) = try {
 }
 
 fun AdbDeviceTestHelper.waitWhileProgressVisible() =
-        waitWhileTrue { it.uiClass.endsWith("ProgressBar") }
+        waitWhileUiNodeExists { it.uiClass.endsWith("ProgressBar") }
 
 fun AdbDeviceTestHelper.waitForTextToDisappear(text: String) {
 

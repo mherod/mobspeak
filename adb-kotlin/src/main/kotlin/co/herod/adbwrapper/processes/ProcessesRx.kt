@@ -1,5 +1,6 @@
-package co.herod.adbwrapper
+package co.herod.adbwrapper.processes
 
+import co.herod.adbwrapper.*
 import co.herod.adbwrapper.AdbBusManager.outputBus
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.toObservable

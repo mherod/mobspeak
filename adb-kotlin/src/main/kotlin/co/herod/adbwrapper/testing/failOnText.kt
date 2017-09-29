@@ -1,9 +1,10 @@
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.model.UiNode
+import co.herod.adbwrapper.ui.sourceUiNodes
 import co.herod.kotlin.ext.containsIgnoreCase
-import co.herod.kotlin.ext.timeout
 import io.reactivex.Observable
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
 
@@ -21,23 +22,35 @@ fun AdbDeviceTestHelper.failOnText(
     // fail fast mode - fail immediately - if text is visible within the first second
     // pass fast mode - pass immediately - if text is not visible within the first second
 
-    val deadlineMillis = timeUnit.toMillis(timeout.toLong())
+    // requires at least 3 second timeout
+    val deadlineMillis = maxOf(timeUnit.toMillis(timeout.toLong()), 2500)
     val timeMillis = measureTimeMillis {
-        // TEMP FIX to allow time for UI to refresh
-        Observable.timer(2000, TimeUnit.MILLISECONDS)
-        // Observable.timer(100, TimeUnit.MILLISECONDS)
-                .flatMap { uiNodeSource() }
-                .timeout(timeout, timeUnit)
+        Observable.timer(100, TimeUnit.MILLISECONDS)
+                .flatMap {
+                    val startTime = now().plusMillis(500)
+                    sourceUiNodes()
+                            .skipWhile { it.time.isBefore(startTime) }
+                            .skipWhile { !it.text.containsIgnoreCase(text) }
+                }
+                .timeout(
+                        deadlineMillis,
+                        TimeUnit.MILLISECONDS
+                )
                 .onErrorResumeNext { _: Throwable -> Observable.empty() }
                 .blockingForEach { uiNode: UiNode ->
-                    if (uiNode.text.containsIgnoreCase(text)) {
+
+                    val eachTime = uiNode.time.plusMillis(300)
+
+                    if (uiNode.text.containsIgnoreCase(text) && eachTime.isAfter(now()) ) {
                         throw AssertionError("Text was visible: $text")
                     }
                 }
     }
-    if ((deadlineMillis * 2.0) < timeMillis) {
+    if ((deadlineMillis * 1.5) < timeMillis) {
         throw AssertionError("Exceeded provided timeout (took $timeMillis, expected $deadlineMillis)")
     }
 
     // TODO this needs to assess the uiHierarchy completely
 }
+
+private fun now() = Date().toInstant()

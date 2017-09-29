@@ -4,7 +4,7 @@ package co.herod.adbwrapper.model
 
 import co.herod.adbwrapper.DEVICE_CONNECTED_DEVICE
 import co.herod.adbwrapper.DEVICE_EMULATOR
-import co.herod.adbwrapper.lookupWindowBounds
+import co.herod.adbwrapper.props.lookupWindowBounds
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -24,12 +24,12 @@ class AdbDevice(
 
     val physical: Boolean by lazy {
         @Suppress("DEPRECATION")
-        isConnectedDevice()
+        (type == DEVICE_CONNECTED_DEVICE)
     }
 
     val emulator: Boolean by lazy {
         @Suppress("DEPRECATION")
-        isEmulator()
+        (type == DEVICE_EMULATOR)
     }
 
     override fun dispose() = disposables.dispose()
@@ -40,7 +40,7 @@ class AdbDevice(
             message = "Use the 'physical' property"
     )
     fun isConnectedDevice(): Boolean {
-        return type == DEVICE_CONNECTED_DEVICE
+        return physical
     }
 
     @Deprecated(
@@ -48,7 +48,7 @@ class AdbDevice(
             message = "Use the 'emulator' property"
     )
     fun isEmulator(): Boolean {
-        return type == DEVICE_EMULATOR
+        return emulator
     }
 
     override fun toString(): String =

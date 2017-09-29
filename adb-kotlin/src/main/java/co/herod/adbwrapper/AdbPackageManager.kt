@@ -1,6 +1,7 @@
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.props.getPackageDumpsys
 import co.herod.kotlin.ext.containsIgnoreCase
 import java.util.*
 

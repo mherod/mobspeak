@@ -1,5 +1,6 @@
-package co.herod.adbwrapper
+package co.herod.adbwrapper.props
 
+import co.herod.adbwrapper.dumpsys
 import co.herod.adbwrapper.model.AdbDevice
 import io.reactivex.Observable
 

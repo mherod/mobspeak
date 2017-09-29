@@ -6,7 +6,7 @@ import co.herod.adbwrapper.dumpsys
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.DumpsysEntry
 import co.herod.adbwrapper.model.DumpsysKey
-import co.herod.adbwrapper.processDumpsys
+import co.herod.adbwrapper.props.processDumpsys
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
