@@ -33,7 +33,7 @@ fun AdbDevice.dumpUiHierarchy(
             .observeOn(Schedulers.single())
             .subscribeOn(Schedulers.computation())
             .filter { it.isNotBlank() }
-            .timeout(6, TimeUnit.SECONDS)
+            .timeout(10, TimeUnit.SECONDS)
             .retry()
             .timeout(timeout, timeUnit)
             .map {

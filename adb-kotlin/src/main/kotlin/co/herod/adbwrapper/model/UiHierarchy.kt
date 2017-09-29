@@ -13,6 +13,10 @@ class UiHierarchy(
         val dumpDate: Date = Date()
 ) {
 
+    init {
+        println("new uiHierarchy $dumpDate")
+    }
+
     val childUiNodes: MutableList<UiNode> by lazy {
         UiHelper.uiXmlToNodes(Observable.just(xmlString), dumpDate)
                 .observeOn(Schedulers.computation())
