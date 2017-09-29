@@ -34,10 +34,10 @@ fun AdbDevice.matchActivity(
                 timeUnit
         )
         .onErrorReturn { "" } // timeout without match
-        .doOnSuccess {
-            if (it.isNotBlank()) {
-                println("\t\tMatched: $it")
-            }
-        }
+//        .doOnSuccess {
+//            if (it.isNotBlank()) {
+//                println("\t\tMatched: $it")
+//            }
+//        }
         .blockingGet()
         .isNotBlank()
