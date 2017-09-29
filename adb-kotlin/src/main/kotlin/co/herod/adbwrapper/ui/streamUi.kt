@@ -3,12 +3,13 @@ package co.herod.adbwrapper.ui
 import co.herod.adbwrapper.AdbBusManager
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiNode
-import co.herod.adbwrapper.rx.ResultChangeFixedDurationTransformer
 import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 fun AdbDevice.streamUi(): Observable<UiNode> =
-        dumpUiHierarchy()
-                .compose(ResultChangeFixedDurationTransformer())
+        Observable.timer(600, TimeUnit.MILLISECONDS)
+                .flatMap { dumpUiHierarchy() }
+                .repeat()
                 .doOnEach(AdbBusManager._uiHierarchyBus)
                 .flatMapIterable { it.childUiNodes }
                 .doOnEach(AdbBusManager._uiNodeBus)

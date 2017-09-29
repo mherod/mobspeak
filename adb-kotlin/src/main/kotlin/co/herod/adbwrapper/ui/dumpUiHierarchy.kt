@@ -14,6 +14,10 @@ fun AdbDevice.dumpUiHierarchy(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Observable<UiHierarchy> = with(this) {
     Observable.just(this)
+//            .doOnSubscribe { println("START dumpUiHierarchy") }
+//            .doOnNext { println("NEXT dumpUiHierarchy") }
+//            .doOnComplete { println("COMPLETE dumpUiHierarchy") }
+//            .doOnDispose { println("STOP dumpUiHierarchy") }
             .flatMap {
                 when {
                     it.preferredUiAutomatorStrategy == 0 ->

@@ -12,10 +12,9 @@ class UiHierarchy(
         val adbDevice: AdbDevice?,
         val dumpDate: Date = Date()
 ) {
-
-    init {
-        println("new uiHierarchy $dumpDate")
-    }
+//    init {
+//        println("new uiHierarchy $dumpDate")
+//    }
 
     val childUiNodes: MutableList<UiNode> by lazy {
         UiHelper.uiXmlToNodes(Observable.just(xmlString), dumpDate)
