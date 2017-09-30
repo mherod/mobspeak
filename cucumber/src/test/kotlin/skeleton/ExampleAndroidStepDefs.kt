@@ -162,13 +162,6 @@ class ExampleAndroidStepDefs {
         testHelper.dragUp({ width -> width / 3 }, 0.2)
     }
 
-    @Then("^I enter \"([^\"]*)\" into \"([^\"]*)\"$")
-    @Throws(Throwable::class)
-    fun iEnterInto(arg0: String, arg1: String) {
-        // Write code here that turns the phrase above into concrete actions
-        throw PendingException()
-    }
-
     @When("^I go back$")
     @Throws(Throwable::class)
     fun goBack() {
@@ -179,6 +172,9 @@ class ExampleAndroidStepDefs {
     @Throws(Throwable::class)
     fun iHaveAConnectedDevice() {
         adbDevice
+
+        // TODO auto wait for boot to complete
+        // TODO auto unlock
     }
 
     @Then("^I have a connected device with the package \"([^\"]*)\" version \"([^\"]*)\"$")
@@ -254,10 +250,7 @@ class ExampleAndroidStepDefs {
     @When("^I swipe open the right drawer$")
     @Throws(Throwable::class)
     fun iSwipeOpenTheRightDrawer() {
-        testHelper.dragLeft(
-                { integer -> integer / 2 },
-                0.2
-        )
+        testHelper.dragLeft({ integer -> integer / 2 }, 0.2)
     }
 
     @When("^I type the \"([^\"]*)\" text$")

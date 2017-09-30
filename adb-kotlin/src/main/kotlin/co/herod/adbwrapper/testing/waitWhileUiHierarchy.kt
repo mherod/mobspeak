@@ -3,13 +3,12 @@
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.model.UiHierarchy
-import co.herod.adbwrapper.ui.sourceUiHierarchy
-import io.reactivex.Observable
-import java.util.concurrent.TimeUnit
 
+@Deprecated(
+        replaceWith = ReplaceWith("whileUiHierarchy"),
+        message = "Method name has changed"
+)
 fun AdbDeviceTestHelper.waitWhileUiHierarchy(predicate: (UiHierarchy) -> Boolean?) = with(adbDevice) {
-    sourceUiHierarchy()
-            .sample(100, TimeUnit.SECONDS)
-            .takeWhile { predicate(it) == true }
-            .blockingSubscribe({}, {})
+    whileUiHierarchy(predicate)
 }
+
