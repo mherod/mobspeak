@@ -22,7 +22,7 @@ fun AdbDeviceTestHelper.failOnText(
     // fail fast mode - fail immediately - if text is visible within the first second
     // pass fast mode - pass immediately - if text is not visible within the first second
 
-    // requires at least 3 second timeout
+    // requires at least ~3 second timeout
     val deadlineMillis = maxOf(timeUnit.toMillis(timeout.toLong()), 2500)
     val timeMillis = measureTimeMillis {
         Observable.timer(100, TimeUnit.MILLISECONDS)
