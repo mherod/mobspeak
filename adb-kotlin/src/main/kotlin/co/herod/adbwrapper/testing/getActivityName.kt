@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.device.dump
