@@ -2,7 +2,7 @@
 
 package co.herod.adbwrapper.device
 
-import co.herod.adbwrapper.KEY_SCREEN_STATE
+import co.herod.adbwrapper.PROPERTY_SCREEN_STATE
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.DumpsysKey
 import co.herod.adbwrapper.model.filterProperty
@@ -22,6 +22,6 @@ fun AdbDeviceScreen.turnOff() = with(adbDevice) {
 
 fun AdbDeviceScreen.isOn() = with(adbDevice) {
     dumpsys().dump(dumpsysKey = DumpsysKey.DISPLAY)
-            .filterProperty(KEY_SCREEN_STATE)
+            .filterProperty(PROPERTY_SCREEN_STATE)
             .hasPositiveValue()
 }
