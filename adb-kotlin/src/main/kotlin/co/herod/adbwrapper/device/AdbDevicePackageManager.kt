@@ -11,7 +11,10 @@ class AdbDevicePackageManager(val adbDevice: AdbDevice)
 
 fun AdbDevice.pm(): AdbDevicePackageManager = AdbDevicePackageManager(this)
 
-@Deprecated(replaceWith = ReplaceWith("adbDevice.pm()", message = "Use adbDevice.pm()"))
+@Deprecated(
+        replaceWith = ReplaceWith("adbDevice.pm()"),
+        message = "Use adbDevice.pm()"
+)
 fun AdbDeviceTestHelper.pm(): AdbDevicePackageManager = adbDevice.pm()
 
 fun AdbDevicePackageManager.forceStop(packageName: String) = with(adbDevice) {
