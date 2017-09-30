@@ -3,8 +3,8 @@ package co.herod.adbwrapper.testing
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.ui.sourceUiNodes
 import co.herod.kotlin.ext.containsIgnoreCase
+import co.herod.kotlin.now
 import io.reactivex.Observable
-import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
 
@@ -30,7 +30,7 @@ fun AdbDeviceTestHelper.failOnText(
                     val startTime = now().plusMillis(500)
                     sourceUiNodes()
                             .skipWhile { it.time.isBefore(startTime) }
-                            .skipWhile { !it.text.containsIgnoreCase(text) }
+                            .skipWhile { it.text.containsIgnoreCase(text).not() }
                 }
                 .timeout(
                         deadlineMillis,
@@ -52,5 +52,3 @@ fun AdbDeviceTestHelper.failOnText(
 
     // TODO this needs to assess the uiHierarchy completely
 }
-
-private fun now() = Date().toInstant()

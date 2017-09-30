@@ -11,7 +11,7 @@ fun AdbDevice.streamUi(): Observable<UiNode> =
                 .flatMap { dumpUiHierarchy() }
                 .repeat()
                 .doOnEach(AdbBusManager._uiHierarchyBus)
-                .flatMapIterable { it.childUiNodes }
+                .flatMapIterable { it.uiNodes }
                 .doOnEach(AdbBusManager._uiNodeBus)
                 .doOnSubscribe {
                     println("Subscribe of streamUi")

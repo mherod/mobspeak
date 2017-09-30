@@ -5,10 +5,14 @@ package co.herod.adbwrapper.device
 import co.herod.adbwrapper.AdbPackageManager
 import co.herod.adbwrapper.execute
 import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.testing.AdbDeviceTestHelper
 
 class AdbDevicePackageManager(val adbDevice: AdbDevice)
 
 fun AdbDevice.pm(): AdbDevicePackageManager = AdbDevicePackageManager(this)
+
+@Deprecated(replaceWith = ReplaceWith("adbDevice.pm()", message = "Use adbDevice.pm()"))
+fun AdbDeviceTestHelper.pm(): AdbDevicePackageManager = adbDevice.pm()
 
 fun AdbDevicePackageManager.forceStop(packageName: String) = with(adbDevice) {
     execute("shell am force-stop $packageName")
