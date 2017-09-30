@@ -12,9 +12,7 @@ object UiHelper {
 
     private const val KEY_DELIMITER = "=\""
 
-    fun extractProperty(s: String, s1: String): String {
-        return extract(s, s1 + KEY_DELIMITER)
-    }
+    fun extractProperty(s: String, s1: String): String = extract(s, s1 + KEY_DELIMITER)
 
     fun extractBoundsInts(s: String) = extractProperty(s, "bounds")
             .replace("][", ",")
@@ -24,7 +22,10 @@ object UiHelper {
             .map { Integer.parseInt(it) }
             .toIntArray()
 
-    fun uiXmlToNodes(upstream: Observable<String>, date: Date = Date()): Observable<UiNode> = upstream
+    fun uiXmlToNodes(
+            upstream: Observable<String>,
+            date: Date = Date()
+    ): Observable<UiNode> = upstream
             .flatMapIterable { it.split(">").dropLastWhile { it.isEmpty() } }
             .map { it.trim() }
             .map { s -> if (s.endsWith(">").not()) s + ">"; s }
@@ -33,7 +34,10 @@ object UiHelper {
             .filter { "bounds" + KEY_DELIMITER in it }
             .map { UiNode(it, date) }
 
-    fun rawDumpToNodes(upstream: Observable<String>, adbDevice: AdbDevice?): Observable<UiNode>? = upstream
+    fun rawDumpToNodes(
+            upstream: Observable<String>,
+            adbDevice: AdbDevice?
+    ): Observable<UiNode>? = upstream
             .filter { Objects.nonNull(it) }
             .map { UiHierarchy(it, adbDevice) }
             .map { it.xmlString }

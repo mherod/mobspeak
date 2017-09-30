@@ -13,6 +13,14 @@ import co.herod.adbwrapper.ui.streamUi
 
 class AdbDeviceTestHelper(val adbDevice: AdbDevice)
 
+// ifUiNodeExists
+// whileUiNodeExists
+// whileUiHierarchy
+// untilUiHierarchy
+// while
+// until
+// failIf
+
 fun AdbDevice.testHelper() = AdbDeviceTestHelper(this)
 
 fun AdbDeviceTestHelper.startUiBus(): Boolean = with(adbDevice) {
@@ -87,33 +95,8 @@ fun AdbDeviceTestHelper.scrollUpUntilISee(function: (UiNode) -> Boolean) {
 
 fun AdbDeviceTestHelper.uninstallPackage(packageName: String) = with(adbDevice) {
 
+
     pressKey().home() // go home first because input method can cause crash
 
     pm().uninstallPackage(packageName)
 }
-
-
-fun AdbDeviceTestHelper.waitForTextToFailToDisappear(text: String) {
-    TODO("not implemented: waitForTextToDisappear $text")
-}
-
-fun AdbDeviceTestHelper.forceStopApp(packageName: String) = with(adbDevice) {
-    pm().forceStop(packageName)
-}
-
-// ifUiNodeExists
-// whileUiNodeExists
-// whileUiHierarchy
-// untilUiHierarchy
-// while
-// until
-// failIf
-
-@JvmOverloads
-fun waitSeconds(waitSeconds: Int = 3) = try {
-    Thread.sleep((waitSeconds * 1000).toLong())
-} catch (ignored: InterruptedException) {
-}
-
-fun AdbDeviceTestHelper.waitWhileProgressVisible() = waitWhileUiNodeExists { it.uiClass.endsWith("ProgressBar") }
-
