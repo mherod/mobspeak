@@ -32,15 +32,9 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-//tasks.assemble.doLast {
-//    exec {
-//        commandLine 'sh', '-c',
-//                "which gtm &> /dev/null && " +
-//                        "gtm commit --yes &> /dev/null; " +
-//                        "git fetchgtm &> /dev/null; " +
-//                        "git pushgtm &> /dev/null"
-//    }
-//}
+jar {
+    from sourceSets.main.allSource
+}
 
 task runDemo(type: JavaExec) {
     main = 'co.herod.adbwrapper.examples.DemoDemoDemo'
