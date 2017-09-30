@@ -24,7 +24,8 @@ object UiHelper {
 
     fun uiXmlToNodes(
             upstream: Observable<String>,
-            date: Date = Date()
+            date: Date = Date(),
+            adbDevice: AdbDevice?
     ): Observable<UiNode> = upstream
             .flatMapIterable { it.split(">").dropLastWhile { it.isEmpty() } }
             .map { it.trim() }
@@ -32,16 +33,16 @@ object UiHelper {
             .map { it.trim() }
             .filter { "=" in it }
             .filter { "bounds" + KEY_DELIMITER in it }
-            .map { UiNode(it, date) }
+            .map { UiNode(adbDevice, it, date) }
 
     fun rawDumpToNodes(
             upstream: Observable<String>,
             adbDevice: AdbDevice?
     ): Observable<UiNode>? = upstream
             .filter { Objects.nonNull(it) }
-            .map { UiHierarchy(it, adbDevice) }
+            .map { UiHierarchy(adbDevice, it) }
             .map { it.xmlString }
-            .compose { uiXmlToNodes(it) }
+            .compose { uiXmlToNodes(it, adbDevice = adbDevice) }
             .filter { Objects.nonNull(it) }
 
     private fun extract(s: String, s1: String): String = try {

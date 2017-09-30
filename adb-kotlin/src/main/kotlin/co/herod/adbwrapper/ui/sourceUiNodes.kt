@@ -11,9 +11,7 @@ fun AdbDeviceTestHelper.sourceUiNodes(): Observable<UiNode> = with(adbDevice) {
     Observable.timer(5, TimeUnit.MILLISECONDS)
             .flatMap {
                 sourceUiHierarchy()
-                        .flatMapIterable {
-                            it.uiNodes
-                        }
+                        .flatMapIterable { it.uiNodes }
             }
             .observeOn(Schedulers.newThread())
             .subscribeOn(Schedulers.computation())

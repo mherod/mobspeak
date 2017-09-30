@@ -9,7 +9,8 @@ import java.util.*
 
 @Suppress("MemberVisibilityCanPrivate")
 class UiNode(
-        private val nodeString: String,
+        val adbDevice: AdbDevice?,
+        val nodeString: String,
         val date: Date = Date()
 ) {
 

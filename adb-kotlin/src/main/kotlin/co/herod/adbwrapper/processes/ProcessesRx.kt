@@ -1,7 +1,6 @@
 package co.herod.adbwrapper.processes
 
 import co.herod.adbwrapper.*
-import co.herod.adbwrapper.AdbBusManager.outputBus
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.toObservable
 import java.io.BufferedReader
@@ -35,7 +34,7 @@ internal fun ProcessBuilder.toObservable(): Observable<String> =
         Observable.just(this)
                 .flatMap { it.start().toObservableOutput() }
                 .flatMap { spotAdbError(it) }
-                .doOnEach(outputBus)
+//                .doOnEach(outputBus)
 
 internal fun Process.toObservableOutput(): Observable<String> =
         inputStream.bufferedReader().toObservable()
