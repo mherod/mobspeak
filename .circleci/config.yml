@@ -22,7 +22,7 @@ jobs:
           - v1-dependencies-{{ checksum "build.gradle" }}
           - v1-dependencies-
 
-      - run: ./gradlew dependencies
+      - run: ./gradlew dependencies adb-kotlin:dependencies cucumber:dependencies
 
       - save_cache:
           paths:
@@ -30,4 +30,4 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run: ./gradlew assemble adb-kotlin:test
+      - run: ./gradlew assemble adb-kotlin:test --offline
