@@ -19,12 +19,15 @@ object AdbBusManager {
 
     internal val _uiHierarchyBus = BehaviorSubject.create<UiHierarchy>()
 
+    @JvmStatic
     val uiHierarchyBus: Observable<UiHierarchy>
         get() = _uiHierarchyBus
                 .doOnSubscribe { }
                 .doOnDispose { }
 
     internal val _uiNodeBus: BusSubject<UiNode> = AdbUiNodeBus()
+
+    @JvmStatic
     val uiNodeBus: Observable<UiNode>
         get() = _uiNodeBus
 

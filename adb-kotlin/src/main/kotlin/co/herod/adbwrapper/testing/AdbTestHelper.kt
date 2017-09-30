@@ -4,22 +4,29 @@
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.AdbPackageManager
-import co.herod.adbwrapper.device.*
+import co.herod.adbwrapper.device.pm
+import co.herod.adbwrapper.device.pressKey
+import co.herod.adbwrapper.device.typeText
+import co.herod.adbwrapper.device.uninstallPackage
 import co.herod.adbwrapper.launchUrl
 import co.herod.adbwrapper.model.AdbDevice
-import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.screenshot
 import co.herod.adbwrapper.ui.streamUi
+import co.herod.kotlin.ext.blockingSilent
 
 class AdbDeviceTestHelper(val adbDevice: AdbDevice)
 
 // ifUiNodeExists
 // whileUiNodeExists
+// untilUiNodeExists
 // whileUiHierarchy
 // untilUiHierarchy
 // while
 // until
 // failIf
+
+// untilUiNodeExists / scrollUp
+// whileUiNodeExists / scrollUp
 
 fun AdbDevice.testHelper() = AdbDeviceTestHelper(this)
 
@@ -31,28 +38,6 @@ fun AdbDeviceTestHelper.stopUiBus() = with(adbDevice) {
     dispose()
 }
 
-fun AdbDeviceTestHelper.assertWithoutPackage(packageName: String) = with(adbDevice) {
-
-    val packages = pm().installedPackages()
-
-    if (packages.contains(packageName)) {
-        throw AssertionError("Packages list contained " + packageName)
-    }
-}
-
-fun AdbDeviceTestHelper.assertInstalledPackageVersionName(packageName: String, versionName: String) = with(adbDevice) {
-
-    val packages = pm().installedPackages()
-
-    if (!packages.contains(packageName)) {
-        throw AssertionError("Packages list did not contain " + packageName)
-    }
-
-    if (!installedPackageIsVersion(packageName, versionName)) {
-        throw AssertionError("Package was not correct version")
-    }
-}
-
 fun AdbDeviceTestHelper.assertPower(minPower: Int) {
     with(adbDevice) {
         TODO("not implemented: assertion for power $minPower")
@@ -60,10 +45,6 @@ fun AdbDeviceTestHelper.assertPower(minPower: Int) {
 }
 
 fun AdbDeviceTestHelper.backButton() = with(adbDevice) { pressKey().back() }
-
-fun AdbDeviceTestHelper.closeLeftDrawer() {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-}
 
 fun AdbDeviceTestHelper.dismissDialog() {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -74,27 +55,20 @@ fun AdbDeviceTestHelper.launchApp(packageName: String) = with(adbDevice) {
 }
 
 fun AdbDeviceTestHelper.launchUrl(url: String) = with(adbDevice) {
-    launchUrl(this, url).blockingSubscribe()
+    launchUrl(this, url).blockingSilent()
 }
 
 fun AdbDeviceTestHelper.launchUrl(url: String, packageName: String) = with(adbDevice) {
-    launchUrl(this, url, packageName).blockingSubscribe()
+    launchUrl(this, url, packageName).blockingSilent()
 }
 
 fun AdbDeviceTestHelper.takeScreenshot() = with(adbDevice) {
     screenshot(false)
 }
 
-fun AdbDeviceTestHelper.typeText(text: String) = with(adbDevice) {
-    typeText(text)
-}
-
-fun AdbDeviceTestHelper.scrollUpUntilISee(function: (UiNode) -> Boolean) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-}
+fun AdbDeviceTestHelper.typeText(text: String) = adbDevice.typeText(text)
 
 fun AdbDeviceTestHelper.uninstallPackage(packageName: String) = with(adbDevice) {
-
 
     pressKey().home() // go home first because input method can cause crash
 

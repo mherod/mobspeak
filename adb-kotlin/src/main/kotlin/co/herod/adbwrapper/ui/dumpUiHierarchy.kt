@@ -46,5 +46,5 @@ fun AdbDevice.dumpUiHierarchy(
                         it.lastIndexOf('>') + 1
                 )
             }
-            .map { UiHierarchy(it, this) }
+            .map { UiHierarchy(this, it) }
 }

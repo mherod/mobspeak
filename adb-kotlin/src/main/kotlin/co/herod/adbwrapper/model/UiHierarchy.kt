@@ -9,8 +9,8 @@ import java.time.Instant
 import java.util.*
 
 class UiHierarchy(
-        val xmlString: String,
         val adbDevice: AdbDevice?,
+        val xmlString: String,
         val dumpDate: Date = Date()
 ) {
     val dumpTime: Instant by lazy {
@@ -18,7 +18,7 @@ class UiHierarchy(
     }
 
     val uiNodes: MutableList<UiNode> by lazy {
-        UiHelper.uiXmlToNodes(Observable.just(xmlString), dumpDate)
+        UiHelper.uiXmlToNodes(Observable.just(xmlString), dumpDate, adbDevice)
                 .observeOn(Schedulers.computation())
                 .filter { Objects.nonNull(it) }
                 .toList()

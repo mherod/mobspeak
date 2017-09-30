@@ -24,7 +24,7 @@ fun AdbDevice.screenshot(ignoreCache: Boolean): File {
 
     val l = file.ageMillis
 
-    if (l < SCREENSHOT_EXPIRY_MILLIS && !ignoreCache) {
+    if (l < SCREENSHOT_EXPIRY_MILLIS && ignoreCache.not()) {
         // TODO only expire turnOn change in UI
         return file
     }
@@ -33,10 +33,14 @@ fun AdbDevice.screenshot(ignoreCache: Boolean): File {
     return file
 }
 
-internal fun AdbDevice.screenshot(nodeString: String) =
-        ScreenshotHelper.screenshot(this, UiNode(nodeString).bounds)
+//internal fun AdbDevice.screenshot(nodeString: String) =
+//        ScreenshotHelper.screenshot(this, UiNode(nodeString).bounds)
 
-internal fun AdbDevice.screenshot(uiNode: UiNode) =
+@Deprecated(
+        replaceWith = ReplaceWith("UiNode.capture"),
+        message = "fun UiNode.capture()"
+)
+fun AdbDevice.screenshot(uiNode: UiNode) =
         ScreenshotHelper.screenshot(this, uiNode.bounds)
 
 object ScreenshotHelper {
@@ -60,7 +64,7 @@ object ScreenshotHelper {
                         .subscribeOn(Schedulers.computation())
                         .observeOn(Schedulers.io())
                         .doOnNext { bufferedImage -> bufferedImage?.let { it1: BufferedImage -> ImageUtil.saveBufferedImage(it1, pathForCropImage(bounds)) } }
-                        .subscribe({ }) { _ -> }
+                        .subscribe({ }) { }
             }
         }
     }

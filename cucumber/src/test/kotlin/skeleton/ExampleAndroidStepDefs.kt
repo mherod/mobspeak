@@ -87,7 +87,7 @@ class ExampleAndroidStepDefs {
     @When("^I close the navigation drawer$")
     @Throws(Throwable::class)
     fun iCloseTheNavigationDrawer() {
-        testHelper.closeLeftDrawer()
+        testHelper.dragLeft({ height -> height / 2 }, 0.2)
     }
 
     @When("^I dismiss the keyboard$")
