@@ -87,7 +87,7 @@ fun AdbCommand.Builder.observable(): Observable<String> = with(build()) {
     }
 }
 
-fun AdbCommand.isShellCommand(): Boolean = command.startsWith("shell ")
+fun AdbCommand.isShellCommand(): Boolean = command.startsWith("$SHELL ")
 fun AdbCommand.shellInternalCommand(): String = command.substring(6).trim { it <= '\"' }
 
 fun AdbCommand.toProcessBuilder(): ProcessBuilder = ProcessBuilder()
