@@ -8,7 +8,6 @@ import co.herod.adbwrapper.model.UiBounds
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.util.FileUtil
 import co.herod.adbwrapper.util.ImageUtil
-import co.herod.kotlin.ext.ageMillis
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.awt.image.BufferedImage
@@ -16,25 +15,12 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 
-private const val SCREENSHOT_EXPIRY_MILLIS = 10000
-
-fun AdbDevice.screenshot(ignoreCache: Boolean): File {
-
-    val file = FileUtil.getFile("screen.png")
-
-    val l = file.ageMillis
-
-    if (l < SCREENSHOT_EXPIRY_MILLIS && ignoreCache.not()) {
-        // TODO only expire turnOn change in UI
-        return file
+fun AdbDevice.screenshot(): File {
+    FileUtil.getFile("screenshots/screen.png").run {
+        pullCapture(this)
+        return this
     }
-
-    pullCapture()
-    return file
 }
-
-//internal fun AdbDevice.screenshot(nodeString: String) =
-//        ScreenshotHelper.screenshot(this, UiNode(nodeString).bounds)
 
 @Deprecated(
         replaceWith = ReplaceWith("UiNode.capture"),
@@ -45,7 +31,12 @@ fun AdbDevice.screenshot(uiNode: UiNode) =
 
 object ScreenshotHelper {
 
-    fun screenshot(adbDevice: AdbDevice, uiBounds: UiBounds) {
+    @JvmStatic
+    @JvmOverloads
+    fun screenshot(
+            adbDevice: AdbDevice,
+            uiBounds: UiBounds = adbDevice.windowBounds
+    ) {
 
         val width = uiBounds.width
         val height = uiBounds.height
@@ -64,27 +55,30 @@ object ScreenshotHelper {
                         .subscribeOn(Schedulers.computation())
                         .observeOn(Schedulers.io())
                         .doOnNext { bufferedImage -> bufferedImage?.let { it1: BufferedImage -> ImageUtil.saveBufferedImage(it1, pathForCropImage(bounds)) } }
-                        .subscribe({ }) { }
+                        .blockingSubscribe({ }) { }
             }
         }
     }
 
-    private fun getBufferedImage(
-            adbDevice: AdbDevice,
-            coordinates: IntArray,
-            width: Int,
-            height: Int
-    ): BufferedImage? {
+}
 
-        val screenshot = adbDevice.screenshot(false)
-        return try {
-            ImageUtil.cropImage(screenshot, coordinates[0], coordinates[1], width, height)
-        } catch (e: IOException) {
-            e.printStackTrace()
-            throw RuntimeException(e)
-        }
+private fun getBufferedImage(
+        adbDevice: AdbDevice,
+        coordinates: IntArray,
+        width: Int,
+        height: Int
+): BufferedImage? {
+
+    val screenshot = adbDevice.screenshot()
+    return try {
+        ImageUtil.cropImage(screenshot, coordinates[0], coordinates[1], width, height)
+    } catch (e: IOException) {
+        e.printStackTrace()
+        throw RuntimeException(e)
     }
 }
 
-private fun pathForCropImage(coordinates: IntArray): String =
-        String.format("imgs/screen_sub_%d.png", Arrays.toString(coordinates).hashCode())
+private fun pathForCropImage(coordinates: IntArray): String {
+    val args = Arrays.toString(coordinates).hashCode()
+    return "imgs/screen_sub_$args.png"
+}

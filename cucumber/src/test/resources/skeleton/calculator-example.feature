@@ -23,8 +23,11 @@ Feature: Example
     Then I see the "<op1>" text
     When I type the "<operator>" text
     Then I type the "<op2>" text
+    Then I see the "<op1>" text
+    Then I see the "<op2>" text
     Then I touch the "=" button
     Then I see the "<result>" text
+    Then I take a screenshot
     Then I do not see the "<op1>" text
     Then I do not see the "<op2>" text
     When I touch the "CLR" button
