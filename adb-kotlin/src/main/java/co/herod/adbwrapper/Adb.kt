@@ -41,10 +41,12 @@ fun AdbDevice.command(command: String): Observable<String> =
                 .observable()
 
 fun AdbDevice.execute(command: String, silent: Boolean = false) {
-    command(command).blockingSubscribe {
+    command(command).blockingSubscribe({
         if (it.isNotBlank() && silent.not()) {
             println("Discarded output: $it")
         }
-    }
+    }, {
+        println("Error: $it")
+    })
 }
 

@@ -14,3 +14,4 @@ fun AdbDeviceTestHelper.sampleUiHierarchy(): Observable<UiHierarchy> =
                             .sample(100, TimeUnit.MILLISECONDS)
                             .skipWhile { it.dumpTime.isBefore(startTime) }
                 }
+                .timeout(10, TimeUnit.SECONDS)
