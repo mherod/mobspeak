@@ -8,6 +8,7 @@ import co.herod.adbwrapper.model.UiBounds
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.util.FileUtil
 import co.herod.adbwrapper.util.ImageUtil
+import co.herod.kotlin.now
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.awt.image.BufferedImage
@@ -16,7 +17,7 @@ import java.io.IOException
 import java.util.*
 
 fun AdbDevice.screenshot(): File {
-    FileUtil.getFile("screenshots/screen.png").run {
+    FileUtil.getFile("screenshots/screen-${now().toEpochMilli()}.png").run {
         pullCapture(this)
         return this
     }
