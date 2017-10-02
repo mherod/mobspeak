@@ -16,6 +16,7 @@ object AdbDeviceManager {
             .firstOrError()
             .retryWhen { it.delay(1, TimeUnit.SECONDS) }
             .timeout(10, TimeUnit.SECONDS)
+            .onErrorReturn { null }
             .blockingGet()
 
     @JvmStatic
