@@ -2,13 +2,13 @@
 
 package co.herod.adbwrapper.model
 
-import co.herod.adbwrapper.DEVICE_CONNECTED_DEVICE
-import co.herod.adbwrapper.DEVICE_EMULATOR
+import co.herod.adbwrapper.S.Companion.DEVICE_CONNECTED_DEVICE
+import co.herod.adbwrapper.S.Companion.DEVICE_EMULATOR
 import co.herod.adbwrapper.props.lookupWindowBounds
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-class AdbDevice(
+data class AdbDevice(
         var deviceIdentifier: String,
         var type: String
 ) : Disposable {
@@ -51,6 +51,8 @@ class AdbDevice(
         return emulator
     }
 
-    override fun toString(): String =
-            "AdbDevice(deviceIdentifier=$deviceIdentifier, type=$type, preferredUiAutomatorStrategy=$preferredUiAutomatorStrategy)"
+    override fun toString(): String {
+        return "AdbDevice(deviceIdentifier='$deviceIdentifier', type='$type', disposables=$disposables, preferredUiAutomatorStrategy=$preferredUiAutomatorStrategy)"
+    }
+
 }

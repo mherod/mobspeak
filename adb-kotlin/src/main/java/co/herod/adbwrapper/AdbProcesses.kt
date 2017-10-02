@@ -1,5 +1,9 @@
 package co.herod.adbwrapper
 
+import co.herod.adbwrapper.S.Companion.DUMPSYS
+import co.herod.adbwrapper.S.Companion.INTENT_ACTION_VIEW
+import co.herod.adbwrapper.S.Companion.SHELL
+import co.herod.adbwrapper.S.Companion.UI_DUMP_XML_PATH
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.InputType
 import io.reactivex.Observable

@@ -3,7 +3,7 @@
 package co.herod.adbwrapper.device
 
 import co.herod.adbwrapper.AdbCommand
-import co.herod.adbwrapper.SHELL
+import co.herod.adbwrapper.S.Companion.SHELL
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.observable
 import io.reactivex.Observable

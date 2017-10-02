@@ -17,11 +17,14 @@ import java.io.IOException
 import java.util.*
 
 fun AdbDevice.screenshot(): File {
-    FileUtil.getFile("screenshots/screen-${now().toEpochMilli()}.png").run {
+    FileUtil.getFile(pathname = createScreenshotPath()).run {
         pullCapture(this)
         return this
     }
 }
+
+private fun createScreenshotPath(): String =
+        "screenshots/screen-${now().toEpochMilli()}.png"
 
 @Deprecated(
         replaceWith = ReplaceWith("UiNode.capture"),

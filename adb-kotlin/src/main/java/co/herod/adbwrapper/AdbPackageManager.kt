@@ -1,5 +1,7 @@
 package co.herod.adbwrapper
 
+import co.herod.adbwrapper.S.Companion.INTENT_CATEGORY_LAUNCHER
+import co.herod.adbwrapper.S.Companion.SHELL
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.props.getPackageDumpsys
 import co.herod.kotlin.ext.containsIgnoreCase
@@ -10,7 +12,7 @@ object AdbPackageManager {
     fun launchApp(adbDevice: AdbDevice, packageName: String, launcher: Boolean = true): String {
 
         val paramPackage = "-p $packageName"
-        val paramCommand = if (launcher) "-c android.intent.category.LAUNCHER" else ""
+        val paramCommand = if (launcher) "-c $INTENT_CATEGORY_LAUNCHER" else ""
         val command = "$SHELL monkey $paramPackage $paramCommand 1"
 
         return adbDevice.command(command)

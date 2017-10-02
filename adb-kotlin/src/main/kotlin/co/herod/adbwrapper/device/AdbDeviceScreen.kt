@@ -2,7 +2,7 @@
 
 package co.herod.adbwrapper.device
 
-import co.herod.adbwrapper.PROPERTY_SCREEN_STATE
+import co.herod.adbwrapper.S.Companion.PROPERTY_SCREEN_STATE
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.DumpsysKey
 import co.herod.adbwrapper.model.filterProperty

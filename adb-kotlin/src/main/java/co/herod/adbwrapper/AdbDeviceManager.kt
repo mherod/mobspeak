@@ -2,6 +2,7 @@
 
 package co.herod.adbwrapper
 
+import co.herod.adbwrapper.S.Companion.DEVICES
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.processes.parseAdbString
 import io.reactivex.Observable
