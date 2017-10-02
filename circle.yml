@@ -1,0 +1,11 @@
+# Disable emulator audio
+machine:
+  environment:
+    QEMU_AUDIO_DRV: none
+
+test:
+  pre:
+    - emulator -avd circleci-android26 -no-window:
+        background: true
+        parallel: true
+    - circle-android wait-for-boot
