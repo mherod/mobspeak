@@ -3,11 +3,9 @@ package co.herod.adbwrapper.testing
 import co.herod.adbwrapper.AdbDeviceManager
 import co.herod.adbwrapper.AdbPackageManager
 import co.herod.adbwrapper.model.AdbDevice
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
 
+@Ignore
 class GetActivityNameKtTest {
 
     private val settingsPackageName = "com.android.settings"
