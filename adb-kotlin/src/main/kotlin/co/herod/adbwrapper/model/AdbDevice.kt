@@ -9,8 +9,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 class AdbDevice(
-        var deviceIdentifier: String? = null,
-        var type: String? = null
+        var deviceIdentifier: String,
+        var type: String
 ) : Disposable {
 
     val disposables: CompositeDisposable = CompositeDisposable()
