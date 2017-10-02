@@ -7,10 +7,16 @@ import java.util.*
 
 object AdbPackageManager {
 
-    fun launchApp(adbDevice: AdbDevice, packageName: String): String =
-            adbDevice.command("$SHELL monkey -p $packageName 1")
-                    .filter { it.containsIgnoreCase("Events injected: 1") }
-                    .blockingFirst()
+    fun launchApp(adbDevice: AdbDevice, packageName: String, launcher: Boolean = true): String {
+
+        val paramPackage = "-p $packageName"
+        val paramCommand = if (launcher) "-c android.intent.category.LAUNCHER" else ""
+        val command = "$SHELL monkey $paramPackage $paramCommand 1"
+
+        return adbDevice.command(command)
+                .filter { it.containsIgnoreCase("Events injected: 1") }
+                .blockingFirst()
+    }
 
     fun listPackages(adbDevice: AdbDevice): MutableList<String> =
             adbDevice.command("$SHELL pm list packages")
