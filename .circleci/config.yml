@@ -30,4 +30,4 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run: ./gradlew assemble adb-kotlin:test
+      - run: ./gradlew assemble adb-kotlin:unitTest

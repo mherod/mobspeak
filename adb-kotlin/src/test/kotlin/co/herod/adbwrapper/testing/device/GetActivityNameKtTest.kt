@@ -1,8 +1,11 @@
-package co.herod.adbwrapper.testing
+package co.herod.adbwrapper.testing.device
 
 import co.herod.adbwrapper.AdbDeviceManager
 import co.herod.adbwrapper.AdbPackageManager
 import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.testing.forceStopApp
+import co.herod.adbwrapper.testing.getActivityName
+import co.herod.adbwrapper.testing.testHelper
 import org.junit.*
 
 @Ignore
