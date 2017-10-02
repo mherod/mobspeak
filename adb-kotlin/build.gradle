@@ -38,11 +38,10 @@ jar {
 }
 
 test {
-    include 'co.herod/**'
+    include 'co/herod/**'
 }
-
 task unitTest(type: Test) {
-    exclude 'co.herod.adbwrapper.testing.device/**'
+    exclude '**/device/**'
 }
 
 task runDemo(type: JavaExec) {
