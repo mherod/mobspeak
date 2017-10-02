@@ -42,7 +42,7 @@ test {
 }
 
 task unitTest(type: Test) {
-    exclude 'co.herod/**/device/**'
+    exclude 'co.herod.adbwrapper.testing.device/**'
 }
 
 task runDemo(type: JavaExec) {
