@@ -6,9 +6,11 @@ import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.testing.forceStopApp
 import co.herod.adbwrapper.testing.getActivityName
 import co.herod.adbwrapper.testing.testHelper
-import org.junit.*
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 
-@Ignore
 class GetActivityNameKtTest {
 
     private val settingsPackageName = "com.android.settings"
