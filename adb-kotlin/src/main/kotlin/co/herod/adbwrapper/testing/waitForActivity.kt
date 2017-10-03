@@ -14,7 +14,7 @@ fun AdbDeviceTestHelper.waitForActivity(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Boolean = with(adbDevice) {
     try {
-        Observable.timer(100, TimeUnit.MILLISECONDS)
+        Observable.timer(20, TimeUnit.MILLISECONDS)
                 .flatMap {
                     Observable.fromCallable {
                         matchActivity(activityName, 10, TimeUnit.SECONDS)

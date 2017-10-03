@@ -13,7 +13,7 @@ fun AdbDeviceTestHelper.waitForUiNodeForFunc(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): String = with(adbDevice) {
 
-    Observable.timer(50, TimeUnit.MILLISECONDS)
+    Observable.timer(20, TimeUnit.MILLISECONDS)
             .flatMap {
                 sourceUiNodes()
                         .buffer(50, TimeUnit.MILLISECONDS)

@@ -9,10 +9,12 @@ import java.util.concurrent.TimeUnit
 fun AdbDevice.primaryDumpUiHierarchy(
         timeout: Long = 10,
         timeUnit: TimeUnit = TimeUnit.SECONDS
-): Observable<String> =
-        uiautomatorDumpExecOut(this)
-                .filter { it.isXmlOutput() }
-                .doOnNext { preferredUiAutomatorStrategy = 1 }
-                .timeout(maxOf(5, timeout / 3), timeUnit)
+): Observable<String> {
+    println("primaryDumpUiHierarchy")
+    return uiautomatorDumpExecOut(this)
+            .filter { it.isXmlOutput() }
+            .doOnNext { preferredUiAutomatorStrategy = 1 }
+            .timeout(maxOf(5, timeout / 3), timeUnit)
 //                .retry()
-                .timeout(timeout, timeUnit)
+            .timeout(timeout, timeUnit)
+}
