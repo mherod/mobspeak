@@ -3,21 +3,40 @@
 package co.herod.adbwrapper.uiautomator
 
 import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.rx.rx_string
+import io.reactivex.Single
 
-fun main(args: Array<String>) {
+class RpcBlah {
+    companion object {
+        private const val RPC_URL = "http://localhost:9008/jsonrpc/0"
 
-    Fuel.post("http://localhost:9008/jsonrpc/0")
-            .body("{\n" +
-                    "\"jsonrpc\": \"2.0\",\n" +
-                    "\"id\": \"json\",\n" +
-                    "\"method\": \"dumpWindowHierarchy\",\n" +
-                    "\"params\": [ \"true\" ]\n" +
-                    "}")
-            .response { request, response, result ->
-                println(request)
-                println(response)
-                println(result)
-            }
+        @JvmStatic
+        fun main(args: Array<String>) {
+            tryRpcUi()
+        }
+
+        fun tryRpcUi(): Single<String> {
+            return Fuel.post(RPC_URL)
+                    .body("{ " +
+                            "\"jsonrpc\": \"2.0\", " +
+                            "\"id\": \"json\", " +
+                            "\"method\": \"dumpWindowHierarchy\", " +
+                            "\"params\": [ \"true\" ]" +
+                            " }")
+                    .rx_string()
+                    .map {
+                        it.get()
+                                .substringBeforeLast('>')
+                                .substringAfter('<')
+                                .let { "<$it>" }
+                                .replace("\\r", "\r")
+                                .replace("\\n", "\n")
+                                .replace("\\\"", "\"")
+                    }
+                    .toObservable()
+                    .firstOrError()
+        }
+    }
 }
 
 /*

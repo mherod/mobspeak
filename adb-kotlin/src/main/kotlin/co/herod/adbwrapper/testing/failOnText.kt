@@ -22,12 +22,12 @@ fun AdbDeviceTestHelper.failOnText(
     // fail fast mode - fail immediately - if text is visible within the first second
     // pass fast mode - pass immediately - if text is not visible within the first second
 
-    // requires at least ~3 second timeout
-    val deadlineMillis = maxOf(timeUnit.toMillis(timeout.toLong()), 2500)
+    // requires at least ~?? second timeout
+    val deadlineMillis = maxOf(timeUnit.toMillis(timeout.toLong()), 750)
     val timeMillis = measureTimeMillis {
-        Observable.timer(100, TimeUnit.MILLISECONDS)
+        Observable.timer(20, TimeUnit.MILLISECONDS)
                 .flatMap {
-                    val startTime = now().plusMillis(500)
+                    val startTime = now().plusMillis(100)
                     sourceUiNodes()
                             .skipWhile { it.time.isBefore(startTime) }
                             .skipWhile { it.text.containsIgnoreCase(text).not() }
@@ -39,7 +39,7 @@ fun AdbDeviceTestHelper.failOnText(
                 .onErrorResumeNext { _: Throwable -> Observable.empty() }
                 .blockingForEach { uiNode: UiNode ->
 
-                    val eachTime = uiNode.time.plusMillis(300)
+                    val eachTime = uiNode.time.plusMillis(150)
 
                     if (uiNode.text.containsIgnoreCase(text) && eachTime.isAfter(now()) ) {
                         throw AssertionError("Text was visible: $text")
