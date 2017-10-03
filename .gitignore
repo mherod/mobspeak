@@ -264,3 +264,4 @@ fabric.properties
 
 /.gtm/
 /.idea/workspace.xml
+!/uiautomator/app-debug-androidTest.apk
