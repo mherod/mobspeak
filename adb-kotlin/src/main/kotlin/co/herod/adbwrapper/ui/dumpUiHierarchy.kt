@@ -5,6 +5,7 @@ import co.herod.adbwrapper.model.UiHierarchy
 import co.herod.adbwrapper.ui.dump.compatDumpUiHierarchy
 import co.herod.adbwrapper.ui.dump.fallbackDumpUiHierarchy
 import co.herod.adbwrapper.ui.dump.primaryDumpUiHierarchy
+import co.herod.adbwrapper.ui.dump.rpcDumpUiHierarchy
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -19,20 +20,19 @@ fun AdbDevice.dumpUiHierarchy(
 //            .doOnComplete { println("COMPLETE dumpUiHierarchy") }
 //            .doOnDispose { println("STOP dumpUiHierarchy") }
             .flatMap {
-                when {
-                    it.preferredUiAutomatorStrategy == 0 ->
-                        this.compatDumpUiHierarchy()
-                                .timeout(6, TimeUnit.SECONDS)
-                    it.preferredUiAutomatorStrategy == 1 ->
-                        this.primaryDumpUiHierarchy()
-                                .timeout(6, TimeUnit.SECONDS)
-                    it.preferredUiAutomatorStrategy == 2 ->
-                        this.fallbackDumpUiHierarchy()
-                                .timeout(6, TimeUnit.SECONDS)
-                    else ->
-                        this.compatDumpUiHierarchy()
-                                .timeout(6, TimeUnit.SECONDS)
-                }
+                rpcDumpUiHierarchy()
+                        .onErrorResumeNext { _: Throwable ->
+                            compatDumpUiHierarchy(6, TimeUnit.SECONDS)
+                        }
+                        .onErrorResumeNext { _: Throwable ->
+                            primaryDumpUiHierarchy(6, TimeUnit.SECONDS)
+                        }
+                        .onErrorResumeNext { _: Throwable ->
+                            fallbackDumpUiHierarchy(6, TimeUnit.SECONDS)
+                        }
+                        .onErrorResumeNext { _: Throwable ->
+                            compatDumpUiHierarchy(6, TimeUnit.SECONDS)
+                        }
             }
             .observeOn(Schedulers.single())
             .subscribeOn(Schedulers.computation())
@@ -48,3 +48,4 @@ fun AdbDevice.dumpUiHierarchy(
             }
             .map { UiHierarchy(this, it) }
 }
+

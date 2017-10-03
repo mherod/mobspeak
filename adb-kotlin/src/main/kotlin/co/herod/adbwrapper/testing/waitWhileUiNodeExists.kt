@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.model.UiNode
@@ -8,15 +10,15 @@ import java.util.concurrent.TimeUnit
 
 fun AdbDeviceTestHelper.waitWhileUiNodeExists(predicate: (UiNode) -> Boolean?) = with(adbDevice) {
 
-    Observable.timer(10, TimeUnit.MILLISECONDS)
+    Observable.timer(20, TimeUnit.MILLISECONDS)
             .flatMap {
                 sourceUiNodes()
-                        .buffer(300, TimeUnit.MILLISECONDS)
+                        .buffer(100, TimeUnit.MILLISECONDS)
                         .flatMapIterable { it }
             }
             .filter { predicate(it) == true && it.visible }
             .doOnNext { println("Blocking while visible: $it") }
-            .buffer(200, TimeUnit.MILLISECONDS)
+            .buffer(100, TimeUnit.MILLISECONDS)
             .doOnNext { list ->
                 if (list.size > 0) {
                     println("Blocking on ${list.size} uiNodes")
