@@ -13,6 +13,7 @@ object AdbPackageManager {
 
         val paramPackage = "-p $packageName"
         val paramCommand = if (launcher) "-c $INTENT_CATEGORY_LAUNCHER" else ""
+
         val command = "$SHELL monkey $paramPackage $paramCommand 1"
 
         return adbDevice.command(command)
