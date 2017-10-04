@@ -8,7 +8,6 @@ import co.herod.adbwrapper.spotAdbError
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.toObservable
 import java.io.BufferedReader
-import java.util.concurrent.TimeUnit
 
 fun outputAsObservable(adbCommand: AdbCommand): Observable<String> =
         AdbCommand.Builder()
@@ -27,7 +26,7 @@ fun outputAsObservable(adbCommand: AdbCommand): Observable<String> =
 
             inputStream.bufferedReader().run {
                 toObservable().spotAdbError()
-                        .timeout(8, TimeUnit.SECONDS)
+                        //.timeout(8, TimeUnit.SECONDS)
                         .doOnError { destroyForcibly() }
                         .doOnComplete { destroyForcibly() }
             }

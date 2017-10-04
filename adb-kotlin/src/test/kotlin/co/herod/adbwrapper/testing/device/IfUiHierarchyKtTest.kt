@@ -8,7 +8,7 @@ import org.junit.Test
 
 class IfUiHierarchyKtTest {
 
-    @Test(timeout = 5000)
+    @Test(timeout = 10 * 1000)
     fun ifUiHierarchyWhenAllFalse() {
         AdbDeviceManager.getDevice()?.testHelper().run {
             val result = this?.ifUiHierarchy {
@@ -20,7 +20,7 @@ class IfUiHierarchyKtTest {
         }
     }
 
-    @Test(timeout = 5000)
+    @Test(timeout = 10 * 1000)
     fun ifUiHierarchyWhenTrue() {
         AdbDeviceManager.getDevice()?.testHelper().run {
             val ifUiHierarchy = this?.ifUiHierarchy {
