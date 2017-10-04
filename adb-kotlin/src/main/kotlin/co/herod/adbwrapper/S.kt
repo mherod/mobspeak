@@ -27,5 +27,9 @@ class S {
         const val PROPERTY_SHOW_REQUESTED = "mShowRequested"
 
         const val INTENT_CATEGORY_LAUNCHER = "android.intent.category.LAUNCHER"
+
+        const val ANDROID_TEST_RUNNER = "android.support.test.runner.AndroidJUnitRunner"
+        const val PACKAGE_UIAUTOMATOR = "com.github.uiautomator"
+        const val PACKAGE_UIAUTOMATOR_TEST = "$PACKAGE_UIAUTOMATOR.test"
     }
 }
