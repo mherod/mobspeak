@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 fun AdbDevice.fallbackDumpUiHierarchy(
-        timeout: Long = 10,
+        timeout: Long = 6,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Observable<String> {
     println("fallbackDumpUiHierarchy")
@@ -19,11 +19,9 @@ fun AdbDevice.fallbackDumpUiHierarchy(
             .flatMap {
                 readDeviceFile(this, "shell cat $it")
                         .doOnNext { run { preferredUiAutomatorStrategy = 2 } }
-//                            .retry()
                         .timeout(maxOf(5, timeout / 3), timeUnit)
             }
             .filter { it.isXmlOutput() }
             .timeout(maxOf(timeout / 3, 10), timeUnit)
-//                .retry()
             .timeout(timeout, timeUnit)
 }

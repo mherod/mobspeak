@@ -7,7 +7,7 @@ import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 fun AdbDevice.compatDumpUiHierarchy(
-        timeout: Long = 30,
+        timeout: Long = 6,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Observable<String> {
     println("compatDumpUiHierarchy")

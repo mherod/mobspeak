@@ -6,24 +6,18 @@ import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.DumpsysKey
 import co.herod.adbwrapper.model.UiBounds
 import co.herod.adbwrapper.model.filterProperty
+import co.herod.kotlin.ext.containsAll
+import co.herod.kotlin.ext.crop
+import co.herod.kotlin.ext.toIntArray
 
-@Deprecated(
-        replaceWith = ReplaceWith("windowBounds"),
-        message = "Use the 'windowBounds' property"
-)
 internal fun AdbDevice.lookupWindowBounds(): UiBounds = dumpsys()
         .dump(dumpsysKey = DumpsysKey.WINDOW)
         .filterProperty("mBounds")
         .map { it.value }
-        .filter { '[' in it && ']' in it }
-        .map {
-            it.substring(
-                    it.lastIndexOf('[') + 1,
-                    it.lastIndexOf(']')
-            )
-        }
+        .filter { it.containsAll('[', ']') }
+        .map { it.crop('[', ']') }
         .map { it.split(',') }
-        .map { it.map { Integer.parseInt(it) } }
-        .map { it.toIntArray() }
+        .map { it -> it.toIntArray() }
         .map { UiBounds(it) }
         .blockingGet()
+

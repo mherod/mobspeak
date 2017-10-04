@@ -1,24 +1,26 @@
 package co.herod.adbwrapper.ui.dump
 
 import co.herod.adbwrapper.exceptions.UiAutomatorBridgeUnavailableException
+import co.herod.adbwrapper.ui.Blah.Companion.subject
 import co.herod.adbwrapper.ui.isUiAutomatorActive
-import co.herod.adbwrapper.uiautomator.RpcBlah
+import co.herod.adbwrapper.uiautomator.RpcSession
+import co.herod.kotlin.ext.retryWithTimeout
+import co.herod.kotlin.log
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 fun rpcDumpUiHierarchy(): Observable<String> {
 
-    // TODO observable processes for logcat
-
     if (isUiAutomatorActive().not()) {
         return Observable.error(UiAutomatorBridgeUnavailableException())
     }
 
-    return RpcBlah.tryRpcUi()
+    return RpcSession.dumpWindowHierarchy(RpcSession())
             .toObservable()
-//            .doOnSubscribe { println("Subscribe rpcDumpUiHierarchy") }
-//            .doOnDispose { println("Dispose rpcDumpUiHierarchy") }
-            .doOnNext { println(it.substringBefore("class")) }
-            .timeout(1, TimeUnit.SECONDS)
+            .doOnError { log(it); subject.onNext(false) }
+            .doOnSubscribe { log("Subscribe rpcDumpUiHierarchy") }
+            .doOnDispose { log("Dispose rpcDumpUiHierarchy") }
+            .doOnNext { println(it.substringBefore("class").substringAfterLast("node")) }
+            .retryWithTimeout(1800, TimeUnit.MILLISECONDS)
 }
 

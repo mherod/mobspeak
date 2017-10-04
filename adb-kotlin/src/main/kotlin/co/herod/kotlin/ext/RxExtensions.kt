@@ -22,7 +22,7 @@ fun <T> Observable<T>.retryWithTimeout(
         timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Observable<T> = this
-//        .retry()
+        .retry()
         .timeout(timeout, timeUnit)
 
 fun <T> Single<T>.retryWithTimeout(
