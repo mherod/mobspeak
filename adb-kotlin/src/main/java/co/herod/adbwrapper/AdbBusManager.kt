@@ -15,7 +15,9 @@ object AdbBusManager {
     val outputBus: BusSubject<String>
         get() = _outputBus
 
-    var uiHierarchyBusActive = false
+    var uiHierarchyBusActive: Boolean = false
+
+    var uiAutomatorBridgeActive: Boolean = false
 
     internal val _uiHierarchyBus = BehaviorSubject.create<UiHierarchy>()
 
