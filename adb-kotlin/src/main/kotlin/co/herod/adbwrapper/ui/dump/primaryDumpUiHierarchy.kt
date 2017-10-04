@@ -7,7 +7,7 @@ import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 fun AdbDevice.primaryDumpUiHierarchy(
-        timeout: Long = 10,
+        timeout: Long = 6,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Observable<String> {
     println("primaryDumpUiHierarchy")
@@ -15,6 +15,6 @@ fun AdbDevice.primaryDumpUiHierarchy(
             .filter { it.isXmlOutput() }
             .doOnNext { preferredUiAutomatorStrategy = 1 }
             .timeout(maxOf(5, timeout / 3), timeUnit)
-//                .retry()
+            .retry()
             .timeout(timeout, timeUnit)
 }
