@@ -1,4 +1,4 @@
-package co.herod.adbwrapper.device
+package co.herod.adbwrapper.environment
 
 import co.herod.adbwrapper.command
 import co.herod.adbwrapper.model.AdbDevice

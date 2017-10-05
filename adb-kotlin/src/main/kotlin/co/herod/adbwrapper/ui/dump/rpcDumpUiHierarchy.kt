@@ -1,6 +1,8 @@
 package co.herod.adbwrapper.ui.dump
 
+import co.herod.adbwrapper.device.rpcSession
 import co.herod.adbwrapper.exceptions.UiAutomatorBridgeUnavailableException
+import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.ui.Blah.Companion.subject
 import co.herod.adbwrapper.ui.isUiAutomatorActive
 import co.herod.adbwrapper.uiautomator.RpcSession
@@ -9,13 +11,13 @@ import co.herod.kotlin.log
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
-fun rpcDumpUiHierarchy(): Observable<String> {
+fun AdbDevice.rpcDumpUiHierarchy(): Observable<String> {
 
     if (isUiAutomatorActive().not()) {
         return Observable.error(UiAutomatorBridgeUnavailableException())
     }
 
-    return RpcSession.dumpWindowHierarchy(RpcSession())
+    return RpcSession.dumpWindowHierarchy(rpcSession())
             .toObservable()
             .doOnError { log(it); subject.onNext(false) }
             .doOnSubscribe { log("Subscribe rpcDumpUiHierarchy") }
