@@ -11,7 +11,7 @@ class Blah {
 
         val sub1: Observable<Boolean> by lazy {
             subject.doOnNext {
-//                println("uiAutomatorBridgeActive = $it")
+                println("uiAutomatorBridgeActive = $it")
                 AdbBusManager.uiAutomatorBridgeActive = it
             }
         }
