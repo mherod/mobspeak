@@ -10,7 +10,8 @@ import io.reactivex.Observable
 
 class AdbDeviceShell(val adbDevice: AdbDevice)
 
-fun AdbDevice.shell(): AdbDeviceShell = AdbDeviceShell(adbDevice = this)
+fun AdbDevice.shell(): AdbDeviceShell =
+        AdbDeviceShell(adbDevice = this)
 
 fun AdbDeviceShell.logcat(): Observable<String> =
         AdbCommand.Builder()

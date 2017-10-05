@@ -1,4 +1,4 @@
-package co.herod.adbwrapper.rx
+package co.herod.adbwrapper.bus
 
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
