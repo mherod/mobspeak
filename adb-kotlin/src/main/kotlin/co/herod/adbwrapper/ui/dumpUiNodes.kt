@@ -4,4 +4,5 @@ import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiNode
 import io.reactivex.Observable
 
-fun AdbDevice.dumpUiNodes(): Observable<UiNode> = dumpUiHierarchy().flatMapIterable { it.uiNodes }
+fun AdbDevice.dumpUiNodes(): Observable<UiNode> =
+        dumpUiHierarchy().flatMapIterable { it.uiNodes }
