@@ -8,7 +8,6 @@ import co.herod.adbwrapper.ui.dump.fallbackDumpUiHierarchy
 import co.herod.adbwrapper.ui.dump.primaryDumpUiHierarchy
 import co.herod.adbwrapper.ui.dump.rpcDumpUiHierarchy
 import co.herod.adbwrapper.uiautomator.uiAutomatorBridge
-import co.herod.kotlin.log
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -22,10 +21,10 @@ fun AdbDevice.dumpUiHierarchy(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Observable<UiHierarchy> = with(this) {
     Observable.just(this)
-            .doOnSubscribe { log("START $s3") }
-            .doOnNext { log("NEXT $s3") }
-            .doOnComplete { log("COMPLETE $s3") }
-            .doOnDispose { log("STOP $s3") }
+            .doOnSubscribe { println("START $s3") }
+            .doOnNext { println("NEXT $s3") }
+            .doOnComplete { println("COMPLETE $s3") }
+            .doOnDispose { println("STOP $s3") }
             .flatMap {
                 tryRpc()
                         .doOnError { println(it) }
@@ -44,10 +43,8 @@ fun AdbDevice.dumpUiHierarchy(
             .map { UiHierarchy(this, it) }
 }
 
-private fun AdbDevice.tryRpc(): Observable<String> {
-    if (uiAutomatorBridge().blockingFirst()) {
-        return rpcDumpUiHierarchy()
-    }
-    return Observable.error(UiAutomatorBridgeUnavailableException())
+private fun AdbDevice.tryRpc(): Observable<String> = when {
+    uiAutomatorBridge().blockingFirst() == true -> rpcDumpUiHierarchy()
+    else -> Observable.error(UiAutomatorBridgeUnavailableException())
 }
 

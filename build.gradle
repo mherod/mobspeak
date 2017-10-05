@@ -2,6 +2,10 @@ subprojects {
 
     apply plugin: 'java'
 
+    tasks.withType(Test)  {
+        maxParallelForks = 1
+    }
+
     buildscript {
         ext.kotlin_version = '1.1.51'
         ext.cucumberVersion = '2.0.0'

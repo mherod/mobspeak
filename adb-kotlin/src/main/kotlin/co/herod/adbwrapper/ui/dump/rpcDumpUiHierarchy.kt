@@ -20,8 +20,8 @@ fun AdbDevice.rpcDumpUiHierarchy(): Observable<String> {
     return RpcSession.dumpWindowHierarchy(rpcSession())
             .toObservable()
             .doOnError { log(it); subject.onNext(false) }
-            .doOnSubscribe { log("Subscribe rpcDumpUiHierarchy") }
-            .doOnDispose { log("Dispose rpcDumpUiHierarchy") }
+            .doOnSubscribe { print("Subscribe rpcDumpUiHierarchy") }
+            .doOnDispose { print("Dispose rpcDumpUiHierarchy") }
             .doOnNext { println(it.substringBefore("class").substringAfterLast("node")) }
             .retryWithTimeout(1800, TimeUnit.MILLISECONDS)
 }
