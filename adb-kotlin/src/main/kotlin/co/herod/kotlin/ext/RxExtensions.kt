@@ -5,8 +5,10 @@ package co.herod.kotlin.ext
 import co.herod.adbwrapper.model.DumpsysEntry
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
+import kotlin.system.measureTimeMillis
 
 fun <T> Observable<T>.timeout(
         timeout: Int = 5,
@@ -94,3 +96,12 @@ fun Observable<DumpsysEntry>.toMapRx(): Observable<MutableMap<String, String>> =
 
 fun Observable<DumpsysEntry>.toMapRxSingle(): Single<MutableMap<String, String>> =
         toMap({ it -> it.key }, { it -> it.value })
+
+fun CompositeDisposable.waitUntilEmpty(): Long =
+        measureTimeMillis {
+            Observable.fromCallable { size() }
+                    .repeat()
+                    .takeUntil { it == 0 }
+                    .flatMap { Observable.timer(100, TimeUnit.MILLISECONDS) }
+                    .blockingSubscribe()
+        }

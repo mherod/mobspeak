@@ -17,6 +17,8 @@ data class AdbDevice(
 
     var preferredUiAutomatorStrategy = 0
 
+    var rpcPort = 9008
+
     val windowBounds: UiBounds by lazy {
         @Suppress("DEPRECATION")
         lookupWindowBounds()

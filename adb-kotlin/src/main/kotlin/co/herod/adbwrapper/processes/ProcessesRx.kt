@@ -4,7 +4,6 @@ import co.herod.adbwrapper.AdbCommand
 import co.herod.adbwrapper.S.Companion.SHELL
 import co.herod.adbwrapper.buildProcess
 import co.herod.adbwrapper.shellInternalCommand
-import co.herod.adbwrapper.spotAdbError
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.toObservable
 import java.io.BufferedReader
