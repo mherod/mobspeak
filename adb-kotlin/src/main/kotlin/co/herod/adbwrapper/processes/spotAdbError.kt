@@ -1,4 +1,4 @@
-package co.herod.adbwrapper
+package co.herod.adbwrapper.processes
 
 import co.herod.adbwrapper.exceptions.AdbError
 import io.reactivex.Observable
