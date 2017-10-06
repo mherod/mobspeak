@@ -12,9 +12,7 @@ fun AdbDevice.sampleUiHierarchy(): Observable<UiHierarchy> =
                 .map { now() }
                 .flatMap { startTime ->
                     sourceUiHierarchy()
-                            .doOnNext { println("TAKE IT") }
                             .sample(20, TimeUnit.MILLISECONDS)
                             .skipWhile { it.dumpTime.isBefore(startTime) }
-                            .doOnError { println("waaah $it") }
                 }
                 .timeout(10, TimeUnit.SECONDS)
