@@ -3,6 +3,9 @@ package co.herod.adbwrapper.ui
 import co.herod.adbwrapper.exceptions.UiAutomatorBridgeUnavailableException
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiHierarchy
+import co.herod.adbwrapper.ui.dump.compatDumpUiHierarchy
+import co.herod.adbwrapper.ui.dump.fallbackDumpUiHierarchy
+import co.herod.adbwrapper.ui.dump.primaryDumpUiHierarchy
 import co.herod.adbwrapper.ui.dump.rpcDumpUiHierarchy
 import co.herod.adbwrapper.uiautomator.uiAutomatorBridge
 import co.herod.adbwrapper.util.isXmlOutput
@@ -20,11 +23,10 @@ fun AdbDevice.dumpUiHierarchy(
 //            .doOnComplete { println("COMPLETE $s3") }
 //            .doOnDispose { println("STOP $s3") }
             .flatMap {
-                tryRpc()
-                        .doOnError { println("ERRRORO: $it") }
-//                        .onErrorResumeNext { _: Throwable -> compatDumpUiHierarchy() }
-//                        .onErrorResumeNext { _: Throwable -> primaryDumpUiHierarchy() }
-//                        .onErrorResumeNext { _: Throwable -> fallbackDumpUiHierarchy() }
+                tryRpcDumpUiHierarchy()
+                        .onErrorResumeNext { _: Throwable -> compatDumpUiHierarchy() }
+                        .onErrorResumeNext { _: Throwable -> primaryDumpUiHierarchy() }
+                        .onErrorResumeNext { _: Throwable -> fallbackDumpUiHierarchy() }
             }
             .retry()
             .observeOn(Schedulers.single())
@@ -37,7 +39,7 @@ fun AdbDevice.dumpUiHierarchy(
             .map { UiHierarchy(this, it) }
 }
 
-private fun AdbDevice.tryRpc(): Observable<String> = when {
+private fun AdbDevice.tryRpcDumpUiHierarchy(): Observable<String> = when {
     uiAutomatorBridge().blockingFirst() == true -> rpcDumpUiHierarchy()
     else -> Observable.error(UiAutomatorBridgeUnavailableException())
 }
