@@ -8,8 +8,6 @@ import io.reactivex.Observable
 
 fun AdbDevice.uiAutomatorBridge(): Observable<Boolean> {
 
-//    println("chips and beans")
-
     if (isUiAutomatorActive().not()) {
 
 //        matchingInstalledPackages(S.PACKAGE_UIAUTOMATOR)
