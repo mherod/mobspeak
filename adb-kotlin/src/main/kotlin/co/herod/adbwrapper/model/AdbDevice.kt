@@ -4,6 +4,7 @@ package co.herod.adbwrapper.model
 
 import co.herod.adbwrapper.S.Companion.DEVICE_CONNECTED_DEVICE
 import co.herod.adbwrapper.S.Companion.DEVICE_EMULATOR
+import co.herod.adbwrapper.bus.UiHierarchyBus
 import co.herod.adbwrapper.props.lookupWindowBounds
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -32,6 +33,10 @@ data class AdbDevice(
     val emulator: Boolean by lazy {
         @Suppress("DEPRECATION")
         (type == DEVICE_EMULATOR)
+    }
+
+    val myUiHierarchyBus: UiHierarchyBus by lazy {
+        UiHierarchyBus(this)
     }
 
     override fun dispose() = disposables.dispose()

@@ -2,7 +2,9 @@
 
 package co.herod.adbwrapper.bus
 
+import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiHierarchy
+import co.herod.adbwrapper.ui.subscribeUiHierarchySource
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.CompositeDisposable
@@ -11,47 +13,51 @@ import io.reactivex.internal.disposables.DisposableContainer
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 
-class UiHierarchyBus :
+class UiHierarchyBus(val adbDevice: AdbDevice) :
         Subject<UiHierarchy>(),
         Observer<UiHierarchy>,
         Disposable,
         DisposableContainer {
 
+//    init {
+//        adbDevice.subscribeUiHierarchySource().subscribe(this)
+//    }
+
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     @Suppress("PropertyName")
-    private val uiHierarchySubject: BehaviorSubject<UiHierarchy> =
+    private val subject: BehaviorSubject<UiHierarchy> =
             BehaviorSubject.create<UiHierarchy>()
 
-    val uiHierarchyBus: Observable<UiHierarchy> by lazy {
-        uiHierarchySubject
+    val observable: Observable<UiHierarchy> by lazy {
+        subject
                 .doOnSubscribe { }
                 .doOnDispose { }
     }
 
     override fun subscribeActual(observer: Observer<in UiHierarchy>) {
-        uiHierarchyBus.subscribe(observer)
+        observable.subscribe(observer)
     }
 
     override fun onComplete() {
 //        uiHierarchySubject.onComplete()
     }
 
-    override fun hasThrowable(): Boolean = uiHierarchySubject.hasThrowable()
+    override fun hasThrowable(): Boolean = subject.hasThrowable()
 
-    override fun hasComplete(): Boolean = uiHierarchySubject.hasComplete()
+    override fun hasComplete(): Boolean = subject.hasComplete()
 
-    override fun onNext(t: UiHierarchy) = uiHierarchySubject.onNext(t)
+    override fun onNext(t: UiHierarchy) = subject.onNext(t)
 
-    override fun onError(e: Throwable) = uiHierarchySubject.onError(e)
+    override fun onError(e: Throwable) = subject.onError(e)
 
     override fun onSubscribe(d: Disposable) {
-        uiHierarchySubject.onSubscribe(d)
+        subject.onSubscribe(d)
     }
 
-    override fun hasObservers(): Boolean = uiHierarchySubject.hasObservers()
+    override fun hasObservers(): Boolean = subject.hasObservers()
 
-    override fun getThrowable(): Throwable? = uiHierarchySubject.throwable
+    override fun getThrowable(): Throwable? = subject.throwable
 
     override fun isDisposed(): Boolean = compositeDisposable.isDisposed
 
