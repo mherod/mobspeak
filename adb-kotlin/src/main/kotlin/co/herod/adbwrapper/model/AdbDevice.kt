@@ -18,7 +18,11 @@ data class AdbDevice(
 
     var preferredUiAutomatorStrategy = 0
 
+    val s1 = "temp"
+
     var rpcPort = 9008
+
+    var lockPath: String = "/sdcard/test.lock"
 
     val windowBounds: UiBounds by lazy {
         @Suppress("DEPRECATION")
