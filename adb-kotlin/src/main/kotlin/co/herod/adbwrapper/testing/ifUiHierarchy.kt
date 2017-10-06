@@ -7,11 +7,12 @@ import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 fun AdbDeviceTestHelper.ifUiHierarchy(predicate: (UiHierarchy) -> Boolean): Boolean = with(adbDevice) {
-    Observable.just(0)
+    Observable.just(true)
+            .doOnNext { println("wanky $it") }
             .flatMap { sampleUiHierarchy() }
             .map { predicate(it) }
             .timeout(10, TimeUnit.SECONDS)
-            .doOnError { println("error: $it") }
+            .doOnError { println("error: $it"); it.printStackTrace() }
             .onErrorReturn { false }
             .blockingFirst(false)
 }

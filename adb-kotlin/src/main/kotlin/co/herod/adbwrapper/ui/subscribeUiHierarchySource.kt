@@ -6,4 +6,6 @@ import co.herod.rx.ResultChangeFixedDurationTransformer
 import io.reactivex.Observable
 
 fun AdbDevice.subscribeUiHierarchySource(): Observable<UiHierarchy> =
-        dumpUiHierarchy().compose(ResultChangeFixedDurationTransformer())
+        dumpUiHierarchy()
+                .compose(ResultChangeFixedDurationTransformer())
+//                .doOnSubscribe { println("subscribeUiSource $it") }

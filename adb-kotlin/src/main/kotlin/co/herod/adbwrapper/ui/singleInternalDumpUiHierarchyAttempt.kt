@@ -11,3 +11,4 @@ fun AdbDevice.singleInternalDumpUiHierarchyAttempt(): Observable<String>? =
                 .onErrorResumeNext { _: Throwable -> compatDumpUiHierarchy() }
                 .onErrorResumeNext { _: Throwable -> primaryDumpUiHierarchy() }
                 .onErrorResumeNext { _: Throwable -> fallbackDumpUiHierarchy() }
+                .doOnNext { println("singleDumpUi -> $it") }
