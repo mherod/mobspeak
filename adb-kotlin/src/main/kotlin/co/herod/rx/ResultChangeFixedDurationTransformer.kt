@@ -10,6 +10,6 @@ class ResultChangeFixedDurationTransformer<T> : FixedDurationTransformer<T>(
 ) {
 
     override fun apply(upstream: Observable<T>): Observable<T> {
-        return super.apply(upstream.repeat()).distinctUntilChanged()
+        return super.apply(upstream.repeat()) // .distinctUntilChanged()
     }
 }

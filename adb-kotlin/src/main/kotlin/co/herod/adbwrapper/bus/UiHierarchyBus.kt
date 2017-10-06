@@ -19,10 +19,6 @@ class UiHierarchyBus(val adbDevice: AdbDevice) :
         Disposable,
         DisposableContainer {
 
-//    init {
-//        adbDevice.subscribeUiHierarchySource().subscribe(this)
-//    }
-
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     @Suppress("PropertyName")
@@ -30,6 +26,11 @@ class UiHierarchyBus(val adbDevice: AdbDevice) :
             BehaviorSubject.create<UiHierarchy>()
 
     val observable: Observable<UiHierarchy> by lazy {
+
+        adbDevice.subscribeUiHierarchySource()
+                .doOnNext { println("that's good: $it") }
+                .subscribe(this)
+
         subject
                 .doOnSubscribe { }
                 .doOnDispose { }
@@ -52,7 +53,9 @@ class UiHierarchyBus(val adbDevice: AdbDevice) :
     override fun onError(e: Throwable) = subject.onError(e)
 
     override fun onSubscribe(d: Disposable) {
-        subject.onSubscribe(d)
+        if (subject != d) {
+            subject.onSubscribe(d)
+        }
     }
 
     override fun hasObservers(): Boolean = subject.hasObservers()
