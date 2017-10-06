@@ -31,9 +31,10 @@ fun AdbDevicePackageManager.installPackage(apkPath: String): Boolean = with(adbD
     command("install $apkPath")
             .filter { "Success" in it }
             .lastOrError()
-            .doOnSuccess { log("Successfully installed $apkPath") }
-            .retry()
+            .doOnSuccess { print("Successfully installed $apkPath") }
+            .retry(2)
             .map { println(it); true }
+            .onErrorReturn { false }
             .blockingGet()
 }
 
@@ -41,9 +42,10 @@ fun AdbDevicePackageManager.updatePackage(apkPath: String): Boolean = with(adbDe
     command("install -r $apkPath")
             .filter { "Success" in it }
             .lastOrError()
-            .doOnSuccess { log("Successfully updated $apkPath") }
-            .retry()
+            .doOnSuccess { print("Successfully updated $apkPath") }
+            .retry(2)
             .map { println(it); true }
+            .onErrorReturn { false }
             .blockingGet()
 }
 
