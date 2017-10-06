@@ -16,7 +16,7 @@ fun AdbDevice.streamUi(): Observable<UiNode> {
             .subscribeOn(Schedulers.newThread())
             .flatMap { dumpUiHierarchy() }
             .repeat()
-            .doOnEach(AdbBusManager._uiHierarchyBus)
+            .doOnEach(myUiHierarchyBus)
             .flatMapIterable { it.uiNodes }
             .doOnEach(AdbBusManager._uiNodeBus)
             .doOnSubscribe {
