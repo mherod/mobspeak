@@ -1,8 +1,12 @@
 package co.herod.adbwrapper.ui
 
-import co.herod.adbwrapper.AdbBusManager
+import co.herod.adbwrapper.model.AdbDevice
+import co.herod.adbwrapper.uiautomator.pingUiAutomatorBridge
 import java.util.concurrent.TimeUnit
 
-fun isUiAutomatorActive(): Boolean = Blah.subject
-        .timeout(250, TimeUnit.MILLISECONDS)
-        .blockingFirst(AdbBusManager.uiAutomatorBridgeActive)
+fun AdbDevice.isUiAutomatorActive(): Boolean = Blah.subject
+        .map { if (it.not()) { pingUiAutomatorBridge() }; it }
+        .timeout(200, TimeUnit.MILLISECONDS)
+        .onErrorReturn { pingUiAutomatorBridge() }
+        .timeout(300, TimeUnit.MILLISECONDS)
+        .blockingFirst()
