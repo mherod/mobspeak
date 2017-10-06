@@ -1,6 +1,8 @@
 package co.herod.adbwrapper.ui
 
+import co.herod.adbwrapper.command
 import co.herod.adbwrapper.exceptions.UiAutomatorBridgeUnavailableException
+import co.herod.adbwrapper.execute
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.UiHierarchy
 import co.herod.adbwrapper.ui.dump.compatDumpUiHierarchy
@@ -18,10 +20,7 @@ fun AdbDevice.dumpUiHierarchy(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Observable<UiHierarchy> = with(this) {
     Observable.just(this)
-//            .doOnSubscribe { println("START $s3") }
-//            .doOnNext { println("NEXT $s3") }
-//            .doOnComplete { println("COMPLETE $s3") }
-//            .doOnDispose { println("STOP $s3") }
+            .flatMap { waitForLockRelease() }
             .flatMap {
                 tryRpcDumpUiHierarchy()
                         .onErrorResumeNext { _: Throwable -> compatDumpUiHierarchy() }
@@ -29,6 +28,8 @@ fun AdbDevice.dumpUiHierarchy(
                         .onErrorResumeNext { _: Throwable -> fallbackDumpUiHierarchy() }
             }
             .retry()
+            .doOnSubscribe { execute("shell echo temp > /sdcard/test.lock") }
+            .doOnDispose { execute("shell rm /sdcard/test.lock") }
             .observeOn(Schedulers.single())
             .subscribeOn(Schedulers.computation())
             .takeWhile { it.isNotBlank() && it.isXmlOutput() }
@@ -43,4 +44,11 @@ private fun AdbDevice.tryRpcDumpUiHierarchy(): Observable<String> = when {
     uiAutomatorBridge().blockingFirst() == true -> rpcDumpUiHierarchy()
     else -> Observable.error(UiAutomatorBridgeUnavailableException())
 }
+
+private fun AdbDevice.waitForLockRelease(): Observable<String> =
+        command("shell cat /sdcard/test.lock")
+                .takeUntil { "temp" == it }
+                .timeout(3, TimeUnit.SECONDS)
+                .last("")
+                .toObservable()
 
