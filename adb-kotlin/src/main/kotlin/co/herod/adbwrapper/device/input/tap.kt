@@ -1,4 +1,4 @@
-package co.herod.adbwrapper.device
+package co.herod.adbwrapper.device.input
 
 import co.herod.adbwrapper.AdbCommand
 import co.herod.adbwrapper.S.Companion.INPUT

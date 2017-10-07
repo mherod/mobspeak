@@ -24,15 +24,18 @@ class S {
         const val DUMPSYS = "dumpsys"
         const val INPUT = "input"
 
+        const val PIDOF = "pidof"
+
         const val PROPERTY_SCREEN_STATE = "mScreenState"
         const val PROPERTY_CURRENT_FOCUS = "mCurrentFocus"
         const val PROPERTY_FOCUSED_APP = "mFocusedApp"
+
+
         const val PROPERTY_SHOW_REQUESTED = "mShowRequested"
-
-
         const val ANDROID_TEST_RUNNER = "android.support.test.runner.AndroidJUnitRunner"
         const val PACKAGE_UIAUTOMATOR = "com.github.uiautomator"
         const val PACKAGE_UIAUTOMATOR_TEST = "$PACKAGE_UIAUTOMATOR.test"
+
     }
 
 }

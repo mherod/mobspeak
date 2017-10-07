@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit
 
 fun AdbDeviceTestHelper.ifUiHierarchy(predicate: (UiHierarchy) -> Boolean): Boolean = with(adbDevice) {
     Observable.just(true)
-            .doOnNext { println("wanky $it") }
             .flatMap { sampleUiHierarchy() }
             .map { predicate(it) }
             .timeout(10, TimeUnit.SECONDS)

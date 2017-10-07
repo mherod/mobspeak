@@ -3,7 +3,8 @@
 package skeleton
 
 import co.herod.adbwrapper.AdbDeviceManager
-import co.herod.adbwrapper.device.pressKey
+import co.herod.adbwrapper.device.input.home
+import co.herod.adbwrapper.device.input.pressKey
 import co.herod.adbwrapper.exceptions.NoConnectedAdbDeviceException
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.testing.*

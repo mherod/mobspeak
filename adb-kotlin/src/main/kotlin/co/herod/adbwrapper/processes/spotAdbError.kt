@@ -11,6 +11,12 @@ internal fun spotAdbError(it: String): Observable<String> =
             it.startsWith("ERROR: ") -> {
                 Observable.error(AdbError(it))
             }
+            "shortMsg=Process crashed" in it -> {
+                Observable.error(AdbError(it))
+            }
+            "Exception" in it -> {
+                Observable.error(AdbError("Exception: $it"))
+            }
             "/system/bin/sh" in it -> {
                 Observable.error(AdbError("Invalid output: $it"))
             }

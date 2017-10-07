@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package co.herod.adbwrapper.environment
 
 import co.herod.adbwrapper.command
@@ -6,8 +8,13 @@ import co.herod.kotlin.log
 
 @JvmOverloads
 fun AdbDevice.forwardPort(local: Int = 9008, remote: Int = 9008) =
-        command("forward tcp:$local tcp:$remote")
+        command(cmdStringForwardPort(local, remote))
                 .doOnError { println(it) }
                 .doOnComplete { log("Successfully forwarded local:$local to remote:$remote") }
                 .retry(1)
                 .blockingSubscribe()
+
+private fun cmdStringForwardPort(
+        local: Int,
+        remote: Int
+) = "forward tcp:$local tcp:$remote"

@@ -48,7 +48,7 @@ task unitTest(type: Test) {
 }
 
 task runDemo(type: JavaExec) {
-    main = 'co.herod.adbwrapper.uiautomator.RpcBlah'
+    main = 'co.herod.adbwrapper.ui.StartUiAutomatorStub'
     classpath = sourceSets.main.runtimeClasspath
 }
 
