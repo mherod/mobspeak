@@ -1,4 +1,4 @@
-package co.herod.adbwrapper.device
+package co.herod.adbwrapper.device.input
 
 import co.herod.adbwrapper.AdbCommand
 import co.herod.adbwrapper.S.Companion.INPUT
@@ -13,7 +13,9 @@ import java.util.concurrent.TimeUnit
 fun AdbDevice.typeText(inputText: String = ""): String =
         AdbCommand.Builder()
                 .setDevice(this)
-                .setCommand("$SHELL $INPUT ${InputType.TEXT} $inputText".trim())
+                .setCommand(cmdStringInputTest(inputText))
                 .observable()
                 .last("") // succeeds silently
                 .blocking(5, TimeUnit.SECONDS)
+
+private fun cmdStringInputTest(inputText: String) = "$SHELL $INPUT ${InputType.TEXT} $inputText".trim()

@@ -1,7 +1,7 @@
 package co.herod.adbwrapper.ui
 
 import co.herod.adbwrapper.model.AdbDevice
-import co.herod.adbwrapper.uiautomator.pingUiAutomatorBridge
+import co.herod.adbwrapper.ui.uiautomator.pingUiAutomatorBridge
 import java.util.concurrent.TimeUnit
 
 fun AdbDevice.isUiAutomatorActive(): Boolean = Blah.subject

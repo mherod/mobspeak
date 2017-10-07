@@ -9,5 +9,5 @@ import io.reactivex.schedulers.Schedulers
 
 fun AdbDevice.sourceUiHierarchy(): Observable<UiHierarchy> = Observable.just(this)
         .flatMap { it.myUiHierarchyBus }
-        .observeOn(Schedulers.newThread())
+        .observeOn(Schedulers.single())
         .subscribeOn(Schedulers.computation())

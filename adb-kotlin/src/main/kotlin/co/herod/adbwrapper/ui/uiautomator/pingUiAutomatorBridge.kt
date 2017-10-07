@@ -1,4 +1,4 @@
-package co.herod.adbwrapper.uiautomator
+package co.herod.adbwrapper.ui.uiautomator
 
 import co.herod.adbwrapper.device.rpcSession
 import co.herod.adbwrapper.model.AdbDevice

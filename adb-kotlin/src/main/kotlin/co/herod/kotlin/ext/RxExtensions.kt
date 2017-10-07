@@ -101,7 +101,8 @@ fun CompositeDisposable.waitUntilEmpty(): Long =
         measureTimeMillis {
             Observable.fromCallable { size() }
                     .repeat()
+                    .distinctUntilChanged()
                     .takeUntil { it == 0 }
-                    .flatMap { Observable.timer(100, TimeUnit.MILLISECONDS) }
+                    .flatMap { println(it); Observable.timer(100, TimeUnit.MILLISECONDS) }
                     .blockingSubscribe()
         }

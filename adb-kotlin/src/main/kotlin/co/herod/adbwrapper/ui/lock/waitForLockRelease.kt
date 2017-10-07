@@ -10,6 +10,7 @@ fun AdbDevice.waitForLockRelease(): Observable<String> =
                 .sample(50, TimeUnit.MILLISECONDS)
                 .doOnNext { println("output from lockfile $it") }
                 .takeUntil { s1 == it }
-                .timeout(3, TimeUnit.SECONDS)
+                .timeout(1, TimeUnit.SECONDS)
+                .onErrorReturn { "" }
                 .last("")
                 .toObservable()

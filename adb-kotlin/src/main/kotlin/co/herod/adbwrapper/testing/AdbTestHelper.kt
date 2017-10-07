@@ -4,8 +4,9 @@
 package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.AdbPackageManager
+import co.herod.adbwrapper.device.input.home
 import co.herod.adbwrapper.device.pm
-import co.herod.adbwrapper.device.pressKey
+import co.herod.adbwrapper.device.input.pressKey
 import co.herod.adbwrapper.device.uninstallPackage
 import co.herod.adbwrapper.launchUrl
 import co.herod.adbwrapper.model.AdbDevice
