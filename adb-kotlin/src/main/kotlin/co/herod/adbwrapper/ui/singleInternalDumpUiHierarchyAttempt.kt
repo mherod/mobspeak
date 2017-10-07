@@ -6,9 +6,8 @@ import co.herod.adbwrapper.ui.dump.fallbackDumpUiHierarchy
 import co.herod.adbwrapper.ui.dump.primaryDumpUiHierarchy
 import io.reactivex.Observable
 
-fun AdbDevice.singleInternalDumpUiHierarchyAttempt(): Observable<String>? =
+internal fun AdbDevice.singleDumpUiHierarchyAttempt(): Observable<String>? =
         tryRpcDumpUiHierarchy()
                 .onErrorResumeNext { _: Throwable -> compatDumpUiHierarchy() }
                 .onErrorResumeNext { _: Throwable -> primaryDumpUiHierarchy() }
                 .onErrorResumeNext { _: Throwable -> fallbackDumpUiHierarchy() }
-                .doOnNext { println("singleDumpUi -> $it") }

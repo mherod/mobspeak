@@ -15,8 +15,8 @@ fun AdbDevice.dumpUiHierarchy(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Observable<UiHierarchy> = with(this) {
     waitForLockRelease()
-            .flatMap { singleInternalDumpUiHierarchyAttempt() }
-            .retry()
+            .flatMap { singleDumpUiHierarchyAttempt() }
+            .retry(1)
             // if it failed go again
             // repeat handled more above
             .doOnSubscribe { putLock() }
@@ -27,7 +27,7 @@ fun AdbDevice.dumpUiHierarchy(
             // filter for good stuff
             .timeout(maxOf(10, timeUnit.toSeconds(timeout) / 5), TimeUnit.SECONDS)
             // taking too long OMG
-            .retry()
+            .retry(1)
             // we may have timed out
             .timeout(timeout, timeUnit)
             // hard deadline

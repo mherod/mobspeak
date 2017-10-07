@@ -27,13 +27,13 @@ class UiHierarchyBus(val adbDevice: AdbDevice) :
 
     val observable: Observable<UiHierarchy> by lazy {
 
-        adbDevice.subscribeUiHierarchySource()
-                .doOnNext { println("that's good: $it") }
-                .subscribe(this)
+        // just once
+        adbDevice.subscribeUiHierarchySource().subscribe(this)
 
         subject
-                .doOnSubscribe { }
-                .doOnDispose { }
+                .doOnNext { println("next next ${it.dumpTime}") }
+                .doOnSubscribe { println("subscribe") }
+                .doOnDispose { println("dispose") }
     }
 
     override fun subscribeActual(observer: Observer<in UiHierarchy>) {

@@ -1,6 +1,6 @@
 @file:JvmName("RpcSession")
 
-package co.herod.adbwrapper.uiautomator
+package co.herod.adbwrapper.ui.uiautomator
 
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.rx.rx_responseString
