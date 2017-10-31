@@ -40,6 +40,7 @@ jar {
 test {
     include 'co/herod/**'
 }
+
 task unitTest(type: Test) {
     exclude '**/device/**'
 }
