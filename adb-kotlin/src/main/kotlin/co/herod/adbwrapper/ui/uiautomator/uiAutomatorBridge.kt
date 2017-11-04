@@ -7,7 +7,11 @@ import io.reactivex.Observable
 
 fun AdbDevice.uiAutomatorBridge(): Observable<Boolean> {
 
-    if (isUiAutomatorActive().not()) {
+    val uiAutomatorActive = isUiAutomatorActive()
+
+    println("uiAutomatorActive $uiAutomatorActive")
+
+    if (uiAutomatorActive.not()) {
         initUiAutomatorBridge()
     }
     return Blah.sub1

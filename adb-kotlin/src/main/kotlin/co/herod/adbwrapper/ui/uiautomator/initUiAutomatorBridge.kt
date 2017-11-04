@@ -12,17 +12,22 @@ import java.util.concurrent.TimeUnit
 
 fun AdbDevice.initUiAutomatorBridge() {
 
+    println("initUiAutomatorBridge")
+
     if (pingUiAutomatorBridge()) {
         return
     }
 
-    murder(S.PACKAGE_UIAUTOMATOR_TEST).blockingSubscribe({}, {})
-
-    murder(S.PACKAGE_UIAUTOMATOR).blockingSubscribe({}, {})
+    murder(S.PACKAGE_UIAUTOMATOR_TEST)
+            .blockingSubscribe({}, {})
+    murder(S.PACKAGE_UIAUTOMATOR)
+            .blockingSubscribe({}, {})
 
     Observable.timer(10, TimeUnit.MILLISECONDS)
             .flatMap { command(instrumentationCommand) }
-            .observeOn(Schedulers.single())
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(Schedulers.newThread())
+            .map { println(it); it }
             .flatMap { spotAdbError(it) }
             .retry(1)
             .doOnNext {
@@ -30,5 +35,11 @@ fun AdbDevice.initUiAutomatorBridge() {
                 println("online: ${pingUiAutomatorBridge()}")
             }
             .takeUntil { "INSTRUMENTATION_" in it }
-            .subscribe({ println(it) }, { println("errorrr $it") })
+            .doOnSubscribe { println("subscribe initUiAutomatorBridge") }
+            .doOnDispose { println("dispose initUiAutomatorBridge") }
+            .subscribe({
+                println("success initUiAutomatorBridge $it")
+            }, {
+                println("error initUiAutomatorBridge $it")
+            })
 }

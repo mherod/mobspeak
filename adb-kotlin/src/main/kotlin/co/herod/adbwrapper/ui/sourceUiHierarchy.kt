@@ -9,5 +9,6 @@ import io.reactivex.schedulers.Schedulers
 
 fun AdbDevice.sourceUiHierarchy(): Observable<UiHierarchy> = Observable.just(this)
         .flatMap { it.myUiHierarchyBus }
+        .map { assert("bounds" in it.xmlString); it }
         .observeOn(Schedulers.single())
         .subscribeOn(Schedulers.computation())

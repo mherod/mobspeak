@@ -9,6 +9,7 @@ import co.herod.kotlin.log
 @JvmOverloads
 fun AdbDevice.forwardPort(local: Int = 9008, remote: Int = 9008) =
         command(cmdStringForwardPort(local, remote))
+                .doOnSubscribe { println("forwardingPort") }
                 .doOnError { println(it) }
                 .doOnComplete { log("Successfully forwarded local:$local to remote:$remote") }
                 .retry(1)

@@ -7,10 +7,23 @@ import java.util.concurrent.TimeUnit
 
 fun AdbDevice.pingUiAutomatorBridge(myRpcSession: RpcSession = rpcSession()): Boolean =
         RpcSession.ping(myRpcSession)
+                .map { println(it); it }
                 .map { "pong" in it }
+                .map {
+                    when {
+                        it -> dumpWindowHierarchyCheck(myRpcSession)
+                        else -> false
+                    }
+                }
                 .timeout(3, TimeUnit.SECONDS)
                 .doOnError { println("pingUiAutomatorBridge error $it") }
                 .onErrorReturn { false }
                 .doOnSuccess { println("pingUiAutomatorBridge $it") }
                 .doOnSuccess { subject.onNext(it) }
                 .blockingGet()
+
+private fun dumpWindowHierarchyCheck(myRpcSession: RpcSession): Boolean {
+    return RpcSession.dumpWindowHierarchy(myRpcSession)
+            .map { "bounds" in it }
+            .blockingGet()
+}

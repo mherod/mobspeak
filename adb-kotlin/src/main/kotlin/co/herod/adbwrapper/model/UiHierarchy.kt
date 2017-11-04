@@ -20,10 +20,10 @@ class UiHierarchy(
 
     val uiNodes: MutableList<UiNode> by lazy {
         UiHelper.uiXmlToNodes(Observable.just(xmlString), dumpDate, adbDevice)
-                .observeOn(Schedulers.single())
+                .observeOn(Schedulers.computation())
                 .filter { Objects.nonNull(it) }
                 .toList()
-                .timeout(100, TimeUnit.MILLISECONDS)
+                .timeout(200, TimeUnit.MILLISECONDS)
                 .onErrorReturn { Collections.emptyList() }
                 .blockingGet()
     }

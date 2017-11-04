@@ -8,6 +8,6 @@ import io.reactivex.schedulers.Schedulers
 fun AdbDeviceTestHelper.sourceUiNodes(): Observable<UiNode> = with(adbDevice) {
     sourceUiHierarchy()
             .flatMapIterable { it.uiNodes }
-            .observeOn(Schedulers.single())
+            .observeOn(Schedulers.newThread())
             .subscribeOn(Schedulers.computation())
 }
