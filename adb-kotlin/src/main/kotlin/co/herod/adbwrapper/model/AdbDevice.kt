@@ -5,11 +5,15 @@ package co.herod.adbwrapper.model
 import co.herod.adbwrapper.S.Companion.DEVICE_CONNECTED_DEVICE
 import co.herod.adbwrapper.S.Companion.DEVICE_EMULATOR
 import co.herod.adbwrapper.bus.UiHierarchyBus
+import co.herod.adbwrapper.device.screen
 import co.herod.adbwrapper.props.lookupWindowBounds
+import co.herod.adbwrapper.screenshot
+import co.herod.kotlin.ext.nowMillis
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
+import java.io.File
 import java.util.concurrent.TimeoutException
 
 // (was) data class
@@ -20,7 +24,9 @@ class AdbDevice(
 
     init {
         RxJavaPlugins.setErrorHandler { throwable ->
-            println("Unhandled error: $throwable")
+//            screenshot().run {
+//                renameTo(File(this.parentFile, "error-${nowMillis()}.png"))
+//            }
             try {
                 if (throwable is UndeliverableException) {
                     throw throwable.cause!!
@@ -31,6 +37,7 @@ class AdbDevice(
             } catch (throwable: Throwable) {
                 throwable.printStackTrace()
             }
+            throw AssertionError("Unhandled exception", throwable)
         }
     }
 
