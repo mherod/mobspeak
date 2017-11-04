@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 fun AdbDeviceTestHelper.waitForUiNodeForFunc(
         predicate: (UiNode) -> Boolean?,
         function: (UiNode) -> String? = { "Matched: ${it.resourceId}" },
-        timeout: Int = 30,
+        timeout: Int = 10,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): String = with(adbDevice) {
 
