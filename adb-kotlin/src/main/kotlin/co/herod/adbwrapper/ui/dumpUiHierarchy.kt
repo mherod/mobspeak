@@ -21,7 +21,7 @@ fun AdbDevice.dumpUiHierarchy(
             // repeat handled more above
             .doOnSubscribe { putLock() }
             .doOnDispose { releaseLock() }
-            .observeOn(Schedulers.single())
+            .observeOn(Schedulers.newThread())
             .subscribeOn(Schedulers.computation())
             .takeWhile { it.isNotBlank() && it.isXmlOutput() }
             // filter for good stuff
