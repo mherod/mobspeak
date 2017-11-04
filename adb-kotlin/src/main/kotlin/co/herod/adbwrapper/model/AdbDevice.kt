@@ -8,11 +8,30 @@ import co.herod.adbwrapper.bus.UiHierarchyBus
 import co.herod.adbwrapper.props.lookupWindowBounds
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.plugins.RxJavaPlugins
+import java.util.concurrent.TimeoutException
 
 data class AdbDevice(
         var deviceIdentifier: String,
         var type: String
 ) : Disposable {
+
+    init {
+        RxJavaPlugins.setErrorHandler { throwable ->
+            println("Unhandled error: $throwable")
+            try {
+                if (throwable is UndeliverableException) {
+                    throw throwable.cause!!
+                } else {
+                    throw throwable
+                }
+            } catch (ignored: TimeoutException) {
+            } catch (throwable: Throwable) {
+                throwable.printStackTrace()
+            }
+        }
+    }
 
     val disposables: CompositeDisposable = CompositeDisposable()
 

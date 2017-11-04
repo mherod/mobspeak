@@ -8,6 +8,7 @@ import co.herod.adbwrapper.device.input.pressKey
 import co.herod.adbwrapper.exceptions.NoConnectedAdbDeviceException
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.testing.*
+import co.herod.kotlin.ext.waitUntilEmpty
 import cucumber.api.PendingException
 import cucumber.api.java.After
 import cucumber.api.java.Before
@@ -46,6 +47,8 @@ class ExampleAndroidStepDefs {
     @After
     fun afterScenario() {
         testHelper.stopUiBus()
+        adbDevice.dispose()
+        adbDevice.disposables.waitUntilEmpty()
     }
 
     @When("^a monkey snatches my device$")

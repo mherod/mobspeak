@@ -31,7 +31,7 @@ fun <T> Single<T>.retryWithTimeout(
         timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Single<T> = this
-//        .retry()
+        .retry()
         .timeout(timeout, timeUnit)
 
 //fun Observable<String>.toSingleBlocking(
@@ -52,27 +52,37 @@ fun <T> Single<T>.retryWithTimeout(
 fun Observable<String>.blockingSilent(
         timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
-): String = this
-        .last("") // succeeds silently
-        .timeout(timeout.toLong(), timeUnit)
-        .doOnError { println("blockingSilent error $it") }
-        .blockingGet()
+): String = try {
+    this
+            .last("") // succeeds silently
+            .timeout(timeout.toLong(), timeUnit)
+            .doOnError { println("blockingSilent error $it") }
+            .onErrorReturn { "" }
+            .blockingGet()
+} catch (error: RuntimeException) {
+    ""
+}
 
 fun Single<String>.blocking(
         timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
-): String = this
-        .timeout(timeout.toLong(), timeUnit)
-        .onErrorResumeNext { throwable ->
-            if (throwable is TimeoutException) {
-                Single.error<String> {
-                    AssertionError("Timed out")
+): String = try {
+    this
+            .timeout(timeout.toLong(), timeUnit)
+            .onErrorResumeNext { throwable ->
+                if (throwable is TimeoutException) {
+                    Single.error<String> {
+                        AssertionError("Timed out")
+                    }
                 }
+                Single.error<String> { throwable }
             }
-            Single.error<String> { throwable }
-        }
-        .doOnError { println("blocking error $it") }
-        .blockingGet()
+            .doOnError { println("blocking error $it") }
+            .onErrorReturn { "" }
+            .blockingGet()
+} catch (error: RuntimeException) {
+    ""
+}
 
 @JvmName("filterPropertiesByKey")
 fun Observable<DumpsysEntry>.filterKeys(vararg keys: String): Observable<Map<String, String>> =
