@@ -25,5 +25,6 @@ fun AdbDevice.pingUiAutomatorBridge(myRpcSession: RpcSession = rpcSession()): Bo
 private fun dumpWindowHierarchyCheck(myRpcSession: RpcSession): Boolean {
     return RpcSession.dumpWindowHierarchy(myRpcSession)
             .map { "bounds" in it }
+            .onErrorReturn { false }
             .blockingGet()
 }

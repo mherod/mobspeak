@@ -55,6 +55,7 @@ fun Observable<String>.blockingSilent(
 ): String = this
         .last("") // succeeds silently
         .timeout(timeout.toLong(), timeUnit)
+        .doOnError { println("blockingSilent error $it") }
         .blockingGet()
 
 fun Single<String>.blocking(
@@ -70,6 +71,7 @@ fun Single<String>.blocking(
             }
             Single.error<String> { throwable }
         }
+        .doOnError { println("blocking error $it") }
         .blockingGet()
 
 @JvmName("filterPropertiesByKey")
@@ -104,5 +106,5 @@ fun CompositeDisposable.waitUntilEmpty(): Long =
                     .distinctUntilChanged()
                     .takeUntil { it == 0 }
                     .flatMap { println(it); Observable.timer(100, TimeUnit.MILLISECONDS) }
-                    .blockingSubscribe()
+                    .blockingSubscribe({}, {})
         }

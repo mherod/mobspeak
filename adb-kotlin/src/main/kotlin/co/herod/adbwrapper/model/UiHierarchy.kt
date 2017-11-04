@@ -8,6 +8,7 @@ import io.reactivex.schedulers.Schedulers
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.system.measureTimeMillis
 
 class UiHierarchy(
         val adbDevice: AdbDevice?,
@@ -20,10 +21,10 @@ class UiHierarchy(
 
     val uiNodes: MutableList<UiNode> by lazy {
         UiHelper.uiXmlToNodes(Observable.just(xmlString), dumpDate, adbDevice)
-                .observeOn(Schedulers.computation())
+                .observeOn(Schedulers.newThread())
                 .filter { Objects.nonNull(it) }
                 .toList()
-                .timeout(200, TimeUnit.MILLISECONDS)
+                .timeout(300, TimeUnit.MILLISECONDS)
                 .onErrorReturn { Collections.emptyList() }
                 .blockingGet()
     }

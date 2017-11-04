@@ -9,4 +9,4 @@ fun AdbDevice.isUiAutomatorActive(): Boolean = Blah.subject
         .timeout(200, TimeUnit.MILLISECONDS)
         .onErrorReturn { pingUiAutomatorBridge() }
         .timeout(300, TimeUnit.MILLISECONDS)
-        .blockingFirst()
+        .blockingFirst(false)

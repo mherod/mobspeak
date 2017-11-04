@@ -31,8 +31,8 @@ class UiHierarchyBus(val adbDevice: AdbDevice) :
         adbDevice.subscribeUiHierarchySource().subscribe(this)
 
         subject
-                .doOnSubscribe { println("subscribe subscribeUiHierarchySource") }
-                .doOnDispose { println("dispose subscribeUiHierarchySource") }
+//                .doOnSubscribe { println("subscribe subscribeUiHierarchySource") }
+//                .doOnDispose { println("dispose subscribeUiHierarchySource") }
     }
 
     override fun subscribeActual(observer: Observer<in UiHierarchy>) {

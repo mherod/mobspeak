@@ -10,4 +10,5 @@ fun AdbDeviceTestHelper.sourceUiNodes(): Observable<UiNode> = with(adbDevice) {
             .flatMapIterable { it.uiNodes }
             .observeOn(Schedulers.newThread())
             .subscribeOn(Schedulers.computation())
+            .retry()
 }

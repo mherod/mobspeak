@@ -31,8 +31,10 @@ fun AdbDevice.initUiAutomatorBridge() {
             .flatMap { spotAdbError(it) }
             .retry(1)
             .doOnNext {
-                forwardPort(local = rpcPort)
-                println("online: ${pingUiAutomatorBridge()}")
+                if (pingUiAutomatorBridge().not()) {
+                    forwardPort(local = rpcPort)
+                    println("online: ${pingUiAutomatorBridge()}")
+                }
             }
             .takeUntil { "INSTRUMENTATION_" in it }
             .doOnSubscribe { println("subscribe initUiAutomatorBridge") }

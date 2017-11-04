@@ -13,7 +13,7 @@ fun AdbDevice.forwardPort(local: Int = 9008, remote: Int = 9008) =
                 .doOnError { println(it) }
                 .doOnComplete { log("Successfully forwarded local:$local to remote:$remote") }
                 .retry(1)
-                .blockingSubscribe()
+                .blockingSubscribe({}, {})
 
 private fun cmdStringForwardPort(
         local: Int,
