@@ -114,7 +114,7 @@ fun CompositeDisposable.waitUntilEmpty(): Long =
             Observable.fromCallable { size() }
                     .repeat()
                     .distinctUntilChanged()
+                    .doOnNext { if (it > 0) println("CompositeDisposable size: $it") }
                     .takeUntil { it == 0 }
-                    .flatMap { println(it); Observable.timer(100, TimeUnit.MILLISECONDS) }
                     .blockingSubscribe({}, {})
         }

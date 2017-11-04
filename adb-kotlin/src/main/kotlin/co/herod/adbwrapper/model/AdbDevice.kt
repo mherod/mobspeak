@@ -12,7 +12,8 @@ import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.concurrent.TimeoutException
 
-data class AdbDevice(
+// (was) data class
+class AdbDevice(
         var deviceIdentifier: String,
         var type: String
 ) : Disposable {

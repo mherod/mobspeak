@@ -17,6 +17,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import junit.framework.AssertionFailedError
 import java.util.concurrent.TimeUnit
+import kotlin.system.measureTimeMillis
 
 class ExampleAndroidStepDefs {
 
@@ -46,9 +47,10 @@ class ExampleAndroidStepDefs {
 
     @After
     fun afterScenario() {
-        testHelper.stopUiBus()
-        adbDevice.dispose()
-        adbDevice.disposables.waitUntilEmpty()
+        val disposeTimeMillis = measureTimeMillis {
+            testHelper.stopUiBus()
+        }
+        println("stopUiBus took $disposeTimeMillis millis")
     }
 
     @When("^a monkey snatches my device$")
