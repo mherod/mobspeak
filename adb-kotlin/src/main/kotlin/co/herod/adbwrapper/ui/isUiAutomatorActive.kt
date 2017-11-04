@@ -15,7 +15,7 @@ fun AdbDevice.isUiAutomatorActive(): Boolean {
             .timeout(sec / 5, TimeUnit.MILLISECONDS)
             .onErrorReturn { pingUiAutomatorBridge() }
             .timeout(sec / 3, TimeUnit.MILLISECONDS)
-            .retry()
+            .retry(3)
             .timeout(sec, TimeUnit.MILLISECONDS)
             .onErrorReturn { false }
             .blockingFirst(false)

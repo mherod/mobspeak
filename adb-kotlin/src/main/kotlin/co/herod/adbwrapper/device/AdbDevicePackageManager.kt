@@ -54,7 +54,7 @@ fun AdbDevicePackageManager.uninstallPackage(packageName: String): String = with
             .filter { "Success" == it }
             .firstOrError()
             .doOnSuccess { log("Successfully uninstalled $packageName") }
-            .retry()
+            .retry(1)
             .blockingGet()
 }
 

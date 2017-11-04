@@ -11,6 +11,6 @@ open class FixedDurationTransformer<T>(
 ) : ObservableTransformer<T, T> {
     override fun apply(upstream: Observable<T>):
             Observable<T> = upstream
-            // .retry()
+            .retry(1)
             .timeout(timeout.toLong(), timeUnit)
 }

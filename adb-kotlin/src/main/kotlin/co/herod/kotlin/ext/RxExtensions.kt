@@ -24,14 +24,14 @@ fun <T> Observable<T>.retryWithTimeout(
         timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Observable<T> = this
-        .retry()
+        .retry(1)
         .timeout(timeout, timeUnit)
 
 fun <T> Single<T>.retryWithTimeout(
         timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Single<T> = this
-        .retry()
+        .retry(1)
         .timeout(timeout, timeUnit)
 
 //fun Observable<String>.toSingleBlocking(

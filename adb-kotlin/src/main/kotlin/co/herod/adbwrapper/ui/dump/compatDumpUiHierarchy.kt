@@ -15,6 +15,6 @@ fun AdbDevice.compatDumpUiHierarchy(
             .filter { it.isXmlOutput() }
             .doOnNext { preferredUiAutomatorStrategy = 0 }
             .timeout(maxOf(5, timeout / 3), timeUnit)
-//                .retry()
+            .retry(1)
             .timeout(timeout, timeUnit)
 }
