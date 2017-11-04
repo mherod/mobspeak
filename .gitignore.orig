@@ -264,6 +264,9 @@ fabric.properties
 
 /.gtm/
 /.idea/workspace.xml
-screenshots/screen-*.png
+<<<<<<< HEAD
 !/uiautomator/app-debug-androidTest.apk
 !/uiautomator/app-debug.apk
+=======
+screenshots/screen-*.png
+>>>>>>> master

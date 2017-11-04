@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package co.herod.kotlin.ext
 
 import java.io.File
