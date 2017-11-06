@@ -28,7 +28,8 @@ class UiHierarchyBus(val adbDevice: AdbDevice) :
     val observable: Observable<UiHierarchy> by lazy {
 
         // just once
-        adbDevice.subscribeUiHierarchySource().subscribe(this)
+        adbDevice.subscribeUiHierarchySource()
+                .subscribe(this)
 
         subject
 //                .doOnSubscribe { println("subscribe subscribeUiHierarchySource") }
@@ -36,7 +37,7 @@ class UiHierarchyBus(val adbDevice: AdbDevice) :
     }
 
     override fun subscribeActual(observer: Observer<in UiHierarchy>) {
-        observable.subscribe(observer)
+        observable.subscribeWith(observer)
     }
 
     override fun onComplete() {
