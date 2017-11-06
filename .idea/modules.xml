@@ -8,7 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cucumber/cucumber.iml" filepath="$PROJECT_DIR$/.idea/modules/cucumber/cucumber.iml" group="cucumber" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cucumber/cucumber_main.iml" filepath="$PROJECT_DIR$/.idea/modules/cucumber/cucumber_main.iml" group="cucumber" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cucumber/cucumber_test.iml" filepath="$PROJECT_DIR$/.idea/modules/cucumber/cucumber_test.iml" group="cucumber" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlin-adb-testing.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlin-adb-testing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kotlin-adb-testing.iml" filepath="$PROJECT_DIR$/kotlin-adb-testing.iml" />
     </modules>
   </component>
 </project>
