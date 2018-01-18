@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:JvmName("StartUiAutomatorStub")
 
 package co.herod.adbwrapper.ui

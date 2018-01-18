@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:Suppress("MemberVisibilityCanPrivate", "unused")
 
 package co.herod.adbwrapper.model
@@ -8,7 +12,6 @@ import io.reactivex.schedulers.Schedulers
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.system.measureTimeMillis
 
 class UiHierarchy(
         val adbDevice: AdbDevice?,

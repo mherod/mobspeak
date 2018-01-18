@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:Suppress("unused", "ObjectPropertyName", "MemberVisibilityCanPrivate")
 
 package co.herod.adbwrapper

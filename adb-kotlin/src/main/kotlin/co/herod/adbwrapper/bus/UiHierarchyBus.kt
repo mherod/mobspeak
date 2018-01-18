@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:Suppress("unused", "MemberVisibilityCanPrivate")
 
 package co.herod.adbwrapper.bus

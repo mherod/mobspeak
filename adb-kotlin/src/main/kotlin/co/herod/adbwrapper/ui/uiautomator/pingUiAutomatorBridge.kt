@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 package co.herod.adbwrapper.ui.uiautomator
 
 import co.herod.adbwrapper.device.rpcSession

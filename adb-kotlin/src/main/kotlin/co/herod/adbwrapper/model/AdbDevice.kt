@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:Suppress("unused", "MemberVisibilityCanPrivate")
 
 package co.herod.adbwrapper.model
@@ -5,15 +9,11 @@ package co.herod.adbwrapper.model
 import co.herod.adbwrapper.S.Companion.DEVICE_CONNECTED_DEVICE
 import co.herod.adbwrapper.S.Companion.DEVICE_EMULATOR
 import co.herod.adbwrapper.bus.UiHierarchyBus
-import co.herod.adbwrapper.device.screen
 import co.herod.adbwrapper.props.lookupWindowBounds
-import co.herod.adbwrapper.screenshot
-import co.herod.kotlin.ext.nowMillis
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
-import java.io.File
 import java.util.concurrent.TimeoutException
 
 // (was) data class

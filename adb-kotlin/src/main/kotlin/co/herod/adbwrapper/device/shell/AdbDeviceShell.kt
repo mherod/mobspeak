@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:Suppress("unused")
 
 package co.herod.adbwrapper.device.shell

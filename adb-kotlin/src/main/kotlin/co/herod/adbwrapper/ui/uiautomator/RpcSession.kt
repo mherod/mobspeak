@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:JvmName("RpcSession")
 
 package co.herod.adbwrapper.ui.uiautomator

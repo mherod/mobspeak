@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 package co.herod.adbwrapper.ui.lock
 
 import co.herod.adbwrapper.command
