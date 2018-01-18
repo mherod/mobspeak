@@ -21,8 +21,8 @@ class AdbCommand(
     internal fun createShellCommandStrings(): List<String> =
             buildShellCommand()
                     .split(regex = " (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)".toRegex())
-                    .filter { it.isNotEmpty() }
-                    .map { it.trim() }
+                    .filter(String::isNotEmpty)
+                    .map(String::trim)
 
     override fun toString(): String {
         return "AdbCommand(deviceIdentifier=$deviceIdentifier, command=$command)"
@@ -81,7 +81,7 @@ fun AdbCommand.Builder.buildProcess(): Process? = build()?.toProcessBuilder()?.s
 fun AdbCommand.Builder.observable(): Observable<String> = with(build()) {
     return when {
         this?.isShellCommand() == true -> {
-            this.let { outputAsObservable(it) }
+            this.let(::outputAsObservable)
         }
         else -> {
             this?.toProcessBuilder()?.toObservable() ?: Observable.error(IllegalStateException())

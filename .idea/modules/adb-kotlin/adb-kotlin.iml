@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":adb-kotlin" external.linked.project.path="$MODULE_DIR$/../../../adb-kotlin" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="co.herod" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+<module type="JAVA_MODULE" version="4">
+  <component name="ExternalSystem" externalSystem="GRADLE" externalSystemModuleGroup="co.herod" externalSystemModuleVersion="1.0-SNAPSHOT" linkedProjectId=":adb-kotlin" linkedProjectPath="$MODULE_DIR$/../../../adb-kotlin" rootProjectPath="$MODULE_DIR$/../../.." />
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../adb-kotlin">

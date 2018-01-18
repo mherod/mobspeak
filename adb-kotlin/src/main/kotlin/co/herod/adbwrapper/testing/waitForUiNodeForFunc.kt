@@ -2,7 +2,6 @@ package co.herod.adbwrapper.testing
 
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.ui.sourceUiNodes
-import co.herod.kotlin.ext.blocking
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
@@ -17,13 +16,13 @@ fun AdbDeviceTestHelper.waitForUiNodeForFunc(
             .flatMap {
                 sourceUiNodes()
                         .buffer(50, TimeUnit.MILLISECONDS)
-                        .flatMapIterable { it }
+                        .flatMapIterable()
             }
             .filter { it.visible }
             .filter { predicate(it) == true } // filter for items passing predicate
             .firstOrError() // if not found in stream it will error
             .retry(1) // retry on error (stream finish before we match)
-            .map { function(it).orEmpty() } // do this function with item
+            .map(function(it)::orEmpty) // do this function with item
 //            .doOnSuccess {
 //                when {
 //                    it.trim().startsWith("Matched:") -> println("\t\t$it")

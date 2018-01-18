@@ -2,9 +2,9 @@
 
 package co.herod.adbwrapper
 
+import co.herod.adbwrapper.bus.BusSubject
 import co.herod.adbwrapper.bus.UiNodeBus
 import co.herod.adbwrapper.model.UiNode
-import co.herod.adbwrapper.bus.BusSubject
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
@@ -26,7 +26,7 @@ object AdbBusManager {
 
     internal fun throttledBus(): Observable<String>? = outputBus.concatMap {
         Observable.timer(20, TimeUnit.MILLISECONDS)
-                .flatMap { _ -> Observable.just(it) }
+                .flatMap { t -> Observable.just(it) }
     }
 }
 

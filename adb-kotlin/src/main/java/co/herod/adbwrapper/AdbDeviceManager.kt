@@ -41,5 +41,5 @@ private fun allDevices(): Observable<AdbDevice> =
                 .setCommand(DEVICES)
                 .observable()
                 .filter { "\t" in it }
-                .map { parseAdbString(it) }
+                .map(::parseAdbString)
 
