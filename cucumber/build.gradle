@@ -14,9 +14,9 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     testCompile project(':adb-kotlin')
-    testCompile 'io.cucumber:cucumber-java:' + cucumberVersion
-    testCompile 'io.cucumber:cucumber-junit:' + cucumberVersion
-    testCompile 'junit:junit:' + junitVersion
+    testCompile "io.cucumber:cucumber-java:$cucumberVersion"
+    testCompile "io.cucumber:cucumber-junit:$cucumberVersion"
+    testCompile "junit:junit:$junitVersion"
 }
 
 test {
