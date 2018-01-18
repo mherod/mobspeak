@@ -19,14 +19,9 @@ fun AdbDeviceTestHelper.waitForUiNodeForFunc(
                         .flatMapIterable()
             }
             .filter { it.visible }
-            .filter { predicate(it) == true } // filter for items passing predicate
+            .filter { predicate(it) ?: false } // filter for items passing predicate
             .firstOrError() // if not found in stream it will error
             .retry(1) // retry on error (stream finish before we match)
             .map(function(it)::orEmpty) // do this function with item
-//            .doOnSuccess {
-//                when {
-//                    it.trim().startsWith("Matched:") -> println("\t\t$it")
-//                }
-//            }
             .blocking(timeout, timeUnit) // with max max timeout
 }
