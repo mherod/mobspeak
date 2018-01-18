@@ -23,7 +23,7 @@ class UiHierarchyBus(val adbDevice: AdbDevice) :
         Disposable,
         DisposableContainer {
 
-    val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     @Suppress("PropertyName")
     private val subject: BehaviorSubject<UiHierarchy> =
@@ -57,9 +57,7 @@ class UiHierarchyBus(val adbDevice: AdbDevice) :
     override fun onError(e: Throwable) = subject.onError(e)
 
     override fun onSubscribe(d: Disposable) {
-        if (subject != d) {
-            subject.onSubscribe(d)
-        }
+        if (subject != d) subject.onSubscribe(d)
     }
 
     override fun hasObservers(): Boolean = subject.hasObservers()
@@ -71,11 +69,11 @@ class UiHierarchyBus(val adbDevice: AdbDevice) :
     override fun dispose() = compositeDisposable.dispose()
 
     override fun add(d: Disposable?): Boolean =
-            d?.let { compositeDisposable.add(it) } ?: false
+            d?.let(compositeDisposable::add) ?: false
 
     override fun remove(d: Disposable?): Boolean =
-            d?.let { compositeDisposable.remove(it) } ?: false
+            d?.let(compositeDisposable::remove) ?: false
 
     override fun delete(d: Disposable?): Boolean =
-            d?.let { compositeDisposable.delete(it) } ?: false
+            d?.let(compositeDisposable::delete) ?: false
 }

@@ -12,8 +12,7 @@ import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 fun AdbDevice.sampleUiHierarchy(): Observable<UiHierarchy> =
-        Observable.just(this)
-                .map { now() }
+        Observable.just(now())
                 .flatMap { startTime ->
                     sourceUiHierarchy()
                             .sample(20, TimeUnit.MILLISECONDS)
