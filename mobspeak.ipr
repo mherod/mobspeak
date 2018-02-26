@@ -247,13 +247,13 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.cucumber/tag-expressions/1.0.1/a365031b5e0dce0457968731e1dc51adefb0fb88/tag-expressions-1.0.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Gradle: io.reactivex.rxjava2:rxjava:2.1.9">
+    <library name="Gradle: io.reactivex.rxjava2:rxjava:2.1.10">
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.9/afd2ab255e6b94b064ea87c2ccd84ac0d163a427/rxjava-2.1.9.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.10/fb1adb822ccb4967d48f6546691f67fa96400d97/rxjava-2.1.10.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.9/890fc9ef77d78ac270f322b024c0e660a8f57ea0/rxjava-2.1.9-sources.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.10/5f6384ea84e8c17fd48ed0c16f7c31e3ef1edba9/rxjava-2.1.10-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Gradle: io.reactivex.rxjava2:rxkotlin:2.2.0">
