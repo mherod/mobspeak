@@ -1,14 +1,16 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 package co.herod.adbwrapper.processes
 
 import co.herod.adbwrapper.AdbCommand
 import co.herod.adbwrapper.S.Companion.SHELL
 import co.herod.adbwrapper.buildProcess
 import co.herod.adbwrapper.shellInternalCommand
-import co.herod.adbwrapper.spotAdbError
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.toObservable
 import java.io.BufferedReader
-import java.util.concurrent.TimeUnit
 
 fun outputAsObservable(adbCommand: AdbCommand): Observable<String> =
         AdbCommand.Builder()
@@ -27,7 +29,7 @@ fun outputAsObservable(adbCommand: AdbCommand): Observable<String> =
 
             inputStream.bufferedReader().run {
                 toObservable().spotAdbError()
-                        .timeout(8, TimeUnit.SECONDS)
+                        //.timeout(8, TimeUnit.SECONDS)
                         .doOnError { destroyForcibly() }
                         .doOnComplete { destroyForcibly() }
             }

@@ -1,12 +1,15 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:Suppress("unused", "ObjectPropertyName", "MemberVisibilityCanPrivate")
 
 package co.herod.adbwrapper
 
-import co.herod.adbwrapper.model.UiHierarchy
+import co.herod.adbwrapper.bus.BusSubject
+import co.herod.adbwrapper.bus.UiNodeBus
 import co.herod.adbwrapper.model.UiNode
-import co.herod.adbwrapper.rx.BusSubject
 import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
 object AdbBusManager {
@@ -15,28 +18,20 @@ object AdbBusManager {
     val outputBus: BusSubject<String>
         get() = _outputBus
 
-    var uiHierarchyBusActive = false
+    var uiAutomatorBridgeActive: Boolean = false
 
-    internal val _uiHierarchyBus = BehaviorSubject.create<UiHierarchy>()
+    var uiHierarchyBusActive: Boolean = false
 
-    @JvmStatic
-    val uiHierarchyBus: Observable<UiHierarchy>
-        get() = _uiHierarchyBus
-                .doOnSubscribe { }
-                .doOnDispose { }
-
-    internal val _uiNodeBus: BusSubject<UiNode> = AdbUiNodeBus()
+    internal val _uiNodeBus: BusSubject<UiNode> = UiNodeBus()
 
     @JvmStatic
     val uiNodeBus: Observable<UiNode>
         get() = _uiNodeBus
 
     internal fun throttledBus(): Observable<String>? = outputBus.concatMap {
-        Observable.timer(10, TimeUnit.MILLISECONDS)
-                .flatMap { _ -> Observable.just(it) }
+        Observable.timer(20, TimeUnit.MILLISECONDS)
+                .flatMap { t -> Observable.just(it) }
     }
 }
 
 class MainBusSubject : BusSubject<String>()
-// class AdbUiHierarchyBus : BusSubject<UiHierarchy>()
-class AdbUiNodeBus : BusSubject<UiNode>()

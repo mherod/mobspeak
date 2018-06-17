@@ -1,8 +1,14 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:Suppress("unused")
 
 package co.herod.adbwrapper.device
 
 import co.herod.adbwrapper.S.Companion.PROPERTY_SCREEN_STATE
+import co.herod.adbwrapper.device.input.power
+import co.herod.adbwrapper.device.input.pressKey
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.model.DumpsysKey
 import co.herod.adbwrapper.model.filterProperty

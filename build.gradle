@@ -1,6 +1,15 @@
 subprojects {
-
     apply plugin: 'java'
+
+    tasks.withType(Test)  {
+        maxParallelForks = 1
+    }
+
+    test {
+        testLogging {
+            showStandardStreams = true
+        }
+    }
 
     buildscript {
         ext.kotlin_version = '1.2.50'

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:Suppress("unused")
 
 package co.herod.adbwrapper.testing
@@ -14,7 +18,7 @@ fun AdbDeviceTestHelper.waitForActivity(
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Boolean = with(adbDevice) {
     try {
-        Observable.timer(100, TimeUnit.MILLISECONDS)
+        Observable.timer(20, TimeUnit.MILLISECONDS)
                 .flatMap {
                     Observable.fromCallable {
                         matchActivity(activityName, 10, TimeUnit.SECONDS)
@@ -22,7 +26,7 @@ fun AdbDeviceTestHelper.waitForActivity(
                 }
                 .filter { it }
                 .firstOrError()
-//                .retry()
+                .retry(1)
                 .toObservable()
                 .timeout(timeout, timeUnit)
                 .blockingFirst()

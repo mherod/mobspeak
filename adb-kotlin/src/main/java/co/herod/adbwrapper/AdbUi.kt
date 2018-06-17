@@ -1,10 +1,18 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 //@file:Suppress("unused")
 //
 //package co.herod.adbwrapper
 //
 //import co.herod.adbwrapper.AdbBusManager.uiNodeBus
 //import co.herod.adbwrapper.model.UiNode
-//import co.herod.adbwrapper.rx.FixedDurationTransformer
+//import co.herod.rx.FixedDurationTransformer
 //import io.reactivex.Observable
 //import java.util.concurrent.TimeUnit
 //

@@ -5,8 +5,10 @@ package co.herod.kotlin.ext
 import co.herod.adbwrapper.model.DumpsysEntry
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
+import kotlin.system.measureTimeMillis
 
 fun <T> Observable<T>.timeout(
         timeout: Int = 5,
@@ -22,14 +24,14 @@ fun <T> Observable<T>.retryWithTimeout(
         timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Observable<T> = this
-//        .retry()
+        .retry(1)
         .timeout(timeout, timeUnit)
 
 fun <T> Single<T>.retryWithTimeout(
         timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
 ): Single<T> = this
-//        .retry()
+        .retry(1)
         .timeout(timeout, timeUnit)
 
 //fun Observable<String>.toSingleBlocking(
@@ -50,25 +52,37 @@ fun <T> Single<T>.retryWithTimeout(
 fun Observable<String>.blockingSilent(
         timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
-): String = this
-        .last("") // succeeds silently
-        .timeout(timeout.toLong(), timeUnit)
-        .blockingGet()
+): String = try {
+    this
+            .last("") // succeeds silently
+            .timeout(timeout.toLong(), timeUnit)
+            .doOnError { println("blockingSilent error $it") }
+            .onErrorReturn { "" }
+            .blockingGet()
+} catch (error: RuntimeException) {
+    ""
+}
 
 fun Single<String>.blocking(
         timeout: Int = 5,
         timeUnit: TimeUnit = TimeUnit.SECONDS
-): String = this
-        .timeout(timeout.toLong(), timeUnit)
-        .onErrorResumeNext { throwable ->
-            if (throwable is TimeoutException) {
-                Single.error<String> {
-                    AssertionError("Timed out")
+): String = try {
+    this
+            .timeout(timeout.toLong(), timeUnit)
+            .onErrorResumeNext { throwable ->
+                if (throwable is TimeoutException) {
+                    Single.error<String> {
+                        AssertionError("Timed out")
+                    }
                 }
+                Single.error<String> { throwable }
             }
-            Single.error<String> { throwable }
-        }
-        .blockingGet()
+            .doOnError { println("blocking error $it") }
+            .onErrorReturn { "" }
+            .blockingGet()
+} catch (error: RuntimeException) {
+    ""
+}
 
 @JvmName("filterPropertiesByKey")
 fun Observable<DumpsysEntry>.filterKeys(vararg keys: String): Observable<Map<String, String>> =
@@ -94,3 +108,13 @@ fun Observable<DumpsysEntry>.toMapRx(): Observable<MutableMap<String, String>> =
 
 fun Observable<DumpsysEntry>.toMapRxSingle(): Single<MutableMap<String, String>> =
         toMap({ it -> it.key }, { it -> it.value })
+
+fun CompositeDisposable.waitUntilEmpty(): Long =
+        measureTimeMillis {
+            Observable.fromCallable { size() }
+                    .repeat()
+                    .distinctUntilChanged()
+                    .doOnNext { if (it > 0) println("CompositeDisposable size: $it") }
+                    .takeUntil { it == 0 }
+                    .blockingSubscribe({}, {})
+        }

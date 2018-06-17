@@ -3,10 +3,12 @@
 package skeleton
 
 import co.herod.adbwrapper.AdbDeviceManager
-import co.herod.adbwrapper.device.pressKey
+import co.herod.adbwrapper.device.input.home
+import co.herod.adbwrapper.device.input.pressKey
 import co.herod.adbwrapper.exceptions.NoConnectedAdbDeviceException
 import co.herod.adbwrapper.model.AdbDevice
 import co.herod.adbwrapper.testing.*
+import co.herod.kotlin.ext.waitUntilEmpty
 import cucumber.api.PendingException
 import cucumber.api.java.After
 import cucumber.api.java.Before
@@ -15,6 +17,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import junit.framework.AssertionFailedError
 import java.util.concurrent.TimeUnit
+import kotlin.system.measureTimeMillis
 
 class ExampleAndroidStepDefs {
 
@@ -44,7 +47,10 @@ class ExampleAndroidStepDefs {
 
     @After
     fun afterScenario() {
-        testHelper.stopUiBus()
+        val disposeTimeMillis = measureTimeMillis {
+            testHelper.stopUiBus()
+        }
+        println("stopUiBus took $disposeTimeMillis millis")
     }
 
     @When("^a monkey snatches my device$")

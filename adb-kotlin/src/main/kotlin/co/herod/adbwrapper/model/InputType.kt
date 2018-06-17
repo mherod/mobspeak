@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 package co.herod.adbwrapper.model
 
 enum class InputType(private val s: String) : CharSequence {

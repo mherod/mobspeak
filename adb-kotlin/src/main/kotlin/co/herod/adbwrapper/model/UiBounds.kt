@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:Suppress("MemberVisibilityCanPrivate")
 
 package co.herod.adbwrapper.model

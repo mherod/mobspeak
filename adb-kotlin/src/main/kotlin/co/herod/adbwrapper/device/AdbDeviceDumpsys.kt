@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:Suppress("unused")
 
 package co.herod.adbwrapper.device
@@ -16,7 +20,7 @@ fun AdbDevice.dumpsys() = AdbDeviceDumpsys(this)
 
 @JvmOverloads
 fun AdbDeviceDumpsys.dump(dumpsysKey: DumpsysKey, args: String = ""): Observable<DumpsysEntry> = with(adbDevice) {
-    Observable.timer(250, TimeUnit.MILLISECONDS)
+    Observable.timer(20, TimeUnit.MILLISECONDS)
             .flatMap { dumpsys("$dumpsysKey $args".trim()) }
             .processDumpsys("=")
             .toObservable()

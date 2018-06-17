@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:JvmName("DemoDemoDemo")
 
 package co.herod.adbwrapper.examples

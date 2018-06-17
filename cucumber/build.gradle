@@ -14,9 +14,9 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     testCompile project(':adb-kotlin')
-    testCompile 'io.cucumber:cucumber-java:' + cucumberVersion
-    testCompile 'io.cucumber:cucumber-junit:' + cucumberVersion
-    testCompile 'junit:junit:' + junitVersion
+    testCompile "io.cucumber:cucumber-java:$cucumberVersion"
+    testCompile "io.cucumber:cucumber-junit:$cucumberVersion"
+    testCompile "junit:junit:$junitVersion"
 }
 
 test {
@@ -37,8 +37,8 @@ compileKotlin {
 
     kotlinOptions {
         jvmTarget = "1.8"
-        apiVersion = "1.1"
-        languageVersion = "1.1"
+        apiVersion = "1.2"
+        languageVersion = "1.2"
     }
 }
 compileTestKotlin {

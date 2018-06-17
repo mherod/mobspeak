@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 package co.herod.adbwrapper
 
 import co.herod.adbwrapper.S.Companion.DUMPSYS
@@ -73,11 +77,12 @@ fun launchUrl(adbDevice: AdbDevice, url: String, packageName: String): Observabl
                 .observable()
 
 @CheckReturnValue
-private fun cmdStringInputKey(key: CharSequence): String =
+fun cmdStringInputKey(key: CharSequence): String =
         "$SHELL input ${InputType.KEY_EVENT} $key"
 
+@JvmOverloads
 @CheckReturnValue
-private fun cmdStringIntentViewUrl(url: String, packageName: String = ""): String =
+fun cmdStringIntentViewUrl(url: String, packageName: String = ""): String =
         "$SHELL am start -a $INTENT_ACTION_VIEW ${"-d '$url' $packageName".trim()}"
 
 @CheckReturnValue

@@ -1,6 +1,10 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 package co.herod.adbwrapper.testing
 
-import co.herod.adbwrapper.device.swipe
+import co.herod.adbwrapper.device.input.swipe
 
 @JvmOverloads
 fun AdbDeviceTestHelper.dragRight(

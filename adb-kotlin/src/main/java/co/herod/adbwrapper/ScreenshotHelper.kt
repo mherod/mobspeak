@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:Suppress("unused")
 
 package co.herod.adbwrapper
@@ -8,7 +12,7 @@ import co.herod.adbwrapper.model.UiBounds
 import co.herod.adbwrapper.model.UiNode
 import co.herod.adbwrapper.util.FileUtil
 import co.herod.adbwrapper.util.ImageUtil
-import co.herod.kotlin.now
+import co.herod.kotlin.ext.nowMillis
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.awt.image.BufferedImage
@@ -24,7 +28,7 @@ fun AdbDevice.screenshot(): File {
 }
 
 private fun createScreenshotPath(): String =
-        "screenshots/screen-${now().toEpochMilli()}.png"
+        "screenshots/screen-${nowMillis()}.png"
 
 @Deprecated(
         replaceWith = ReplaceWith("UiNode.capture"),

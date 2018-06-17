@@ -8,9 +8,11 @@ import org.junit.Test
 
 class IfUiHierarchyKtTest {
 
-    @Test(timeout = 5000)
+    @Test(timeout = 5 * 1000)
     fun ifUiHierarchyWhenAllFalse() {
+//        println("fucks sake")
         AdbDeviceManager.getDevice()?.testHelper().run {
+//            println("blah")
             val result = this?.ifUiHierarchy {
                 it.uiNodes.size > 5 && it.uiNodes.any {
                     it.uiClass.startsWith("rubbishOS.1.")
@@ -20,9 +22,11 @@ class IfUiHierarchyKtTest {
         }
     }
 
-    @Test(timeout = 5000)
+    @Test(timeout = 5 * 1000)
     fun ifUiHierarchyWhenTrue() {
+//        println("fucks sake")
         AdbDeviceManager.getDevice()?.testHelper().run {
+//            println("blah2")
             val ifUiHierarchy = this?.ifUiHierarchy {
                 it.uiNodes.size > 5 && it.uiNodes.any {
                     it.uiClass.startsWith("android.widget.")

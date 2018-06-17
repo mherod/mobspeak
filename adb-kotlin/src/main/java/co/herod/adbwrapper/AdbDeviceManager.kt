@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Herod
+ */
+
 @file:Suppress("unused")
 
 package co.herod.adbwrapper
@@ -41,5 +45,5 @@ private fun allDevices(): Observable<AdbDevice> =
                 .setCommand(DEVICES)
                 .observable()
                 .filter { "\t" in it }
-                .map { parseAdbString(it) }
+                .map(::parseAdbString)
 
