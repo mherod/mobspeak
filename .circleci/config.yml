@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:8-jdk@sha256:4d5a2746dd49d577d852f32672bfc3fe4fc559f9115d55d30624a6535fed1776
+      - image: circleci/openjdk:8-jdk@sha256:2eeac73983ef98638c2a2dbec20d55894b021cbe60390c58be668a66fe0e2b12
 
     working_directory: ~/repo
 
